@@ -1,0 +1,12 @@
+- [x] Fork `KytyPS5/KytyPS5` → `erickson558/KatyPS5`, repoint local `origin`/`upstream` remotes.
+- [x] SDD scaffold: `CLAUDE.md`, `specs/CONSTITUTION.md`, `specs/TEMPLATE-spec.md`, this spec.
+- [x] Agents: `build-verifier.md`, `security-auditor.md`, `release-manager.md`.
+- [x] Skills: `github-publish`, `debug-fix-release`, `code-annotator`, `security-hardening`.
+- [x] `SECURITY.md`, `.github/workflows/codeql.yml`, `.github/dependabot.yml`.
+- [x] Bounded security review + fix of `compatibilityDatabase.cpp` / `mainDialog.cpp`.
+- [x] Scripted Kyty→Katy rename across non-3rdparty files (exceptions preserved).
+- [x] Hand-edit `README.md`, `build.yml`, `compatibilityDatabase.cpp` for the exceptions.
+- [x] Donate button + `.github/FUNDING.yml`.
+- [x] i18n scaffold (en/es) + language switcher.
+- [x] Version bump to `0.3.0`, `CHANGELOG.md`.
+- [ ] Push `rebrand/katyps5`, verify CI, merge to `main`, tag `v0.3.0`.
