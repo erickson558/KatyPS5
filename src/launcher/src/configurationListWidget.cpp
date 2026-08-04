@@ -45,9 +45,9 @@
 
 #include "ui_configuration_list_widget.h"
 
-constexpr char CONF_FILE_NAME[]    = "Kyty.ini";
-constexpr char CONF_ORG_NAME[]     = "Kyty";
-constexpr char CONF_APP_NAME[]     = "Kyty";
+constexpr char CONF_FILE_NAME[]    = "Katy.ini";
+constexpr char CONF_ORG_NAME[]     = "Katy";
+constexpr char CONF_APP_NAME[]     = "Katy";
 constexpr char CONF_SECTION_NAME[] = "GameConfigurations";
 constexpr char CONF_LAUNCHER[]     = "Launcher";
 constexpr char CONF_GAME_DIR[]     = "game_dir";
@@ -259,6 +259,10 @@ ConfigurationListWidget::ConfigurationListWidget(QWidget* parent)
 	        &ConfigurationListWidget::edit_configuration);
 	connect(m_ui->delete_button, &QToolButton::clicked, this,
 	        &ConfigurationListWidget::delete_configuartion);
+	connect(m_ui->donate_button, &QToolButton::clicked, this, [] {
+		QDesktopServices::openUrl(
+		    QUrl(QStringLiteral("https://www.paypal.com/donate/?hosted_button_id=ZABFRXC2P3JQN")));
+	});
 	connect(m_ui->cfgs_list, &QTreeWidget::currentItemChanged, this,
 	        &ConfigurationListWidget::list_currentItemChanged);
 	connect(m_ui->cfgs_list, &QTreeWidget::itemDoubleClicked, this,
