@@ -16,7 +16,7 @@ public:
 	explicit PatchesDialog(const Configuration& game, QWidget* parent = nullptr);
 	~PatchesDialog() override = default;
 
-	KYTY_QT_CLASS_NO_COPY(PatchesDialog);
+	KATY_QT_CLASS_NO_COPY(PatchesDialog);
 
 	[[nodiscard]] static bool    IsSupportedTitleId(const QString& title_id);
 	[[nodiscard]] static QString PatchPlanPath(const QString& title_id);

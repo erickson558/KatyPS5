@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_SINGLETON_H_
-#define KYTY_COMMON_SINGLETON_H_
+#ifndef KATY_COMMON_SINGLETON_H_
+#define KATY_COMMON_SINGLETON_H_
 
 #include <cstdlib>
 #include <new>
@@ -19,7 +19,7 @@ public:
 		return g_m_instance;
 	}
 
-	KYTY_CLASS_NO_COPY(Singleton);
+	KATY_CLASS_NO_COPY(Singleton);
 
 protected:
 	Singleton();
@@ -33,4 +33,4 @@ private:
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_SINGLETON_H_ */
+#endif /* KATY_COMMON_SINGLETON_H_ */

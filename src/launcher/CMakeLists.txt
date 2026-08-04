@@ -1,5 +1,5 @@
 
-find_package(Qt6 COMPONENTS Concurrent Network Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Concurrent Network Widgets LinguistTools REQUIRED)
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS forms)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -19,32 +19,40 @@ add_executable(launcher WIN32
 	resources.qrc
 )
 
+# lrelease the hand-maintained .ts files into .qm and embed them in the launcher binary
+# (RESOURCE_PREFIX below) so there's no separate translations/ folder to lose on install -
+# QTranslator::load() in main.cpp reads them back from ":/translations/...".
+qt_add_translations(launcher
+	TS_FILES translations/katyps5_es.ts
+	RESOURCE_PREFIX "/translations"
+)
+
 
 target_link_libraries(launcher Qt6::Concurrent Qt6::Network Qt6::Widgets)
 if(WIN32)
 target_link_libraries(launcher setupapi)
 endif()
-if (CLANG AND NOT KYTY_CLANG_CL)
+if (CLANG AND NOT KATY_CLANG_CL)
 target_compile_options(launcher PRIVATE -frtti)
 target_link_libraries(launcher pthread)
 endif()
 target_include_directories(launcher PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set_target_properties(launcher PROPERTIES AUTOUIC ON AUTOMOC ON AUTORCC ON)
 
-if(WIN32 AND NOT KYTY_CLANG_CL)
-	set_target_properties(launcher PROPERTIES LINK_FLAGS "${KYTY_LD_OPTIONS}")
+if(WIN32 AND NOT KATY_CLANG_CL)
+	set_target_properties(launcher PROPERTIES LINK_FLAGS "${KATY_LD_OPTIONS}")
 elseif(LINUX)
-	# Use the same linker as kyty_emulator.
-	set_target_properties(launcher PROPERTIES LINK_FLAGS "${KYTY_LD_OPTIONS}")
+	# Use the same linker as katy_emulator.
+	set_target_properties(launcher PROPERTIES LINK_FLAGS "${KATY_LD_OPTIONS}")
 endif()
 
-add_dependencies(launcher kyty_emulator)
+add_dependencies(launcher katy_emulator)
 
-if(KYTY_CLANG_CL)
+if(KATY_CLANG_CL)
 	add_custom_command(TARGET launcher POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_PDB_FILE:kyty_emulator> $<TARGET_FILE_DIR:launcher>/$<TARGET_PDB_FILE_NAME:kyty_emulator>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE_DIR:kyty_emulator>/${KYTY_EMULATOR_MAP_NAME} $<TARGET_FILE_DIR:launcher>/${KYTY_EMULATOR_MAP_NAME}
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${KYTY_THIRD_PARTY_DIR}/winpthread/bin/libwinpthread-1.dll" $<TARGET_FILE_DIR:launcher>/libwinpthread-1.dll
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_PDB_FILE:katy_emulator> $<TARGET_FILE_DIR:launcher>/$<TARGET_PDB_FILE_NAME:katy_emulator>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE_DIR:katy_emulator>/${KATY_EMULATOR_MAP_NAME} $<TARGET_FILE_DIR:launcher>/${KATY_EMULATOR_MAP_NAME}
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${KATY_THIRD_PARTY_DIR}/winpthread/bin/libwinpthread-1.dll" $<TARGET_FILE_DIR:launcher>/libwinpthread-1.dll
 	)
 endif()
 
@@ -87,49 +95,49 @@ elseif(LINUX)
 	set_target_properties(launcher PROPERTIES
 		INSTALL_RPATH "$ORIGIN/lib"
 		BUILD_WITH_INSTALL_RPATH FALSE
-		LINK_FLAGS "${KYTY_LD_OPTIONS} -Wl,--disable-new-dtags")
+		LINK_FLAGS "${KATY_LD_OPTIONS} -Wl,--disable-new-dtags")
 
 	# Support distribution and official Qt layouts.
-	get_target_property(kyty_qt_core_lib Qt6::Core IMPORTED_LOCATION_RELEASE)
-	if(NOT kyty_qt_core_lib)
-		get_target_property(kyty_qt_core_lib Qt6::Core IMPORTED_LOCATION)
+	get_target_property(katy_qt_core_lib Qt6::Core IMPORTED_LOCATION_RELEASE)
+	if(NOT katy_qt_core_lib)
+		get_target_property(katy_qt_core_lib Qt6::Core IMPORTED_LOCATION)
 	endif()
-	get_filename_component(kyty_qt_libdir "${kyty_qt_core_lib}" DIRECTORY)
+	get_filename_component(katy_qt_libdir "${katy_qt_core_lib}" DIRECTORY)
 
-	set(kyty_qt_plugins_dir "")
-	foreach(kyty_candidate
-			"${kyty_qt_libdir}/qt6/plugins"
-			"${kyty_qt_libdir}/../plugins"
+	set(katy_qt_plugins_dir "")
+	foreach(katy_candidate
+			"${katy_qt_libdir}/qt6/plugins"
+			"${katy_qt_libdir}/../plugins"
 			"${Qt6_DIR}/../../../plugins")
-		if(IS_DIRECTORY "${kyty_candidate}/platforms")
-			get_filename_component(kyty_qt_plugins_dir "${kyty_candidate}" ABSOLUTE)
+		if(IS_DIRECTORY "${katy_candidate}/platforms")
+			get_filename_component(katy_qt_plugins_dir "${katy_candidate}" ABSOLUTE)
 			break()
 		endif()
 	endforeach()
 
-	if(kyty_qt_plugins_dir)
-		message(STATUS "Qt plugins for launcher deployment: ${kyty_qt_plugins_dir}")
-		set(kyty_qt_plugin_files "")
-		foreach(kyty_qt_plugin platforms tls imageformats xcbglintegrations wayland-shell-integration)
-			if(IS_DIRECTORY "${kyty_qt_plugins_dir}/${kyty_qt_plugin}")
-				file(GLOB kyty_qt_plugin_group
-					"${kyty_qt_plugins_dir}/${kyty_qt_plugin}/*.so"
-					"${kyty_qt_plugins_dir}/${kyty_qt_plugin}/*.so.*")
-				list(APPEND kyty_qt_plugin_files ${kyty_qt_plugin_group})
-				install(DIRECTORY "${kyty_qt_plugins_dir}/${kyty_qt_plugin}" DESTINATION "plugins")
+	if(katy_qt_plugins_dir)
+		message(STATUS "Qt plugins for launcher deployment: ${katy_qt_plugins_dir}")
+		set(katy_qt_plugin_files "")
+		foreach(katy_qt_plugin platforms tls imageformats xcbglintegrations wayland-shell-integration)
+			if(IS_DIRECTORY "${katy_qt_plugins_dir}/${katy_qt_plugin}")
+				file(GLOB katy_qt_plugin_group
+					"${katy_qt_plugins_dir}/${katy_qt_plugin}/*.so"
+					"${katy_qt_plugins_dir}/${katy_qt_plugin}/*.so.*")
+				list(APPEND katy_qt_plugin_files ${katy_qt_plugin_group})
+				install(DIRECTORY "${katy_qt_plugins_dir}/${katy_qt_plugin}" DESTINATION "plugins")
 			endif()
 		endforeach()
 		install(CODE "
-			set(kyty_plugin_files \"${kyty_qt_plugin_files}\")
+			set(katy_plugin_files \"${katy_qt_plugin_files}\")
 			file(GET_RUNTIME_DEPENDENCIES
 				EXECUTABLES \"${CMAKE_CURRENT_BINARY_DIR}/${launcher_name}\"
-				LIBRARIES \${kyty_plugin_files}
-				RESOLVED_DEPENDENCIES_VAR kyty_resolved
+				LIBRARIES \${katy_plugin_files}
+				RESOLVED_DEPENDENCIES_VAR katy_resolved
 				POST_INCLUDE_REGEXES \"libQt6\" \"libicu\"
 				POST_EXCLUDE_REGEXES \".*\")
-			foreach(kyty_dep \${kyty_resolved})
+			foreach(katy_dep \${katy_resolved})
 				file(INSTALL DESTINATION \"\${CMAKE_INSTALL_PREFIX}/lib\"
-					TYPE SHARED_LIBRARY FOLLOW_SYMLINK_CHAIN FILES \"\${kyty_dep}\")
+					TYPE SHARED_LIBRARY FOLLOW_SYMLINK_CHAIN FILES \"\${katy_dep}\")
 			endforeach()
 		")
 		install(CODE "

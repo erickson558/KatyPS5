@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_THREADS_H_
-#define KYTY_COMMON_THREADS_H_
+#ifndef KATY_COMMON_THREADS_H_
+#define KATY_COMMON_THREADS_H_
 
 #include "common/common.h"
 #include "common/subsystems.h"
@@ -9,7 +9,7 @@
 
 namespace Common {
 
-KYTY_SUBSYSTEM_DEFINE(Threads);
+KATY_SUBSYSTEM_DEFINE(Threads);
 
 using thread_func_t    = void (*)(void*);
 using wait_poll_func_t = void (*)();
@@ -45,7 +45,7 @@ public:
 	// The id is unique and can't be reused by another thread.
 	static int GetThreadIdUnique();
 
-	KYTY_CLASS_NO_COPY(Thread);
+	KATY_CLASS_NO_COPY(Thread);
 
 private:
 	std::unique_ptr<ThreadPrivate> m_thread;
@@ -62,7 +62,7 @@ public:
 
 	friend class CondVar;
 
-	KYTY_CLASS_NO_COPY(Mutex);
+	KATY_CLASS_NO_COPY(Mutex);
 
 private:
 	std::unique_ptr<MutexPrivate> m_mutex;
@@ -81,7 +81,7 @@ public:
 	static void SignalThread(int thread_id);
 	static void SetWaitPollCallback(wait_poll_func_t callback);
 
-	KYTY_CLASS_NO_COPY(CondVar);
+	KATY_CLASS_NO_COPY(CondVar);
 
 private:
 	std::unique_ptr<CondVarPrivate> m_cond_var;
@@ -96,7 +96,7 @@ public:
 
 	~LockGuard() { m_mutex.Unlock(); }
 
-	KYTY_CLASS_NO_COPY(LockGuard);
+	KATY_CLASS_NO_COPY(LockGuard);
 
 private:
 	mutex_type& m_mutex;
@@ -104,4 +104,4 @@ private:
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_THREADS_H_ */
+#endif /* KATY_COMMON_THREADS_H_ */

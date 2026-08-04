@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_UNIQUEFUNCTION_H_
-#define KYTY_COMMON_UNIQUEFUNCTION_H_
+#ifndef KATY_COMMON_UNIQUEFUNCTION_H_
+#define KATY_COMMON_UNIQUEFUNCTION_H_
 
 #include <memory>
 #include <type_traits>
@@ -51,4 +51,4 @@ private:
 
 } // namespace Common
 
-#endif // KYTY_COMMON_UNIQUEFUNCTION_H_
+#endif // KATY_COMMON_UNIQUEFUNCTION_H_

@@ -9,7 +9,7 @@
 #include <thread>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -67,7 +67,7 @@ void TestSerializesTransactions() {
 	      "contender did not resume after resource transaction");
 }
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 [[noreturn]] void RunDeathCase() {
 	ResourceMutex mutex;
 	std::lock_guard first(mutex);
@@ -102,7 +102,7 @@ void CheckDeathCase() {
 } // namespace
 
 int main(int argc, char** argv) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	if (argc == 2 && std::strcmp(argv[1], "--death") == 0) {
 		RunDeathCase();
 	}
@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
 #endif
 	TestOwnership();
 	TestSerializesTransactions();
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	CheckDeathCase();
 #endif
 	std::puts("ResourceMutexTests: all cases passed");

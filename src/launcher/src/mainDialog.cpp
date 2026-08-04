@@ -37,15 +37,15 @@
 class QWidget;
 
 #if defined(_WIN32)
-constexpr char EMULATOR_EXE[] = "kyty_emulator.exe";
+constexpr char EMULATOR_EXE[] = "katy_emulator.exe";
 #else
-constexpr char EMULATOR_EXE[] = "kyty_emulator";
+constexpr char EMULATOR_EXE[] = "katy_emulator";
 #endif
 
 #if defined(_WIN32)
 constexpr char CMD_EXE[] = "cmd.exe";
 #elif defined(__linux__)
-constexpr char KYTY_BASH_FILE[] = "kyty_run.sh";
+constexpr char KATY_BASH_FILE[] = "katy_run.sh";
 #endif
 #if defined(_WIN32)
 constexpr DWORD CMD_X_CHARS = 175;
@@ -67,7 +67,7 @@ public:
 
 class MainDialogPrivate: public QObject {
 	Q_OBJECT
-	KYTY_QT_CLASS_NO_COPY(MainDialogPrivate);
+	KATY_QT_CLASS_NO_COPY(MainDialogPrivate);
 
 public:
 	explicit MainDialogPrivate(QObject* parent = nullptr): QObject(parent) {}
@@ -330,6 +330,23 @@ static bool FindTerminal(QString* program, QStringList* prefix) {
 }
 #endif
 
+#if defined(_WIN32)
+// cmd.exe re-parses its whole command line looking for its own operator characters
+// (& | < > ^) even though Qt has already argv-quoted each element for CreateProcessW -
+// those quotes tell the *target* program where one argument ends, they don't stop cmd.exe
+// itself from treating an unescaped '&' or '|' in a game/log folder path as "run another
+// command here". Mirrors what BashQuote() already does for the Linux path above; this is
+// the missing Windows half of the same escaping.
+static QString CmdEscapeArgument(QString value) {
+	value.replace(QLatin1Char('^'), QStringLiteral("^^"));
+	value.replace(QLatin1Char('&'), QStringLiteral("^&"));
+	value.replace(QLatin1Char('|'), QStringLiteral("^|"));
+	value.replace(QLatin1Char('<'), QStringLiteral("^<"));
+	value.replace(QLatin1Char('>'), QStringLiteral("^>"));
+	return value;
+}
+#endif
+
 void MainDialog::RunInterpreter(QProcess* process, const Configuration& info) {
 	const auto& interpreter = m_p->GetInterpreter();
 
@@ -344,7 +361,7 @@ void MainDialog::RunInterpreter(QProcess* process, const Configuration& info) {
 	}
 
 #ifdef __linux__
-	auto bash_file_name = dir.filePath(KYTY_BASH_FILE);
+	auto bash_file_name = dir.filePath(KATY_BASH_FILE);
 	if (!CreateBashScript(interpreter, args, bash_file_name)) {
 		QMessageBox::critical(this, tr("Error"), tr("Can't create file:\n") + bash_file_name);
 		QApplication::quit();
@@ -367,8 +384,10 @@ void MainDialog::RunInterpreter(QProcess* process, const Configuration& info) {
 	{
 		process->setProgram(CMD_EXE);
 		QStringList process_args;
-		process_args << QStringLiteral("/K") << interpreter;
-		process_args += args;
+		process_args << QStringLiteral("/K") << CmdEscapeArgument(interpreter);
+		for (const auto& arg: args) {
+			process_args << CmdEscapeArgument(arg);
+		}
 		process->setArguments(process_args);
 	}
 #else

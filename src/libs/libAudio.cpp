@@ -33,7 +33,7 @@ static AudioPropagationHandle AudioPropagationNextHandle() {
 	return next_handle.fetch_add(1, std::memory_order_relaxed);
 }
 
-static int32_t KYTY_SYSV_ABI AudioPropagationSystemQueryMemory(
+static int32_t KATY_SYSV_ABI AudioPropagationSystemQueryMemory(
     const void* /*options*/, AudioPropagationSystemMemory* out_memory) {
 	PRINT_NAME();
 
@@ -47,7 +47,7 @@ static int32_t KYTY_SYSV_ABI AudioPropagationSystemQueryMemory(
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI
+static int32_t KATY_SYSV_ABI
 AudioPropagationSystemCreate(const void* /*options*/, AudioPropagationSystemMemory* /*memory*/,
                              AudioPropagationHandle* out_system_handle) {
 	PRINT_NAME();
@@ -59,7 +59,7 @@ AudioPropagationSystemCreate(const void* /*options*/, AudioPropagationSystemMemo
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI AudioPropagationRoomCreate(AudioPropagationHandle /*system_handle*/,
+static int32_t KATY_SYSV_ABI AudioPropagationRoomCreate(AudioPropagationHandle /*system_handle*/,
                                                         AudioPropagationHandle* out_room_handle) {
 	PRINT_NAME();
 
@@ -70,7 +70,7 @@ static int32_t KYTY_SYSV_ABI AudioPropagationRoomCreate(AudioPropagationHandle /
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI AudioPropagationSystemRegisterMaterial(
+static int32_t KATY_SYSV_ABI AudioPropagationSystemRegisterMaterial(
     AudioPropagationHandle /*system_handle*/, const void* /*material*/,
     AudioPropagationHandle* out_material_handle) {
 	PRINT_NAME();
@@ -82,7 +82,7 @@ static int32_t KYTY_SYSV_ABI AudioPropagationSystemRegisterMaterial(
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI
+static int32_t KATY_SYSV_ABI
 AudioPropagationSystemSetAttributes(AudioPropagationHandle /*system_handle*/,
                                     const void* /*attributes*/, uint32_t /*num_attributes*/) {
 	PRINT_NAME();
@@ -90,7 +90,7 @@ AudioPropagationSystemSetAttributes(AudioPropagationHandle /*system_handle*/,
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI AudioPropagationSystemGetRays(AudioPropagationHandle /*system_handle*/,
+static int32_t KATY_SYSV_ABI AudioPropagationSystemGetRays(AudioPropagationHandle /*system_handle*/,
                                                            void* /*rays*/, uint32_t* num_rays) {
 	PRINT_NAME();
 
@@ -295,7 +295,7 @@ static VoicePort* get_voice_port(uint32_t port_id) {
 	return &g_voice_ports[port_id];
 }
 
-int KYTY_SYSV_ABI VoiceInit(VoiceInitParam* /*param*/, int32_t /*version*/) {
+int KATY_SYSV_ABI VoiceInit(VoiceInitParam* /*param*/, int32_t /*version*/) {
 	PRINT_NAME();
 	g_voice_started = false;
 	for (auto& port: g_voice_ports) {
@@ -305,12 +305,12 @@ int KYTY_SYSV_ABI VoiceInit(VoiceInitParam* /*param*/, int32_t /*version*/) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceSetThreadsParams(void* /*params*/) {
+int KATY_SYSV_ABI VoiceSetThreadsParams(void* /*params*/) {
 	PRINT_NAME();
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceCreatePort(uint32_t* port_id, const VoicePortParam* param) {
+int KATY_SYSV_ABI VoiceCreatePort(uint32_t* port_id, const VoicePortParam* param) {
 	PRINT_NAME();
 
 	if (port_id == nullptr) {
@@ -326,7 +326,7 @@ int KYTY_SYSV_ABI VoiceCreatePort(uint32_t* port_id, const VoicePortParam* param
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceConnectIPortToOPort(uint32_t input_port_id, uint32_t output_port_id) {
+int KATY_SYSV_ABI VoiceConnectIPortToOPort(uint32_t input_port_id, uint32_t output_port_id) {
 	PRINT_NAME();
 
 	auto* input_port  = get_voice_port(input_port_id);
@@ -342,7 +342,7 @@ int KYTY_SYSV_ABI VoiceConnectIPortToOPort(uint32_t input_port_id, uint32_t outp
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceDisconnectIPortFromOPort(uint32_t input_port_id, uint32_t output_port_id) {
+int KATY_SYSV_ABI VoiceDisconnectIPortFromOPort(uint32_t input_port_id, uint32_t output_port_id) {
 	PRINT_NAME();
 
 	auto* input_port  = get_voice_port(input_port_id);
@@ -358,7 +358,7 @@ int KYTY_SYSV_ABI VoiceDisconnectIPortFromOPort(uint32_t input_port_id, uint32_t
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceDeletePort(uint32_t port_id) {
+int KATY_SYSV_ABI VoiceDeletePort(uint32_t port_id) {
 	PRINT_NAME();
 
 	if (auto* port = get_voice_port(port_id); port != nullptr) {
@@ -368,7 +368,7 @@ int KYTY_SYSV_ABI VoiceDeletePort(uint32_t port_id) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceEnd() {
+int KATY_SYSV_ABI VoiceEnd() {
 	PRINT_NAME();
 
 	g_voice_started = false;
@@ -380,19 +380,19 @@ int KYTY_SYSV_ABI VoiceEnd() {
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceStart(const VoiceStartParam* /*param*/) {
+int KATY_SYSV_ABI VoiceStart(const VoiceStartParam* /*param*/) {
 	PRINT_NAME();
 	g_voice_started = true;
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceStop() {
+int KATY_SYSV_ABI VoiceStop() {
 	PRINT_NAME();
 	g_voice_started = false;
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceReadFromOPort(uint32_t /*output_port_id*/, void* data, uint32_t* size) {
+int KATY_SYSV_ABI VoiceReadFromOPort(uint32_t /*output_port_id*/, void* data, uint32_t* size) {
 	PRINT_NAME();
 
 	if (size == nullptr) {
@@ -407,7 +407,7 @@ int KYTY_SYSV_ABI VoiceReadFromOPort(uint32_t /*output_port_id*/, void* data, ui
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceWriteToIPort(uint32_t /*input_port_id*/, const void* /*data*/,
+int KATY_SYSV_ABI VoiceWriteToIPort(uint32_t /*input_port_id*/, const void* /*data*/,
                                     uint32_t* size, int16_t /*frame_gaps*/) {
 	PRINT_NAME();
 
@@ -418,7 +418,7 @@ int KYTY_SYSV_ABI VoiceWriteToIPort(uint32_t /*input_port_id*/, const void* /*da
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceGetPortInfo(uint32_t port_id, VoicePortInfo* info) {
+int KATY_SYSV_ABI VoiceGetPortInfo(uint32_t port_id, VoicePortInfo* info) {
 	PRINT_NAME();
 
 	if (info == nullptr) {
@@ -439,7 +439,7 @@ int KYTY_SYSV_ABI VoiceGetPortInfo(uint32_t port_id, VoicePortInfo* info) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceGetPortAttr(uint32_t /*port_id*/, int32_t attr, void* value, int32_t size) {
+int KATY_SYSV_ABI VoiceGetPortAttr(uint32_t /*port_id*/, int32_t attr, void* value, int32_t size) {
 	PRINT_NAME();
 
 	if (value == nullptr || size <= 0) {
@@ -456,7 +456,7 @@ int KYTY_SYSV_ABI VoiceGetPortAttr(uint32_t /*port_id*/, int32_t attr, void* val
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceGetBitRate(uint32_t port_id, uint32_t* bitrate) {
+int KATY_SYSV_ABI VoiceGetBitRate(uint32_t port_id, uint32_t* bitrate) {
 	PRINT_NAME();
 
 	if (bitrate == nullptr) {
@@ -469,7 +469,7 @@ int KYTY_SYSV_ABI VoiceGetBitRate(uint32_t port_id, uint32_t* bitrate) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceSetVolume(uint32_t port_id, float volume) {
+int KATY_SYSV_ABI VoiceSetVolume(uint32_t port_id, float volume) {
 	PRINT_NAME();
 
 	if (auto* port = get_voice_port(port_id); port != nullptr) {
@@ -479,7 +479,7 @@ int KYTY_SYSV_ABI VoiceSetVolume(uint32_t port_id, float volume) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI VoiceGetVolume(uint32_t port_id, float* volume) {
+int KATY_SYSV_ABI VoiceGetVolume(uint32_t port_id, float* volume) {
 	PRINT_NAME();
 
 	if (volume == nullptr) {
@@ -889,7 +889,7 @@ static void audiodec_fill_info(AudiodecCtrl* ctrl, const AudiodecDecoder& decode
 	}
 }
 
-static int32_t KYTY_SYSV_ABI AudiodecInitLibrary(uint32_t codec_type) {
+static int32_t KATY_SYSV_ABI AudiodecInitLibrary(uint32_t codec_type) {
 	PRINT_NAME();
 
 	if (!audiodec_is_valid_type(codec_type)) {
@@ -902,7 +902,7 @@ static int32_t KYTY_SYSV_ABI AudiodecInitLibrary(uint32_t codec_type) {
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI AudiodecTermLibrary(uint32_t codec_type) {
+static int32_t KATY_SYSV_ABI AudiodecTermLibrary(uint32_t codec_type) {
 	PRINT_NAME();
 
 	if (!audiodec_is_valid_type(codec_type)) {
@@ -917,7 +917,7 @@ static int32_t KYTY_SYSV_ABI AudiodecTermLibrary(uint32_t codec_type) {
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI AudiodecCreateDecoder(AudiodecCtrl* ctrl, uint32_t codec_type) {
+static int32_t KATY_SYSV_ABI AudiodecCreateDecoder(AudiodecCtrl* ctrl, uint32_t codec_type) {
 	PRINT_NAME();
 
 	if (!audiodec_is_valid_type(codec_type)) {
@@ -983,7 +983,7 @@ static int32_t KYTY_SYSV_ABI AudiodecCreateDecoder(AudiodecCtrl* ctrl, uint32_t 
 	return AUDIODEC_ERROR_ARG;
 }
 
-static int32_t KYTY_SYSV_ABI AudiodecDeleteDecoder(int32_t handle) {
+static int32_t KATY_SYSV_ABI AudiodecDeleteDecoder(int32_t handle) {
 	PRINT_NAME();
 
 	if (handle <= 0 || static_cast<uint32_t>(handle) > g_audiodec_decoders.size()) {
@@ -1001,7 +1001,7 @@ static int32_t KYTY_SYSV_ABI AudiodecDeleteDecoder(int32_t handle) {
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI AudiodecDecode(int32_t handle, AudiodecCtrl* ctrl) {
+static int32_t KATY_SYSV_ABI AudiodecDecode(int32_t handle, AudiodecCtrl* ctrl) {
 	PRINT_NAME();
 
 	if (handle <= 0 || static_cast<uint32_t>(handle) > g_audiodec_decoders.size()) {
@@ -1035,7 +1035,7 @@ static int32_t KYTY_SYSV_ABI AudiodecDecode(int32_t handle, AudiodecCtrl* ctrl) 
 	return 0;
 }
 
-static int32_t KYTY_SYSV_ABI AudiodecClearContext(int32_t handle) {
+static int32_t KATY_SYSV_ABI AudiodecClearContext(int32_t handle) {
 	PRINT_NAME();
 
 	if (handle <= 0 || static_cast<uint32_t>(handle) > g_audiodec_decoders.size()) {

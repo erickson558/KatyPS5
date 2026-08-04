@@ -1,7 +1,7 @@
 #include "common/common.h"
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_LINUX
-// #error "KYTY_PLATFORM != KYTY_PLATFORM_LINUX"
+#if KATY_PLATFORM != KATY_PLATFORM_LINUX
+// #error "KATY_PLATFORM != KATY_PLATFORM_LINUX"
 #else
 
 #include "common/platform/sysDbg.h"

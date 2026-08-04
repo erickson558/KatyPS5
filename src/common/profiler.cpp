@@ -61,12 +61,12 @@ void Close() {
 	}
 }
 
-KYTY_SUBSYSTEM_INIT(Profiler) {
+KATY_SUBSYSTEM_INIT(Profiler) {
 	switch (Config::GetProfilerDirection()) {
 		case Config::ProfilerDirection::Network:
 			if (!tracy::ProfilerAvailable()) {
 				tracy::StartupProfiler();
-				TracySetProgramName("KytyPS5");
+				TracySetProgramName("KatyPS5");
 				::printf("Tracy profiler enabled: client %d.%d.%d, protocol %u, "
 				         "broadcast %u, connect to 127.0.0.1:8086\n",
 				         tracy::Version::Major, tracy::Version::Minor, tracy::Version::Patch,
@@ -78,11 +78,11 @@ KYTY_SUBSYSTEM_INIT(Profiler) {
 	}
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Profiler) {
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Profiler) {
 	Close();
 }
 
-KYTY_SUBSYSTEM_DESTROY(Profiler) {
+KATY_SUBSYSTEM_DESTROY(Profiler) {
 	Close();
 }
 

@@ -8,14 +8,14 @@ namespace Common {
 class File;
 } // namespace Common
 
-#define KYTY_PM4_GET(u, r, f) (((u) >> Pm4::r##_##f##_SHIFT) & Pm4::r##_##f##_MASK)
+#define KATY_PM4_GET(u, r, f) (((u) >> Pm4::r##_##f##_SHIFT) & Pm4::r##_##f##_MASK)
 
-#define KYTY_PM4(len, op, r)                                                                       \
+#define KATY_PM4(len, op, r)                                                                       \
 	(0xC0000000u | (((static_cast<uint16_t>(len) - 2u) & 0x3fffu) << 16u) |                        \
 	 (((op) & 0xffu) << 8u) | (((r) & (Pm4::R_NUM - 1u)) << 2u))
 
-#define KYTY_PM4_R(cmd_id)   (((cmd_id) >> 2u) & (Pm4::R_NUM - 1u))
-#define KYTY_PM4_LEN(cmd_id) ((((cmd_id) >> 16u) & 0x3fffu) + 2u)
+#define KATY_PM4_R(cmd_id)   (((cmd_id) >> 2u) & (Pm4::R_NUM - 1u))
+#define KATY_PM4_LEN(cmd_id) ((((cmd_id) >> 16u) & 0x3fffu) + 2u)
 
 namespace Libs::Graphics::Pm4 {
 

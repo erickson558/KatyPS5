@@ -16,7 +16,7 @@ public:
 	// The owner must stop all PageManager callers before destruction.
 	~PageManager();
 
-	KYTY_CLASS_NO_COPY(PageManager);
+	KATY_CLASS_NO_COPY(PageManager);
 
 	[[nodiscard]] uint64_t GetPageSize() const;
 

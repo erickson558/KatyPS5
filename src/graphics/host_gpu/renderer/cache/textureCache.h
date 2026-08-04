@@ -51,7 +51,7 @@ public:
 	TextureCache(GraphicContext& graphics, CommandScheduler& scheduler, PageManager& page_manager,
 	             BufferCache& buffer_cache, ResourceMutex& resource_mutex);
 	~TextureCache();
-	KYTY_CLASS_NO_COPY(TextureCache);
+	KATY_CLASS_NO_COPY(TextureCache);
 
 	[[nodiscard]] ImageId       FindImage(ImageDesc& desc, bool exact_format = false);
 	[[nodiscard]] ImageId       FindImageFromRange(uint64_t address, uint64_t size,

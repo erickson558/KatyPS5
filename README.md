@@ -1,25 +1,26 @@
-# KytyPS5
+# KatyPS5
 
-[![Build KytyPS5 (Windows)](https://img.shields.io/github/actions/workflow/status/KytyPS5/KytyPS5/build.yml?branch=main&event=push&label=Build%20KytyPS5%20%28Windows%29)](https://github.com/KytyPS5/KytyPS5/actions/workflows/build.yml)
-[![Build KytyPS5 (Linux)](https://img.shields.io/github/actions/workflow/status/KytyPS5/KytyPS5/build.yml?branch=main&event=push&label=Build%20KytyPS5%20%28Linux%29)](https://github.com/KytyPS5/KytyPS5/actions/workflows/build.yml)
-[![Build KytyPS5 (macOS)](https://img.shields.io/github/actions/workflow/status/KytyPS5/KytyPS5/build.yml?branch=main&event=push&label=Build%20KytyPS5%20%28macOS%29)](https://github.com/KytyPS5/KytyPS5/actions/workflows/build.yml)
+[![Build KatyPS5 (Windows)](https://img.shields.io/github/actions/workflow/status/erickson558/KatyPS5/build.yml?branch=main&event=push&label=Build%20KatyPS5%20%28Windows%29)](https://github.com/erickson558/KatyPS5/actions/workflows/build.yml)
+[![Build KatyPS5 (Linux)](https://img.shields.io/github/actions/workflow/status/erickson558/KatyPS5/build.yml?branch=main&event=push&label=Build%20KatyPS5%20%28Linux%29)](https://github.com/erickson558/KatyPS5/actions/workflows/build.yml)
+[![Build KatyPS5 (macOS)](https://img.shields.io/github/actions/workflow/status/erickson558/KatyPS5/build.yml?branch=main&event=push&label=Build%20KatyPS5%20%28macOS%29)](https://github.com/erickson558/KatyPS5/actions/workflows/build.yml)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64%20%7C%20Linux%20x64%20%7C%20macOS%20x86__64-0078D4.svg)](#system-requirements)
 [![Status](https://img.shields.io/badge/status-early%20development-orange.svg)](#current-status)
 [![License](https://img.shields.io/badge/license-GPL--2.0-blue.svg)](LICENSE)
 
-KytyPS5 is a free and open-source PlayStation 5 emulator written in C++ for Windows and Linux,
-with experimental macOS support. It is based on a heavily modified version of
-[Kyty](https://github.com/InoriRus/Kyty). The project is in an early stage of development, so
+KatyPS5 is a free and open-source PlayStation 5 emulator written in C++ for Windows and Linux,
+with experimental macOS support. It is a rebranded fork of
+[KytyPS5](https://github.com/KytyPS5/KytyPS5), which is itself based on a heavily modified version
+of [Kyty](https://github.com/InoriRus/Kyty). The project is in an early stage of development, so
 compatibility is limited and behavior may change significantly between builds.
 
 > [!IMPORTANT]
-> KytyPS5 is not affiliated with Sony Interactive Entertainment or PlayStation. The project does
+> KatyPS5 is not affiliated with Sony Interactive Entertainment or PlayStation. The project does
 > not distribute games or copyrighted system software. Use only game files that you have obtained
 > legally.
 
 ## Current Status
 
-KytyPS5 can boot 2D games and a selection of 3D games, including titles built with Unreal Engine
+KatyPS5 can boot 2D games and a selection of 3D games, including titles built with Unreal Engine
 4/5, Unity, and custom engines. No external low-level emulation modules are currently required.
 
 Development is focused on compatibility and boot reliability.
@@ -42,31 +43,31 @@ graphical glitches, low compatibility, and poor performance.
   <tr>
     <td align="center">
       <strong>Disgaea 6</strong><br>
-      <img src="docs/screenshots/ps5-01.png" width="300" alt="Disgaea 6 running in KytyPS5">
+      <img src="docs/screenshots/ps5-01.png" width="300" alt="Disgaea 6 running in KatyPS5">
     </td>
     <td align="center">
       <strong>Dreaming Sarah</strong><br>
-      <img src="docs/screenshots/ps5-03.png" width="300" alt="Dreaming Sarah running in KytyPS5">
+      <img src="docs/screenshots/ps5-03.png" width="300" alt="Dreaming Sarah running in KatyPS5">
     </td>
   </tr>
   <tr>
     <td align="center">
       <strong>Neptunia ReVerse</strong><br>
-      <img src="docs/screenshots/ps5-04.png" width="300" alt="Minecraft Legends running in KytyPS5">
+      <img src="docs/screenshots/ps5-04.png" width="300" alt="Minecraft Legends running in KatyPS5">
     </td>
     <td align="center">
       <strong>SILENT HILL: The Short Message</strong><br>
-      <img src="docs/screenshots/ps5-05.png" width="300" alt="SILENT HILL: The Short Message running in KytyPS5">
+      <img src="docs/screenshots/ps5-05.png" width="300" alt="SILENT HILL: The Short Message running in KatyPS5">
     </td>
   </tr>
   <tr>
     <td align="center">
       <strong>Hellboy</strong><br>
-      <img src="docs/screenshots/ps5-02.png" width="300" alt="Disgaea 6 running in KytyPS5">
+      <img src="docs/screenshots/ps5-02.png" width="300" alt="Disgaea 6 running in KatyPS5">
     </td>
     <td align="center">
       <strong>Paleo Pines</strong><br>
-      <img src="docs/screenshots/ps5-06.png" width="300" alt="Dreaming Sarah running in KytyPS5">
+      <img src="docs/screenshots/ps5-06.png" width="300" alt="Dreaming Sarah running in KatyPS5">
     </td>
   </tr>
 </table>
@@ -80,8 +81,12 @@ issues first, then use the **Game Emulation Bug Report** template and attach the
 
 Code contributions should be focused, build successfully on the platforms they touch, and include
 relevant tests where practical. Windows is the primary target, so a change that alters shared code
-should not regress it; changes confined to a platform's own code paths only need to build there. Because KytyPS5 is still evolving quickly, consider opening an issue before
+should not regress it; changes confined to a platform's own code paths only need to build there. Because KatyPS5 is still evolving quickly, consider opening an issue before
 starting a large change.
+
+This repo follows a Spec-Driven Development workflow — see [`CLAUDE.md`](CLAUDE.md) and
+[`specs/CONSTITUTION.md`](specs/CONSTITUTION.md) for the non-negotiables (don't break existing
+functionality, keep semver in sync, analyze before fixing) before proposing a non-trivial change.
 
 ### Formatting
 
@@ -216,12 +221,12 @@ cmake --build _Build/macos --target launcher --parallel
 cmake --install _Build/macos --prefix _Build/macos/install
 ```
 
-The build re-signs `kyty_emulator` with the JIT entitlements it needs to execute translated
+The build re-signs `katy_emulator` with the JIT entitlements it needs to execute translated
 guest code; no manual signing step is required.
 
 Vulkan comes from MoltenVK. Download `MoltenVK-macos.tar` from the
 [MoltenVK releases](https://github.com/KhronosGroup/MoltenVK/releases), then copy
-`MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib` next to `kyty_emulator` and ad-hoc sign it:
+`MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib` next to `katy_emulator` and ad-hoc sign it:
 
 ```bash
 codesign --force --sign - _Build/macos/install/libMoltenVK.dylib
@@ -234,7 +239,7 @@ Release archives already include a signed `libMoltenVK.dylib`.
 Build every regression executable and run the registered tests with:
 
 ```powershell
-cmake --build _Build/windows --target kyty_tests
+cmake --build _Build/windows --target katy_tests
 ctest --test-dir _Build/windows --output-on-failure
 ```
 
@@ -244,7 +249,7 @@ Use `_Build/linux` instead of `_Build/windows` for a Linux build.
 
 A ready-made Visual Studio Code setup is included in [`.vscode`](.vscode). It configures CMake
 Tools to build the project with Ninja and `clang-cl` and provides launch profiles for both
-`launcher.exe` and `kyty_emulator.exe`. It is Windows-only: VS Code settings cannot select a
+`launcher.exe` and `katy_emulator.exe`. It is Windows-only: VS Code settings cannot select a
 compiler per platform, so on Linux configure from the command line as shown above.
 
 Before using it:
@@ -253,7 +258,7 @@ Before using it:
 2. Update `CMAKE_PREFIX_PATH` in [`.vscode/settings.json`](.vscode/settings.json) to point to your
    Qt 6 MSVC installation.
 3. Update the `--game` path in [`.vscode/launch.json`](.vscode/launch.json) for the
-   **Debug kyty_emulator** profile.
+   **Debug katy_emulator** profile.
 4. Open the repository in an x64 Visual Studio developer environment, configure the CMake project,
    and select a launch profile from **Run and Debug**.
 
@@ -278,11 +283,11 @@ from the game list.
 The emulator can also be started directly with a legally obtained game directory or ELF file:
 
 ```powershell
-.\_Build\windows\install\kyty_emulator.exe --game "D:\Games\ExampleGame"
+.\_Build\windows\install\katy_emulator.exe --game "D:\Games\ExampleGame"
 ```
 
 ```bash
-./_Build/linux/install/kyty_emulator --game "/games/ExampleGame"
+./_Build/linux/install/katy_emulator --game "/games/ExampleGame"
 ```
 
 On macOS, point SDL at the MoltenVK library explicitly; the hardened runtime prevents it from
@@ -290,10 +295,10 @@ being picked up from the executable's directory:
 
 ```bash
 cd _Build/macos/install
-SDL_VULKAN_LIBRARY="$PWD/libMoltenVK.dylib" ./kyty_emulator --game "/games/ExampleGame"
+SDL_VULKAN_LIBRARY="$PWD/libMoltenVK.dylib" ./katy_emulator --game "/games/ExampleGame"
 ```
 
-Run `kyty_emulator --help` to see the available graphics, logging, validation, profiling, and
+Run `katy_emulator --help` to see the available graphics, logging, validation, profiling, and
 debugging options.
 
 ### AI Use
@@ -307,19 +312,37 @@ Pull requests that include AI-assisted or AI-generated work should disclose the 
 involvement and describe the human review and testing performed before submission. Unverified or
 untested generated changes may be closed without review.
 
+This repository also uses AI agents in a structured way for its own maintenance — see
+[`CLAUDE.md`](CLAUDE.md), [`.claude/agents/`](.claude/agents), and [`.claude/skills/`](.claude/skills).
+The disclosure/human-review expectation above still applies to anything produced that way.
+
+## Security
+
+See [`SECURITY.md`](SECURITY.md) to report a vulnerability. Static analysis
+(CodeQL) runs on every push/PR via [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml),
+and [Dependabot](.github/dependabot.yml) tracks updates for the vendored submodules and CI Actions.
+
 ## License
 
-KytyPS5 is licensed under the [GNU General Public License version 2](LICENSE)
-(`GPL-2.0-only`).
+KatyPS5 is licensed under the [GNU General Public License version 2](LICENSE)
+(`GPL-2.0-only`) — the same license as upstream KytyPS5; a GPL-2.0 codebase cannot be relicensed
+to a permissive license without every contributor's consent, so this fork keeps it unchanged.
 
-This project is based on the original [Kyty](https://github.com/InoriRus/Kyty), which was released
-under the MIT License. Kyty's original copyright and license notice are preserved in
+This project is a rebrand of [KytyPS5](https://github.com/KytyPS5/KytyPS5), which is based on the
+original [Kyty](https://github.com/InoriRus/Kyty), released under the MIT License. Kyty's original
+copyright and license notice are preserved in
 [`LICENSES/Kyty-MIT.txt`](LICENSES/Kyty-MIT.txt). Third-party components remain subject to the
 licenses included with those components.
 
 ## Special Thanks
 
+- [KytyPS5/KytyPS5](https://github.com/KytyPS5/KytyPS5) — KatyPS5 is a rebranded fork of KytyPS5.
 - [InoriRus/Kyty](https://github.com/InoriRus/Kyty) — KytyPS5 is based on a heavily modified version
   of the original Kyty project.
 - [shadps4-emu/shadPS4](https://github.com/shadps4-emu/shadPS4) — reference for memory-model
   understanding and the AVPlayer implementation.
+
+## Support
+
+If KatyPS5 has been useful to you, you can support development:
+[☕ Buy me a beer](https://www.paypal.com/donate/?hosted_button_id=ZABFRXC2P3JQN)

@@ -8,7 +8,7 @@
 
 namespace Loader::Timer {
 
-KYTY_SUBSYSTEM_DEFINE(Timer);
+KATY_SUBSYSTEM_DEFINE(Timer);
 
 void         Start();
 double       GetTimeMs();

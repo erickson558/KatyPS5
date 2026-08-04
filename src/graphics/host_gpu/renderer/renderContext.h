@@ -30,7 +30,7 @@ class RenderContext {
 public:
 	explicit RenderContext(GraphicContext& graphics);
 	~RenderContext();
-	KYTY_CLASS_NO_COPY(RenderContext);
+	KATY_CLASS_NO_COPY(RenderContext);
 
 	[[nodiscard]] GraphicContext&           GetGraphics() const noexcept { return m_graphics; }
 	void                                    InitializeGpu(VideoOut::VideoOutDriver* video_out);

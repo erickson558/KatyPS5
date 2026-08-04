@@ -127,7 +127,7 @@ struct ContentExportInitParam2 {
 
 static bool g_initialized = false;
 
-static int KYTY_SYSV_ABI ContentExportInit2(const ContentExportInitParam2* init_param) {
+static int KATY_SYSV_ABI ContentExportInit2(const ContentExportInitParam2* init_param) {
 	PRINT_NAME();
 
 	LOGF("\t init_param  = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(init_param));
@@ -172,7 +172,7 @@ struct ContentSearchInitParam {
 
 static bool g_initialized = false;
 
-static int KYTY_SYSV_ABI ContentSearchInit(const ContentSearchInitParam* init_param) {
+static int KATY_SYSV_ABI ContentSearchInit(const ContentSearchInitParam* init_param) {
 	PRINT_NAME();
 
 	LOGF("\t init_param  = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(init_param));
@@ -212,7 +212,7 @@ struct ContentDeleteInitParam {
 
 static bool g_initialized = false;
 
-static int KYTY_SYSV_ABI ContentDeleteInitialize(const ContentDeleteInitParam* init_param) {
+static int KATY_SYSV_ABI ContentDeleteInitialize(const ContentDeleteInitParam* init_param) {
 	PRINT_NAME();
 
 	LOGF("\t init_param = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(init_param));

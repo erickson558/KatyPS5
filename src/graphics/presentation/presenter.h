@@ -18,7 +18,7 @@ public:
 
 	explicit Presenter(WindowContext& window);
 	~Presenter();
-	KYTY_CLASS_NO_COPY(Presenter);
+	KATY_CLASS_NO_COPY(Presenter);
 
 	[[nodiscard]] Frame&         PrepareFrame(CommandBuffer& command, const ImageInfo& info);
 	[[nodiscard]] Frame&         PrepareBlankFrame(uint32_t width, uint32_t height, bool opaque,

@@ -40,7 +40,7 @@ public:
 	Buffer(GraphicContext& graphics, CommandScheduler& scheduler, MemoryUsage usage,
 	       uint64_t cpu_address, vk::BufferUsageFlags flags, uint64_t size);
 	~Buffer();
-	KYTY_CLASS_NO_COPY(Buffer);
+	KATY_CLASS_NO_COPY(Buffer);
 
 	[[nodiscard]] vk::Buffer         Handle() const noexcept;
 	[[nodiscard]] uint64_t           Size() const noexcept { return m_size; }

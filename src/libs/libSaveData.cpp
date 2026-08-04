@@ -306,7 +306,7 @@ static int mount_save_data(int slot, std::string_view dir_name, const std::strin
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataInitialize3(const void* /*init*/) {
+int KATY_SYSV_ABI SaveDataInitialize3(const void* /*init*/) {
 	PRINT_NAME();
 
 	// EXIT_NOT_IMPLEMENTED(init != nullptr);
@@ -314,7 +314,7 @@ int KYTY_SYSV_ABI SaveDataInitialize3(const void* /*init*/) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataTerminate() {
+int KATY_SYSV_ABI SaveDataTerminate() {
 	PRINT_NAME();
 
 	Common::LockGuard lock(g_mount_mutex);
@@ -326,7 +326,7 @@ int KYTY_SYSV_ABI SaveDataTerminate() {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataCreateTransactionResource(uint32_t size) {
+int KATY_SYSV_ABI SaveDataCreateTransactionResource(uint32_t size) {
 	PRINT_NAME();
 
 	LOGF("\t size = %" PRIu32 "\n", size);
@@ -334,7 +334,7 @@ int KYTY_SYSV_ABI SaveDataCreateTransactionResource(uint32_t size) {
 	return g_next_transaction_resource++;
 }
 
-int KYTY_SYSV_ABI SaveDataDeleteTransactionResource(int32_t resource) {
+int KATY_SYSV_ABI SaveDataDeleteTransactionResource(int32_t resource) {
 	PRINT_NAME();
 
 	LOGF("\t resource = %" PRId32 "\n", resource);
@@ -342,7 +342,7 @@ int KYTY_SYSV_ABI SaveDataDeleteTransactionResource(int32_t resource) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataDirNameSearch(const SaveDataDirNameSearchCond* cond,
+int KATY_SYSV_ABI SaveDataDirNameSearch(const SaveDataDirNameSearchCond* cond,
                                         SaveDataDirNameSearchResult*     result) {
 	PRINT_NAME();
 
@@ -420,7 +420,7 @@ int KYTY_SYSV_ABI SaveDataDirNameSearch(const SaveDataDirNameSearchCond* cond,
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataMount3(const SaveDataMount3* mount, SaveDataMountResult* mount_result) {
+int KATY_SYSV_ABI SaveDataMount3(const SaveDataMount3* mount, SaveDataMountResult* mount_result) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(mount == nullptr);
@@ -477,7 +477,7 @@ int KYTY_SYSV_ABI SaveDataMount3(const SaveDataMount3* mount, SaveDataMountResul
 	return mount_save_data(slot, dir_name, mount_dir, created ? 1u : 0u, mount_result);
 }
 
-int KYTY_SYSV_ABI SaveDataSetupSaveDataMemory2(const SaveDataMemorySetup2* setup_param,
+int KATY_SYSV_ABI SaveDataSetupSaveDataMemory2(const SaveDataMemorySetup2* setup_param,
                                                SaveDataMemorySetupResult*  result) {
 	PRINT_NAME();
 
@@ -505,7 +505,7 @@ int KYTY_SYSV_ABI SaveDataSetupSaveDataMemory2(const SaveDataMemorySetup2* setup
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataGetSaveDataMemory2(SaveDataMemoryGet2* get_param) {
+int KATY_SYSV_ABI SaveDataGetSaveDataMemory2(SaveDataMemoryGet2* get_param) {
 	PRINT_NAME();
 
 	if (get_param == nullptr) {
@@ -543,7 +543,7 @@ int KYTY_SYSV_ABI SaveDataGetSaveDataMemory2(SaveDataMemoryGet2* get_param) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataSetSaveDataMemory2(const SaveDataMemorySet2* set_param) {
+int KATY_SYSV_ABI SaveDataSetSaveDataMemory2(const SaveDataMemorySet2* set_param) {
 	PRINT_NAME();
 
 	if (set_param == nullptr) {
@@ -579,7 +579,7 @@ int KYTY_SYSV_ABI SaveDataSetSaveDataMemory2(const SaveDataMemorySet2* set_param
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataTransferringMount(const SaveDataTransferringMount* mount,
+int KATY_SYSV_ABI SaveDataTransferringMount(const SaveDataTransferringMount* mount,
                                             SaveDataMountResult*             mount_result) {
 	PRINT_NAME();
 
@@ -614,7 +614,7 @@ int KYTY_SYSV_ABI SaveDataTransferringMount(const SaveDataTransferringMount* mou
 	return mount_save_data(slot, dir_name, mount_dir, 1, mount_result);
 }
 
-int KYTY_SYSV_ABI SaveDataUmount2(uint32_t mode, const SaveDataMountPoint* mount_point) {
+int KATY_SYSV_ABI SaveDataUmount2(uint32_t mode, const SaveDataMountPoint* mount_point) {
 	PRINT_NAME();
 
 	if (mount_point == nullptr) {
@@ -641,7 +641,7 @@ int KYTY_SYSV_ABI SaveDataUmount2(uint32_t mode, const SaveDataMountPoint* mount
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataPrepare(const SaveDataMountPoint*   mount_point,
+int KATY_SYSV_ABI SaveDataPrepare(const SaveDataMountPoint*   mount_point,
                                   const SaveDataPrepareParam* param) {
 	PRINT_NAME();
 
@@ -657,7 +657,7 @@ int KYTY_SYSV_ABI SaveDataPrepare(const SaveDataMountPoint*   mount_point,
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataCommit(const SaveDataCommitParam* param) {
+int KATY_SYSV_ABI SaveDataCommit(const SaveDataCommitParam* param) {
 	PRINT_NAME();
 
 	if (param == nullptr) {
@@ -675,7 +675,7 @@ int KYTY_SYSV_ABI SaveDataCommit(const SaveDataCommitParam* param) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataDelete(const SaveDataDelete* del) {
+int KATY_SYSV_ABI SaveDataDelete(const SaveDataDelete* del) {
 	PRINT_NAME();
 
 	if (del == nullptr || del->dir_name == nullptr) {
@@ -697,7 +697,7 @@ int KYTY_SYSV_ABI SaveDataDelete(const SaveDataDelete* del) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataGetParam(const SaveDataMountPoint* mount_point, uint32_t param_type,
+int KATY_SYSV_ABI SaveDataGetParam(const SaveDataMountPoint* mount_point, uint32_t param_type,
                                    void* param_buf, size_t param_buf_size, size_t* got_size) {
 	PRINT_NAME();
 
@@ -729,7 +729,7 @@ int KYTY_SYSV_ABI SaveDataGetParam(const SaveDataMountPoint* mount_point, uint32
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataLoadIcon(const SaveDataMountPoint* mount_point, SaveDataIcon* icon) {
+int KATY_SYSV_ABI SaveDataLoadIcon(const SaveDataMountPoint* mount_point, SaveDataIcon* icon) {
 	PRINT_NAME();
 
 	if (mount_point == nullptr || icon == nullptr) {
@@ -746,7 +746,7 @@ int KYTY_SYSV_ABI SaveDataLoadIcon(const SaveDataMountPoint* mount_point, SaveDa
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataSaveIconByPath(const SaveDataMountPoint* mount_point, const char* path) {
+int KATY_SYSV_ABI SaveDataSaveIconByPath(const SaveDataMountPoint* mount_point, const char* path) {
 	PRINT_NAME();
 
 	if (mount_point == nullptr || path == nullptr) {
@@ -760,7 +760,7 @@ int KYTY_SYSV_ABI SaveDataSaveIconByPath(const SaveDataMountPoint* mount_point, 
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataSyncSaveDataMemory(const void* sync_param) {
+int KATY_SYSV_ABI SaveDataSyncSaveDataMemory(const void* sync_param) {
 	PRINT_NAME();
 
 	LOGF("\t sync_param = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(sync_param));
@@ -768,7 +768,7 @@ int KYTY_SYSV_ABI SaveDataSyncSaveDataMemory(const void* sync_param) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataGetEventResult(const void* event_param, SaveDataEvent* event) {
+int KATY_SYSV_ABI SaveDataGetEventResult(const void* event_param, SaveDataEvent* event) {
 	PRINT_NAME();
 
 	LOGF("\t event_param = 0x%016" PRIx64 "\n"
@@ -797,7 +797,7 @@ int KYTY_SYSV_ABI SaveDataGetEventResult(const void* event_param, SaveDataEvent*
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataBackup(const SaveDataBackup* backup) {
+int KATY_SYSV_ABI SaveDataBackup(const SaveDataBackup* backup) {
 	PRINT_NAME();
 
 	LOGF("\t backup = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(backup));
@@ -818,7 +818,7 @@ int KYTY_SYSV_ABI SaveDataBackup(const SaveDataBackup* backup) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataSetParam(const SaveDataMountPoint* mount_point, uint32_t param_type,
+int KATY_SYSV_ABI SaveDataSetParam(const SaveDataMountPoint* mount_point, uint32_t param_type,
                                    const void* param_buf, size_t param_buf_size) {
 	PRINT_NAME();
 
@@ -844,7 +844,7 @@ int KYTY_SYSV_ABI SaveDataSetParam(const SaveDataMountPoint* mount_point, uint32
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataGetMountInfo(const SaveDataMountPoint* mount_point,
+int KATY_SYSV_ABI SaveDataGetMountInfo(const SaveDataMountPoint* mount_point,
                                        SaveDataMountInfo*        info) {
 	PRINT_NAME();
 
@@ -859,7 +859,7 @@ int KYTY_SYSV_ABI SaveDataGetMountInfo(const SaveDataMountPoint* mount_point,
 	return OK;
 }
 
-int KYTY_SYSV_ABI SaveDataSaveIcon(const SaveDataMountPoint* mount_point,
+int KATY_SYSV_ABI SaveDataSaveIcon(const SaveDataMountPoint* mount_point,
                                    const SaveDataIcon*       icon) {
 	EXIT_NOT_IMPLEMENTED(mount_point == nullptr);
 	EXIT_NOT_IMPLEMENTED(icon == nullptr);

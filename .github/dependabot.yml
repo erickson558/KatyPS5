@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # The 12 vendored dependencies under 3rdparty/ (SDL2, Vulkan-Headers, SPIRV-Tools, fmt, spdlog,
+  # etc.) are git submodules, not a package-manager manifest — this is the ecosystem Dependabot
+  # uses to track submodule updates.
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Keep the Actions used in build.yml/codeql.yml (checkout, install-qt-action, codeql-action, ...)
+  # pinned to non-vulnerable, current versions.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

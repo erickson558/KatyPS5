@@ -75,13 +75,13 @@ struct SystemServiceHdrToneMapLuminance {
 	float min_tone_map_luminance;
 };
 
-static int KYTY_SYSV_ABI SystemServiceHideSplashScreen() {
+static int KATY_SYSV_ABI SystemServiceHideSplashScreen() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemServiceParamGetInt(int param_id, int* value) {
+static int KATY_SYSV_ABI SystemServiceParamGetInt(int param_id, int* value) {
 	PRINT_NAME();
 
 	if (value == nullptr) {
@@ -109,7 +109,7 @@ static int KYTY_SYSV_ABI SystemServiceParamGetInt(int param_id, int* value) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemServiceParamGetString(int param_id, char* buf, size_t buf_size) {
+static int KATY_SYSV_ABI SystemServiceParamGetString(int param_id, char* buf, size_t buf_size) {
 	PRINT_NAME();
 
 	if (buf == nullptr || buf_size == 0) {
@@ -118,7 +118,7 @@ static int KYTY_SYSV_ABI SystemServiceParamGetString(int param_id, char* buf, si
 
 	const char* value = nullptr;
 	switch (param_id) {
-		case PARAM_ID_SYSTEM_NAME: value = "Kyty"; break;
+		case PARAM_ID_SYSTEM_NAME: value = "Katy"; break;
 		default: EXIT("unknown string param_id: %d\n", param_id);
 	}
 
@@ -133,7 +133,7 @@ static int KYTY_SYSV_ABI SystemServiceParamGetString(int param_id, char* buf, si
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemServiceReceiveEvent(SystemServiceEvent* event) {
+static int KATY_SYSV_ABI SystemServiceReceiveEvent(SystemServiceEvent* event) {
 	PRINT_NAME();
 
 	if (event == nullptr) {
@@ -146,7 +146,7 @@ static int KYTY_SYSV_ABI SystemServiceReceiveEvent(SystemServiceEvent* event) {
 	return SYSTEM_SERVICE_ERROR_NO_EVENT;
 }
 
-static int KYTY_SYSV_ABI SystemServiceGetStatus(SystemServiceStatus* status) {
+static int KATY_SYSV_ABI SystemServiceGetStatus(SystemServiceStatus* status) {
 	PRINT_NAME();
 
 	if (status == nullptr) {
@@ -158,7 +158,7 @@ static int KYTY_SYSV_ABI SystemServiceGetStatus(SystemServiceStatus* status) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 SystemServiceGetDisplaySafeAreaInfo(SystemServiceDisplaySafeAreaInfo* info) {
 	PRINT_NAME();
 
@@ -171,7 +171,7 @@ SystemServiceGetDisplaySafeAreaInfo(SystemServiceDisplaySafeAreaInfo* info) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 SystemServiceGetHdrToneMapLuminance(SystemServiceHdrToneMapLuminance* luminance) {
 	PRINT_NAME();
 
@@ -186,7 +186,7 @@ SystemServiceGetHdrToneMapLuminance(SystemServiceHdrToneMapLuminance* luminance)
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemServiceGetNoticeScreenSkipFlag(bool* value) {
+static int KATY_SYSV_ABI SystemServiceGetNoticeScreenSkipFlag(bool* value) {
 	PRINT_NAME();
 
 	if (value == nullptr) {
@@ -198,25 +198,25 @@ static int KYTY_SYSV_ABI SystemServiceGetNoticeScreenSkipFlag(bool* value) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemServiceDisableNoticeScreenSkipFlagAutoSet() {
+static int KATY_SYSV_ABI SystemServiceDisableNoticeScreenSkipFlagAutoSet() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemServiceSetNoticeScreenSkipFlag() {
+static int KATY_SYSV_ABI SystemServiceSetNoticeScreenSkipFlag() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemServicePowerTick() {
+static int KATY_SYSV_ABI SystemServicePowerTick() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemServiceReportAbnormalTermination(const void* info) {
+static int KATY_SYSV_ABI SystemServiceReportAbnormalTermination(const void* info) {
 	PRINT_NAME();
 
 	LOGF("\t info = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(info));
@@ -283,15 +283,15 @@ static bool SystemGestureIsValidHandle(int32_t gesture_handle) {
 	return gesture_handle == SYSTEM_GESTURE_HANDLE;
 }
 
-static int KYTY_SYSV_ABI SystemGestureInitializePrimitiveTouchRecognizer(const void*) {
+static int KATY_SYSV_ABI SystemGestureInitializePrimitiveTouchRecognizer(const void*) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemGestureFinalizePrimitiveTouchRecognizer() {
+static int KATY_SYSV_ABI SystemGestureFinalizePrimitiveTouchRecognizer() {
 	return OK;
 }
 
-static int32_t KYTY_SYSV_ABI SystemGestureOpen(int32_t input_type, const void*) {
+static int32_t KATY_SYSV_ABI SystemGestureOpen(int32_t input_type, const void*) {
 	if (input_type != SYSTEM_GESTURE_INPUT_TOUCH_PAD) {
 		return SYSTEM_GESTURE_ERROR_INVALID_ARGUMENT;
 	}
@@ -299,20 +299,20 @@ static int32_t KYTY_SYSV_ABI SystemGestureOpen(int32_t input_type, const void*) 
 	return SYSTEM_GESTURE_HANDLE;
 }
 
-static int KYTY_SYSV_ABI SystemGestureClose(int32_t gesture_handle) {
+static int KATY_SYSV_ABI SystemGestureClose(int32_t gesture_handle) {
 	return SystemGestureIsValidHandle(gesture_handle) ? OK : SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
 }
 
-static int KYTY_SYSV_ABI SystemGestureResetPrimitiveTouchRecognizer(int32_t gesture_handle) {
+static int KATY_SYSV_ABI SystemGestureResetPrimitiveTouchRecognizer(int32_t gesture_handle) {
 	return SystemGestureIsValidHandle(gesture_handle) ? OK : SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
 }
 
-static int KYTY_SYSV_ABI SystemGestureUpdatePrimitiveTouchRecognizer(int32_t gesture_handle,
+static int KATY_SYSV_ABI SystemGestureUpdatePrimitiveTouchRecognizer(int32_t gesture_handle,
                                                                      const void*) {
 	return SystemGestureIsValidHandle(gesture_handle) ? OK : SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetPrimitiveTouchEvents(
+static int KATY_SYSV_ABI SystemGestureGetPrimitiveTouchEvents(
     int32_t gesture_handle, SystemGesturePrimitiveTouchEvent* event_buffer,
     uint32_t capacity_of_buffer, uint32_t* number_of_event) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
@@ -330,11 +330,11 @@ static int KYTY_SYSV_ABI SystemGestureGetPrimitiveTouchEvents(
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetPrimitiveTouchEventsCount(int32_t gesture_handle) {
+static int KATY_SYSV_ABI SystemGestureGetPrimitiveTouchEventsCount(int32_t gesture_handle) {
 	return SystemGestureIsValidHandle(gesture_handle) ? 0 : SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetPrimitiveTouchEventByIndex(
+static int KATY_SYSV_ABI SystemGestureGetPrimitiveTouchEventByIndex(
     int32_t gesture_handle, uint32_t, SystemGesturePrimitiveTouchEvent* event) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
 		return SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
@@ -345,7 +345,7 @@ static int KYTY_SYSV_ABI SystemGestureGetPrimitiveTouchEventByIndex(
 	return SYSTEM_GESTURE_ERROR_EVENT_DATA_NOT_FOUND;
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetPrimitiveTouchEventByPrimitiveID(
+static int KATY_SYSV_ABI SystemGestureGetPrimitiveTouchEventByPrimitiveID(
     int32_t gesture_handle, uint16_t, SystemGesturePrimitiveTouchEvent* event) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
 		return SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
@@ -356,7 +356,7 @@ static int KYTY_SYSV_ABI SystemGestureGetPrimitiveTouchEventByPrimitiveID(
 	return SYSTEM_GESTURE_ERROR_EVENT_DATA_NOT_FOUND;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 SystemGestureCreateTouchRecognizer(int32_t gesture_handle, SystemGestureTouchRecognizer* recognizer,
                                    int32_t, const SystemGestureRectangle*, const void*) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
@@ -371,7 +371,7 @@ SystemGestureCreateTouchRecognizer(int32_t gesture_handle, SystemGestureTouchRec
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemGestureAppendTouchRecognizer(
+static int KATY_SYSV_ABI SystemGestureAppendTouchRecognizer(
     int32_t gesture_handle, SystemGestureTouchRecognizer* recognizer) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
 		return SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
@@ -379,7 +379,7 @@ static int KYTY_SYSV_ABI SystemGestureAppendTouchRecognizer(
 	return (recognizer != nullptr ? OK : SYSTEM_GESTURE_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI SystemGestureRemoveTouchRecognizer(
+static int KATY_SYSV_ABI SystemGestureRemoveTouchRecognizer(
     int32_t gesture_handle, SystemGestureTouchRecognizer* recognizer) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
 		return SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
@@ -387,7 +387,7 @@ static int KYTY_SYSV_ABI SystemGestureRemoveTouchRecognizer(
 	return (recognizer != nullptr ? OK : SYSTEM_GESTURE_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI SystemGestureResetTouchRecognizer(
+static int KATY_SYSV_ABI SystemGestureResetTouchRecognizer(
     int32_t gesture_handle, SystemGestureTouchRecognizer* recognizer) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
 		return SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
@@ -398,7 +398,7 @@ static int KYTY_SYSV_ABI SystemGestureResetTouchRecognizer(
 	return (recognizer != nullptr ? OK : SYSTEM_GESTURE_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetTouchRecognizerInformation(
+static int KATY_SYSV_ABI SystemGestureGetTouchRecognizerInformation(
     int32_t gesture_handle, const SystemGestureTouchRecognizer* recognizer,
     SystemGestureTouchRecognizerInformation* information) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
@@ -413,7 +413,7 @@ static int KYTY_SYSV_ABI SystemGestureGetTouchRecognizerInformation(
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemGestureUpdateTouchRecognizer(
+static int KATY_SYSV_ABI SystemGestureUpdateTouchRecognizer(
     int32_t gesture_handle, SystemGestureTouchRecognizer* recognizer) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
 		return SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
@@ -421,11 +421,11 @@ static int KYTY_SYSV_ABI SystemGestureUpdateTouchRecognizer(
 	return (recognizer != nullptr ? OK : SYSTEM_GESTURE_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI SystemGestureUpdateAllTouchRecognizer(int32_t gesture_handle) {
+static int KATY_SYSV_ABI SystemGestureUpdateAllTouchRecognizer(int32_t gesture_handle) {
 	return SystemGestureIsValidHandle(gesture_handle) ? OK : SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
 }
 
-static int KYTY_SYSV_ABI SystemGestureUpdateTouchRecognizerRectangle(
+static int KATY_SYSV_ABI SystemGestureUpdateTouchRecognizerRectangle(
     int32_t gesture_handle, SystemGestureTouchRecognizer* recognizer,
     const SystemGestureRectangle* rectangle) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
@@ -437,7 +437,7 @@ static int KYTY_SYSV_ABI SystemGestureUpdateTouchRecognizerRectangle(
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetTouchEvents(int32_t gesture_handle,
+static int KATY_SYSV_ABI SystemGestureGetTouchEvents(int32_t gesture_handle,
                                                      const SystemGestureTouchRecognizer* recognizer,
                                                      SystemGestureTouchEvent* event_buffer,
                                                      uint32_t                 capacity_of_buffer,
@@ -457,7 +457,7 @@ static int KYTY_SYSV_ABI SystemGestureGetTouchEvents(int32_t gesture_handle,
 	return OK;
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetTouchEventsCount(
+static int KATY_SYSV_ABI SystemGestureGetTouchEventsCount(
     int32_t gesture_handle, const SystemGestureTouchRecognizer* recognizer) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
 		return SYSTEM_GESTURE_ERROR_INVALID_HANDLE;
@@ -465,7 +465,7 @@ static int KYTY_SYSV_ABI SystemGestureGetTouchEventsCount(
 	return (recognizer != nullptr ? 0 : SYSTEM_GESTURE_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetTouchEventByIndex(
+static int KATY_SYSV_ABI SystemGestureGetTouchEventByIndex(
     int32_t gesture_handle, const SystemGestureTouchRecognizer* recognizer, uint32_t,
     SystemGestureTouchEvent* event) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {
@@ -480,7 +480,7 @@ static int KYTY_SYSV_ABI SystemGestureGetTouchEventByIndex(
 	return SYSTEM_GESTURE_ERROR_EVENT_DATA_NOT_FOUND;
 }
 
-static int KYTY_SYSV_ABI SystemGestureGetTouchEventByEventID(
+static int KATY_SYSV_ABI SystemGestureGetTouchEventByEventID(
     int32_t gesture_handle, const SystemGestureTouchRecognizer* recognizer, uint32_t,
     SystemGestureTouchEvent* event) {
 	if (!SystemGestureIsValidHandle(gesture_handle)) {

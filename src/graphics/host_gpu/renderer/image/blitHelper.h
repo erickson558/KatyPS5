@@ -20,7 +20,7 @@ public:
 
 	BlitHelper(GraphicContext& graphics, CommandScheduler& scheduler);
 	~BlitHelper();
-	KYTY_CLASS_NO_COPY(BlitHelper);
+	KATY_CLASS_NO_COPY(BlitHelper);
 
 	void ReinterpretColorAsMsDepth(Image& source, Image& destination);
 

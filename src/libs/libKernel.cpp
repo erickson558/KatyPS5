@@ -35,7 +35,7 @@
 #include <unordered_map>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -64,8 +64,8 @@ LIB_DEFINE(InitLibKernel_1_Apr);
 namespace LibKernel {
 
 using KernelModule                   = int32_t;
-using get_thread_atexit_count_func_t = KYTY_SYSV_ABI int (*)(KernelModule);
-using thread_atexit_report_func_t    = KYTY_SYSV_ABI void (*)(KernelModule);
+using get_thread_atexit_count_func_t = KATY_SYSV_ABI int (*)(KernelModule);
+using thread_atexit_report_func_t    = KATY_SYSV_ABI void (*)(KernelModule);
 
 static uint32_t sha1_rol(uint32_t value, uint32_t bits) {
 	return (value << bits) | (value >> (32u - bits));
@@ -206,7 +206,7 @@ static const Loader::SymbolRecord* kernel_find_export_symbol(const Loader::Symbo
 	return symbols->FindByName(symbol_name, Loader::SymbolType::NoType);
 }
 
-static void* KYTY_SYSV_ABI KernelApplicationHeapGetMem(uint64_t alignment, uint64_t size) {
+static void* KATY_SYSV_ABI KernelApplicationHeapGetMem(uint64_t alignment, uint64_t size) {
 	static std::atomic_uint32_t log_count = 0;
 
 	if (alignment < 0x10u) {
@@ -229,7 +229,7 @@ static void* KYTY_SYSV_ABI KernelApplicationHeapGetMem(uint64_t alignment, uint6
 	return ptr;
 }
 
-int KYTY_SYSV_ABI KernelDlsym(KernelModule handle, const char* symbol, void** addr) {
+int KATY_SYSV_ABI KernelDlsym(KernelModule handle, const char* symbol, void** addr) {
 	static std::atomic_uint32_t log_count = 0;
 	const auto                  index     = log_count.fetch_add(1, std::memory_order_relaxed);
 	if (index < 32 || (index % 600) == 0) {
@@ -363,17 +363,17 @@ void SetProgName(const std::string& name) {
 	strncpy(g_progname_buf, name.c_str(), PROGNAME_MAX_SIZE);
 }
 
-static KYTY_SYSV_ABI int* get_error_addr() {
+static KATY_SYSV_ABI int* get_error_addr() {
 	return Posix::GetErrorAddr();
 }
 
-static KYTY_SYSV_ABI int getargc() {
+static KATY_SYSV_ABI int getargc() {
 	PRINT_NAME();
 
 	return LibC::GetArgc();
 }
 
-static KYTY_SYSV_ABI const char** getargv() {
+static KATY_SYSV_ABI const char** getargv() {
 	PRINT_NAME();
 
 	return LibC::GetArgv();
@@ -460,7 +460,7 @@ static void dump_stack_chk_fail_context(uint64_t caller, uint64_t rsp) {
 	}
 }
 
-static KYTY_SYSV_ABI void stack_chk_fail() {
+static KATY_SYSV_ABI void stack_chk_fail() {
 	PRINT_NAME();
 
 	uint64_t rsp = 0;
@@ -470,7 +470,7 @@ static KYTY_SYSV_ABI void stack_chk_fail() {
 	EXIT("stack fail!!!");
 }
 
-static KYTY_SYSV_ABI int sigprocmask(int /*how*/, const void* /*set*/, void* /*oset*/) {
+static KATY_SYSV_ABI int sigprocmask(int /*how*/, const void* /*set*/, void* /*oset*/) {
 	// PRINT_NAME();
 
 	// LOGF("\t how = %d\n", how);
@@ -494,7 +494,7 @@ static bool IsAllowedExceptionSignal(int signum) {
 
 static void* g_exception_handlers[130] = {};
 
-using exception_handler_func_t = KYTY_SYSV_ABI void (*)(int, void*);
+using exception_handler_func_t = KATY_SYSV_ABI void (*)(int, void*);
 
 static thread_local bool g_dispatching_signal_handler = false;
 
@@ -590,13 +590,13 @@ static_assert(offsetof(SignalMcontext, mc_rip) == 0xa0);
 static_assert(offsetof(SignalUcontext, uc_mcontext) + offsetof(SignalMcontext, mc_rsp) == 0xf8);
 
 static SignalUcontext CreateSignalUcontext(
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
     const CONTEXT* source_ctx = nullptr
 #endif
 ) {
 	SignalUcontext ctx = {};
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	CONTEXT host_ctx = {};
 	if (source_ctx != nullptr) {
 		host_ctx = *source_ctx;
@@ -807,7 +807,7 @@ static void SanitizeNonGuestSignalUcontext(SignalUcontext* ctx, Pthread thread) 
 	ctx->uc_mcontext.mc_rip = 0;
 }
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 static void ApplySignalUcontext(CONTEXT* dst_ctx, const SignalUcontext& src_ctx) {
 	if (dst_ctx == nullptr) {
 		return;
@@ -840,7 +840,7 @@ static void ApplySignalUcontext(CONTEXT* dst_ctx, const SignalUcontext& src_ctx)
 }
 #endif
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_WINDOWS && defined(__x86_64__)
+#if KATY_PLATFORM != KATY_PLATFORM_WINDOWS && defined(__x86_64__)
 
 static SignalUcontext CreateSignalUcontextFromHost(const ucontext_t* host_ctx) {
 	SignalUcontext ctx = {};
@@ -1016,22 +1016,22 @@ static bool EnsureHostSignalDispatchInstalled() {
 
 #endif
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
-enum KytyQueueUserApcFlags : ULONG_PTR {
-	KytyQueueUserApcFlagsNone            = 0,
-	KytyQueueUserApcFlagsSpecialUserApc  = 1,
-	KytyQueueUserApcFlagsCallbackContext = 0x00010000,
-	KytyQueueUserApcFlagsMaxValue        = 2,
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
+enum KatyQueueUserApcFlags : ULONG_PTR {
+	KatyQueueUserApcFlagsNone            = 0,
+	KatyQueueUserApcFlagsSpecialUserApc  = 1,
+	KatyQueueUserApcFlagsCallbackContext = 0x00010000,
+	KatyQueueUserApcFlagsMaxValue        = 2,
 };
 
-union KytyUserApcOption {
+union KatyUserApcOption {
 	ULONG_PTR UserApcFlags;
 	HANDLE    MemoryReserveHandle;
 };
 
-using KytyPsApcRoutine = void (*)(void* apc_arg1, void* apc_arg2, void* apc_arg3, PCONTEXT context);
-using NtQueueApcThreadExFunc = uint64_t(WINAPI*)(HANDLE thread, KytyUserApcOption option,
-                                                 KytyPsApcRoutine routine, void* arg1, void* arg2,
+using KatyPsApcRoutine = void (*)(void* apc_arg1, void* apc_arg2, void* apc_arg3, PCONTEXT context);
+using NtQueueApcThreadExFunc = uint64_t(WINAPI*)(HANDLE thread, KatyUserApcOption option,
+                                                 KatyPsApcRoutine routine, void* arg1, void* arg2,
                                                  void* arg3);
 
 static NtQueueApcThreadExFunc GetNtQueueApcThreadEx() {
@@ -1147,7 +1147,7 @@ void KernelDispatchPendingSignalForCurrentThread() {
 	}
 }
 
-static int KYTY_SYSV_ABI KernelInstallExceptionHandler(int signum, void* handler) {
+static int KATY_SYSV_ABI KernelInstallExceptionHandler(int signum, void* handler) {
 	PRINT_NAME();
 
 	LOGF("\t signum  = %d\n"
@@ -1165,7 +1165,7 @@ static int KYTY_SYSV_ABI KernelInstallExceptionHandler(int signum, void* handler
 	return OK;
 }
 
-static int KYTY_SYSV_ABI KernelRemoveExceptionHandler(int signum) {
+static int KATY_SYSV_ABI KernelRemoveExceptionHandler(int signum) {
 	PRINT_NAME();
 
 	LOGF("\t signum = %d\n", signum);
@@ -1178,7 +1178,7 @@ static int KYTY_SYSV_ABI KernelRemoveExceptionHandler(int signum) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI KernelRaiseException(Pthread thread, int signum) {
+static int KATY_SYSV_ABI KernelRaiseException(Pthread thread, int signum) {
 	constexpr int POSIX_SIGUSR1 = 30;
 
 	if (signum != POSIX_SIGUSR1 || thread == nullptr) {
@@ -1187,7 +1187,7 @@ static int KYTY_SYSV_ABI KernelRaiseException(Pthread thread, int signum) {
 
 	auto* handler = reinterpret_cast<exception_handler_func_t>(g_exception_handlers[signum]);
 	if (handler != nullptr) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		const auto target_thread_id       = PthreadGetHostThreadId(thread);
 		auto*      nt_queue_apc_thread_ex = GetNtQueueApcThreadEx();
 		if (target_thread_id == 0) {
@@ -1212,8 +1212,8 @@ static int KYTY_SYSV_ABI KernelRaiseException(Pthread thread, int signum) {
 		}
 
 		QueuePendingSignal(thread, signum);
-		KytyUserApcOption option {};
-		option.UserApcFlags = KytyQueueUserApcFlagsSpecialUserApc;
+		KatyUserApcOption option {};
+		option.UserApcFlags = KatyQueueUserApcFlagsSpecialUserApc;
 
 		const auto status =
 		    nt_queue_apc_thread_ex(target_thread, option, SignalApcHandler, thread,
@@ -1270,7 +1270,7 @@ static int KYTY_SYSV_ABI KernelRaiseException(Pthread thread, int signum) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI KernelModule KernelLoadStartModule(const char* module_file_name, size_t args,
+static KATY_SYSV_ABI KernelModule KernelLoadStartModule(const char* module_file_name, size_t args,
                                                         const void* argp, uint32_t flags,
                                                         const KernelLoadModuleOpt* opt, int* res) {
 	PRINT_NAME();
@@ -1322,7 +1322,7 @@ static KYTY_SYSV_ABI KernelModule KernelLoadStartModule(const char* module_file_
 	return static_cast<KernelModule>(handle);
 }
 
-static int KYTY_SYSV_ABI KernelStopUnloadModule(KernelModule handle, size_t args, const void* argp,
+static int KATY_SYSV_ABI KernelStopUnloadModule(KernelModule handle, size_t args, const void* argp,
                                                 uint32_t flags, const KernelUnloadModuleOpt* opt,
                                                 int* res) {
 	PRINT_NAME();
@@ -1366,7 +1366,7 @@ static int KYTY_SYSV_ABI KernelStopUnloadModule(KernelModule handle, size_t args
 	return OK;
 }
 
-static void* KYTY_SYSV_ABI tls_get_addr(TlsInfo* info) {
+static void* KATY_SYSV_ABI tls_get_addr(TlsInfo* info) {
 	PRINT_NAME();
 
 	// EXIT_NOT_IMPLEMENTED(!Common::Thread::IsMainThread());
@@ -1374,7 +1374,7 @@ static void* KYTY_SYSV_ABI tls_get_addr(TlsInfo* info) {
 	return Loader::RuntimeLinker::TlsGetAddr(info->program) + info->offset;
 }
 
-static void* KYTY_SYSV_ABI KernelGetProcParam() {
+static void* KATY_SYSV_ABI KernelGetProcParam() {
 	PRINT_NAME();
 
 	auto* rt = Common::Singleton<Loader::RuntimeLinker>::Instance(); // NOLINT
@@ -1382,7 +1382,7 @@ static void* KYTY_SYSV_ABI KernelGetProcParam() {
 	return reinterpret_cast<void*>(rt->GetProcParam());
 }
 
-static int KYTY_SYSV_ABI KernelIsTrinityMode() {
+static int KATY_SYSV_ABI KernelIsTrinityMode() {
 	static std::atomic_uint32_t call_count {0};
 
 	auto count = call_count.fetch_add(1, std::memory_order_relaxed);
@@ -1394,7 +1394,7 @@ static int KYTY_SYSV_ABI KernelIsTrinityMode() {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI KernelFsync(int fd) {
+static int KATY_SYSV_ABI KernelFsync(int fd) {
 	PRINT_NAME();
 
 	LOGF("\t fd = %d\n", fd);
@@ -1402,17 +1402,17 @@ static int KYTY_SYSV_ABI KernelFsync(int fd) {
 	return OK;
 }
 
-static void KYTY_SYSV_ABI KernelSync() {
+static void KATY_SYSV_ABI KernelSync() {
 	PRINT_NAME();
 }
 
-static int KYTY_SYSV_ABI getpid() {
+static int KATY_SYSV_ABI getpid() {
 	PRINT_NAME();
 
 	return 100;
 }
 
-static void KYTY_SYSV_ABI KernelRtldSetApplicationHeapAPI(void* api[]) {
+static void KATY_SYSV_ABI KernelRtldSetApplicationHeapAPI(void* api[]) {
 	PRINT_NAME();
 
 	auto* rt = Common::Singleton<Loader::RuntimeLinker>::Instance();
@@ -1431,7 +1431,7 @@ static void KYTY_SYSV_ABI KernelRtldSetApplicationHeapAPI(void* api[]) {
 	[[maybe_unused]] auto* heap_posix_memalign = api[6];
 }
 
-static int64_t KYTY_SYSV_ABI write(int d, const char* str, int64_t size) {
+static int64_t KATY_SYSV_ABI write(int d, const char* str, int64_t size) {
 	// PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(d < 0);
@@ -1449,11 +1449,11 @@ static int64_t KYTY_SYSV_ABI write(int d, const char* str, int64_t size) {
 	return size_int;
 }
 
-static int KYTY_SYSV_ABI open(const char* path, int flags, int mode) {
+static int KATY_SYSV_ABI open(const char* path, int flags, int mode) {
 	return POSIX_N_CALL(FileSystem::KernelOpen(path, flags, mode));
 }
 
-static int KYTY_SYSV_ABI close(int d) {
+static int KATY_SYSV_ABI close(int d) {
 	if (d < 0) {
 		*Posix::GetErrorAddr() = Posix::POSIX_EBADF;
 		return -1;
@@ -1470,7 +1470,7 @@ static int KYTY_SYSV_ABI close(int d) {
 	return POSIX_CALL(FileSystem::KernelClose(d));
 }
 
-static int64_t KYTY_SYSV_ABI read(int d, void* buf, uint64_t nbytes) {
+static int64_t KATY_SYSV_ABI read(int d, void* buf, uint64_t nbytes) {
 	// PRINT_NAME();
 
 	if (buf == nullptr) {
@@ -1569,12 +1569,12 @@ static bool DecodeEhFramePointer(const uint8_t* data, const uint8_t* end, uint8_
 	return true;
 }
 
-// Kyty does not create guest signal-return trampoline frames.
-int KYTY_SYSV_ABI KernelIsSignalReturn(uint64_t /*pc*/) {
+// Katy does not create guest signal-return trampoline frames.
+int KATY_SYSV_ABI KernelIsSignalReturn(uint64_t /*pc*/) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI KernelGetModuleInfoForUnwind(uint64_t addr, int flags,
+int KATY_SYSV_ABI KernelGetModuleInfoForUnwind(uint64_t addr, int flags,
                                                ModuleInfoForUnwind* info) {
 	if (flags >= 3) {
 		if (info != nullptr) {
@@ -1595,12 +1595,12 @@ int KYTY_SYSV_ABI KernelGetModuleInfoForUnwind(uint64_t addr, int flags,
 	auto* program = rt->FindProgramByAddr(addr);
 	if (program == nullptr || program->elf == nullptr) {
 		if (addr < 0x800000000ull) {
-			// TODO(unwind): guest unwinding can reach a Kyty host return address below the guest VA
+			// TODO(unwind): guest unwinding can reach a Katy host return address below the guest VA
 			// range. Report a synthetic boundary with no unwind tables so libc stops cleanly
 			// instead of raising.
 			std::memset(info, 0, sizeof(ModuleInfoForUnwind));
 			info->st_size = sizeof(ModuleInfoForUnwind);
-			std::snprintf(info->name, sizeof(info->name), "%s", "KytyHostBoundary");
+			std::snprintf(info->name, sizeof(info->name), "%s", "KatyHostBoundary");
 			info->seg0_addr = addr & ~0xfffffull;
 			info->seg0_size = 0x100000;
 			return OK;
@@ -1707,7 +1707,7 @@ int KYTY_SYSV_ABI KernelGetModuleInfoForUnwind(uint64_t addr, int flags,
 	return OK;
 }
 
-static int KYTY_SYSV_ABI KernelGetModuleInfoFromAddr(uint64_t addr, int n, ModuleInfo* r) {
+static int KATY_SYSV_ABI KernelGetModuleInfoFromAddr(uint64_t addr, int n, ModuleInfo* r) {
 	PRINT_NAME();
 
 	LOGF("\taddr = %016" PRIx64 "\n"
@@ -1734,21 +1734,21 @@ static int KYTY_SYSV_ABI KernelGetModuleInfoFromAddr(uint64_t addr, int n, Modul
 	return 0;
 }
 
-static void KYTY_SYSV_ABI KernelDebugRaiseExceptionOnReleaseMode(int /*c1*/, int /*c2*/) {
+static void KATY_SYSV_ABI KernelDebugRaiseExceptionOnReleaseMode(int /*c1*/, int /*c2*/) {
 	PRINT_NAME();
 }
 
-static void KYTY_SYSV_ABI KernelDebugRaiseException(int /*c1*/, int /*c2*/) {
+static void KATY_SYSV_ABI KernelDebugRaiseException(int /*c1*/, int /*c2*/) {
 	PRINT_NAME();
 }
 
-static void KYTY_SYSV_ABI exit(int code) {
+static void KATY_SYSV_ABI exit(int code) {
 	PRINT_NAME();
 
 	::exit(code);
 }
 
-static KYTY_SYSV_ABI MallocReplace* KernelGetSanitizerMallocReplaceExternal() {
+static KATY_SYSV_ABI MallocReplace* KernelGetSanitizerMallocReplaceExternal() {
 	PRINT_NAME();
 
 	static MallocReplace ret;
@@ -1756,7 +1756,7 @@ static KYTY_SYSV_ABI MallocReplace* KernelGetSanitizerMallocReplaceExternal() {
 	return &ret;
 }
 
-static KYTY_SYSV_ABI NewReplace* KernelGetSanitizerNewReplaceExternal() {
+static KATY_SYSV_ABI NewReplace* KernelGetSanitizerNewReplaceExternal() {
 	PRINT_NAME();
 
 	static NewReplace ret;
@@ -1764,7 +1764,7 @@ static KYTY_SYSV_ABI NewReplace* KernelGetSanitizerNewReplaceExternal() {
 	return &ret;
 }
 
-static KYTY_SYSV_ABI int elf_phdr_match_addr(ModuleInfo* m, uint64_t dtor_vaddr) {
+static KATY_SYSV_ABI int elf_phdr_match_addr(ModuleInfo* m, uint64_t dtor_vaddr) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(m == nullptr);
@@ -1781,7 +1781,7 @@ static KYTY_SYSV_ABI int elf_phdr_match_addr(ModuleInfo* m, uint64_t dtor_vaddr)
 	return result;
 }
 
-int KYTY_SYSV_ABI KernelUuidCreate(uint32_t* uuid) {
+int KATY_SYSV_ABI KernelUuidCreate(uint32_t* uuid) {
 	PRINT_NAME();
 
 	if (uuid == nullptr) {
@@ -1797,7 +1797,7 @@ int KYTY_SYSV_ABI KernelUuidCreate(uint32_t* uuid) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI int KernelGetOpenPsId(void* open_ps_id) {
+static KATY_SYSV_ABI int KernelGetOpenPsId(void* open_ps_id) {
 	PRINT_NAME();
 
 	if (open_ps_id == nullptr) {
@@ -1814,11 +1814,11 @@ static KYTY_SYSV_ABI int KernelGetOpenPsId(void* open_ps_id) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI void pthread_cxa_finalize(void* /*p*/) {
+static KATY_SYSV_ABI void pthread_cxa_finalize(void* /*p*/) {
 	PRINT_NAME();
 }
 
-void KYTY_SYSV_ABI KernelSetThreadAtexitCount(get_thread_atexit_count_func_t func) {
+void KATY_SYSV_ABI KernelSetThreadAtexitCount(get_thread_atexit_count_func_t func) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(g_get_thread_atexit_count_func != nullptr);
@@ -1826,7 +1826,7 @@ void KYTY_SYSV_ABI KernelSetThreadAtexitCount(get_thread_atexit_count_func_t fun
 	g_get_thread_atexit_count_func = func;
 }
 
-void KYTY_SYSV_ABI KernelSetThreadAtexitReport(thread_atexit_report_func_t func) {
+void KATY_SYSV_ABI KernelSetThreadAtexitReport(thread_atexit_report_func_t func) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(g_thread_atexit_report_func != nullptr);
@@ -1834,7 +1834,7 @@ void KYTY_SYSV_ABI KernelSetThreadAtexitReport(thread_atexit_report_func_t func)
 	g_thread_atexit_report_func = func;
 }
 
-int KYTY_SYSV_ABI KernelRtldThreadAtexitIncrement(uint64_t* /*c*/) {
+int KATY_SYSV_ABI KernelRtldThreadAtexitIncrement(uint64_t* /*c*/) {
 	PRINT_NAME();
 
 	//__sync_fetch_and_add(c, 1);
@@ -1842,7 +1842,7 @@ int KYTY_SYSV_ABI KernelRtldThreadAtexitIncrement(uint64_t* /*c*/) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI KernelRtldThreadAtexitDecrement(uint64_t* /*c*/) {
+int KATY_SYSV_ABI KernelRtldThreadAtexitDecrement(uint64_t* /*c*/) {
 	PRINT_NAME();
 
 	//__sync_fetch_and_sub(c, 1);
@@ -1850,25 +1850,25 @@ int KYTY_SYSV_ABI KernelRtldThreadAtexitDecrement(uint64_t* /*c*/) {
 	return 0;
 }
 
-static KYTY_SYSV_ABI int KernelGetCurrentCpu() {
+static KATY_SYSV_ABI int KernelGetCurrentCpu() {
 	PRINT_NAME();
 
 	return 0;
 }
 
-int KYTY_SYSV_ABI clock_gettime(int clock_id, LibKernel::KernelTimespec* time) {
+int KATY_SYSV_ABI clock_gettime(int clock_id, LibKernel::KernelTimespec* time) {
 	PRINT_NAME();
 
 	return POSIX_CALL(LibKernel::KernelClockGettime(clock_id, time));
 }
 
-int KYTY_SYSV_ABI clock_getres(int clock_id, LibKernel::KernelTimespec* res) {
+int KATY_SYSV_ABI clock_getres(int clock_id, LibKernel::KernelTimespec* res) {
 	PRINT_NAME();
 
 	return POSIX_CALL(LibKernel::KernelClockGetres(clock_id, res));
 }
 
-void KYTY_SYSV_ABI KernelSetGPO(uint32_t bits) {
+void KATY_SYSV_ABI KernelSetGPO(uint32_t bits) {
 	g_gpo_state_bits.store(bits, std::memory_order_relaxed);
 
 	static std::atomic_uint32_t call_count {0};
@@ -1879,7 +1879,7 @@ void KYTY_SYSV_ABI KernelSetGPO(uint32_t bits) {
 	}
 }
 
-uint64_t KYTY_SYSV_ABI KernelGetGPI() {
+uint64_t KATY_SYSV_ABI KernelGetGPI() {
 	auto bits = g_gpo_state_bits.load(std::memory_order_relaxed);
 
 	static std::atomic_uint32_t call_count {0};
@@ -1898,7 +1898,7 @@ namespace LibKernelWriteThrottling {
 
 LIB_VERSION("libkernel_write_throttling", 1, "libkernel", 1, 1);
 
-static uint64_t KYTY_SYSV_ABI WriteThrottlingStub() {
+static uint64_t KATY_SYSV_ABI WriteThrottlingStub() {
 	return 0;
 }
 
@@ -1912,19 +1912,19 @@ namespace Posix {
 
 LIB_VERSION("Posix", 1, "libkernel", 1, 1);
 
-int KYTY_SYSV_ABI getpagesize() {
+int KATY_SYSV_ABI getpagesize() {
 	PRINT_NAME();
 
 	return 0x4000;
 }
 
-int KYTY_SYSV_ABI clock_gettime(int clock_id, LibKernel::KernelTimespec* time) {
+int KATY_SYSV_ABI clock_gettime(int clock_id, LibKernel::KernelTimespec* time) {
 	PRINT_NAME();
 
 	return POSIX_CALL(LibKernel::KernelClockGettime(clock_id, time));
 }
 
-int KYTY_SYSV_ABI clock_getres(int clock_id, LibKernel::KernelTimespec* res) {
+int KATY_SYSV_ABI clock_getres(int clock_id, LibKernel::KernelTimespec* res) {
 	PRINT_NAME();
 
 	return POSIX_CALL(LibKernel::KernelClockGetres(clock_id, res));
@@ -1935,7 +1935,7 @@ struct KernelTimezone {
 	int32_t tz_dsttime;
 };
 
-int KYTY_SYSV_ABI gettimeofday(LibKernel::KernelTimeval* time, KernelTimezone* timezone) {
+int KATY_SYSV_ABI gettimeofday(LibKernel::KernelTimeval* time, KernelTimezone* timezone) {
 	PRINT_NAME();
 
 	if (time != nullptr) {
@@ -1954,44 +1954,44 @@ int KYTY_SYSV_ABI gettimeofday(LibKernel::KernelTimeval* time, KernelTimezone* t
 	return 0;
 }
 
-int KYTY_SYSV_ABI nanosleep(const LibKernel::KernelTimespec* rqtp,
+int KATY_SYSV_ABI nanosleep(const LibKernel::KernelTimespec* rqtp,
                             LibKernel::KernelTimespec*       rmtp) {
 	PRINT_NAME();
 
 	return POSIX_CALL(LibKernel::KernelNanosleep(rqtp, rmtp));
 }
 
-int KYTY_SYSV_ABI stat(const char* path, LibKernel::FileSystem::FileStat* sb) {
+int KATY_SYSV_ABI stat(const char* path, LibKernel::FileSystem::FileStat* sb) {
 	PRINT_NAME();
 
 	return POSIX_CALL(LibKernel::FileSystem::KernelStat(path, sb));
 }
 
-int KYTY_SYSV_ABI mkdir(const char* path, uint16_t mode) {
+int KATY_SYSV_ABI mkdir(const char* path, uint16_t mode) {
 	PRINT_NAME();
 
 	return POSIX_CALL(LibKernel::FileSystem::KernelMkdir(path, mode));
 }
 
-int64_t KYTY_SYSV_ABI lseek(int d, int64_t offset, int whence) {
+int64_t KATY_SYSV_ABI lseek(int d, int64_t offset, int whence) {
 	PRINT_NAME();
 
 	return POSIX_N_CALL(LibKernel::FileSystem::KernelLseek(d, offset, whence));
 }
 
-int64_t KYTY_SYSV_ABI pread(int d, void* buf, size_t nbytes, int64_t offset) {
+int64_t KATY_SYSV_ABI pread(int d, void* buf, size_t nbytes, int64_t offset) {
 	PRINT_NAME();
 
 	return POSIX_N_CALL(LibKernel::FileSystem::KernelPread(d, buf, nbytes, offset));
 }
 
-int64_t KYTY_SYSV_ABI pwrite(int d, const void* buf, size_t nbytes, int64_t offset) {
+int64_t KATY_SYSV_ABI pwrite(int d, const void* buf, size_t nbytes, int64_t offset) {
 	PRINT_NAME();
 
 	return POSIX_N_CALL(LibKernel::FileSystem::KernelPwrite(d, buf, nbytes, offset));
 }
 
-int KYTY_SYSV_ABI flock(int d, int operation) {
+int KATY_SYSV_ABI flock(int d, int operation) {
 	PRINT_NAME();
 
 	constexpr int lock_sh = 0x01;
@@ -2015,87 +2015,87 @@ int KYTY_SYSV_ABI flock(int d, int operation) {
 	return 0;
 }
 
-int64_t KYTY_SYSV_ABI fstat(int d, LibKernel::FileSystem::FileStat* sb) {
+int64_t KATY_SYSV_ABI fstat(int d, LibKernel::FileSystem::FileStat* sb) {
 	PRINT_NAME();
 
 	return POSIX_N_CALL(LibKernel::FileSystem::KernelFstat(d, sb));
 }
 
-int KYTY_SYSV_ABI ftruncate(int d, int64_t length) {
+int KATY_SYSV_ABI ftruncate(int d, int64_t length) {
 	PRINT_NAME();
 
 	return POSIX_CALL(LibKernel::FileSystem::KernelFtruncate(d, length));
 }
 
-int KYTY_SYSV_ABI socket(int family, int type, int protocol) {
+int KATY_SYSV_ABI socket(int family, int type, int protocol) {
 	PRINT_NAME();
 	return Network::Net::Socket(family, type, protocol);
 }
 
-int KYTY_SYSV_ABI bind(int s, const void* addr, uint32_t addrlen) {
+int KATY_SYSV_ABI bind(int s, const void* addr, uint32_t addrlen) {
 	PRINT_NAME();
 	return Network::Net::Bind(s, addr, addrlen);
 }
 
-int KYTY_SYSV_ABI connect(int s, const void* addr, uint32_t addrlen) {
+int KATY_SYSV_ABI connect(int s, const void* addr, uint32_t addrlen) {
 	PRINT_NAME();
 	return Network::Net::Connect(s, addr, addrlen);
 }
 
-int KYTY_SYSV_ABI listen(int s, int backlog) {
+int KATY_SYSV_ABI listen(int s, int backlog) {
 	PRINT_NAME();
 	return Network::Net::Listen(s, backlog);
 }
 
-int KYTY_SYSV_ABI accept(int s, void* addr, uint32_t* addrlen) {
+int KATY_SYSV_ABI accept(int s, void* addr, uint32_t* addrlen) {
 	PRINT_NAME();
 	return Network::Net::Accept(s, addr, addrlen);
 }
 
-int KYTY_SYSV_ABI getsockname(int s, void* addr, uint32_t* addrlen) {
+int KATY_SYSV_ABI getsockname(int s, void* addr, uint32_t* addrlen) {
 	PRINT_NAME();
 	return Network::Net::Getsockname(s, addr, addrlen);
 }
 
-int KYTY_SYSV_ABI getsockopt(int s, int level, int optname, void* optval, uint32_t* optlen) {
+int KATY_SYSV_ABI getsockopt(int s, int level, int optname, void* optval, uint32_t* optlen) {
 	PRINT_NAME();
 	return Network::Net::Getsockopt(s, level, optname, optval, optlen);
 }
 
-int KYTY_SYSV_ABI setsockopt(int s, int level, int optname, const void* optval, uint32_t optlen) {
+int KATY_SYSV_ABI setsockopt(int s, int level, int optname, const void* optval, uint32_t optlen) {
 	PRINT_NAME();
 	return Network::Net::Setsockopt(s, level, optname, optval, optlen);
 }
 
-int KYTY_SYSV_ABI select(int nfds, void* readfds, void* writefds, void* exceptfds,
+int KATY_SYSV_ABI select(int nfds, void* readfds, void* writefds, void* exceptfds,
                          const void* timeout) {
 	PRINT_NAME();
 	return Network::Net::Select(nfds, readfds, writefds, exceptfds, timeout);
 }
 
-int64_t KYTY_SYSV_ABI send(int s, const void* buf, uint64_t len, int flags) {
+int64_t KATY_SYSV_ABI send(int s, const void* buf, uint64_t len, int flags) {
 	PRINT_NAME();
 	return Network::Net::Send(s, buf, len, flags);
 }
 
-int64_t KYTY_SYSV_ABI sendto(int s, const void* buf, uint64_t len, int flags, const void* addr,
+int64_t KATY_SYSV_ABI sendto(int s, const void* buf, uint64_t len, int flags, const void* addr,
                              uint32_t addrlen) {
 	PRINT_NAME();
 	return Network::Net::Sendto(s, buf, len, flags, addr, addrlen);
 }
 
-int64_t KYTY_SYSV_ABI recv(int s, void* buf, uint64_t len, int flags) {
+int64_t KATY_SYSV_ABI recv(int s, void* buf, uint64_t len, int flags) {
 	PRINT_NAME();
 	return Network::Net::Recv(s, buf, len, flags);
 }
 
-int64_t KYTY_SYSV_ABI recvfrom(int s, void* buf, uint64_t len, int flags, void* addr,
+int64_t KATY_SYSV_ABI recvfrom(int s, void* buf, uint64_t len, int flags, void* addr,
                                uint32_t* addrlen) {
 	PRINT_NAME();
 	return Network::Net::Recvfrom(s, buf, len, flags, addr, addrlen);
 }
 
-int KYTY_SYSV_ABI inet_pton(int af, const char* src, void* dst) {
+int KATY_SYSV_ABI inet_pton(int af, const char* src, void* dst) {
 	PRINT_NAME();
 
 	const int result = Network::Net::NetInetPton(af, src, dst);
@@ -2106,7 +2106,7 @@ int KYTY_SYSV_ABI inet_pton(int af, const char* src, void* dst) {
 	return result;
 }
 
-const char* KYTY_SYSV_ABI inet_ntop(int af, const void* src, char* dst, uint32_t size) {
+const char* KATY_SYSV_ABI inet_ntop(int af, const void* src, char* dst, uint32_t size) {
 	PRINT_NAME();
 
 	const char* result = Network::Net::NetInetNtop(af, src, dst, size);
@@ -2117,7 +2117,7 @@ const char* KYTY_SYSV_ABI inet_ntop(int af, const void* src, char* dst, uint32_t
 	return result;
 }
 
-uint64_t KYTY_SYSV_ABI cfwBSQyr5Ys(uint64_t a1, uint64_t a2, uint64_t a3, uint64_t a4, uint64_t a5,
+uint64_t KATY_SYSV_ABI cfwBSQyr5Ys(uint64_t a1, uint64_t a2, uint64_t a3, uint64_t a4, uint64_t a5,
                                    uint64_t a6) {
 	PRINT_NAME();
 
@@ -2134,7 +2134,7 @@ uint64_t KYTY_SYSV_ABI cfwBSQyr5Ys(uint64_t a1, uint64_t a2, uint64_t a3, uint64
 	return 0;
 }
 
-uint64_t KYTY_SYSV_ABI KernelSyncOnAddressV1(uint64_t op, uint64_t address, uint64_t value,
+uint64_t KATY_SYSV_ABI KernelSyncOnAddressV1(uint64_t op, uint64_t address, uint64_t value,
                                              uint64_t size, uint64_t timeout, uint64_t flags) {
 	static std::atomic_uint32_t log_count = 0;
 	const auto                  index     = log_count.fetch_add(1, std::memory_order_relaxed);
@@ -2258,7 +2258,7 @@ LIB_VERSION("Coredump", 1, "Coredump", 1, 1);
 static uint64_t g_coredump_handler         = 0;
 static uint64_t g_coredump_handler_context = 0;
 
-int KYTY_SYSV_ABI sceCoredumpRegisterCoredumpHandler(uint64_t handler, size_t stack_size,
+int KATY_SYSV_ABI sceCoredumpRegisterCoredumpHandler(uint64_t handler, size_t stack_size,
                                                      uint64_t context) {
 	PRINT_NAME();
 
@@ -2273,7 +2273,7 @@ int KYTY_SYSV_ABI sceCoredumpRegisterCoredumpHandler(uint64_t handler, size_t st
 	return OK;
 }
 
-int KYTY_SYSV_ABI sceCoredumpUnregisterCoredumpHandler() {
+int KATY_SYSV_ABI sceCoredumpUnregisterCoredumpHandler() {
 	PRINT_NAME();
 
 	g_coredump_handler         = 0;
@@ -2306,7 +2306,7 @@ constexpr uint32_t FIBER_STATE_IDLE        = 2;
 constexpr uint32_t FIBER_STATE_TERMINATED  = 3;
 constexpr uint32_t FIBER_FLAG_SET_FPU_REGS = 0x100;
 
-using FiberEntry = KYTY_SYSV_ABI void (*)(uint64_t arg_on_initialize, uint64_t arg_on_run);
+using FiberEntry = KATY_SYSV_ABI void (*)(uint64_t arg_on_initialize, uint64_t arg_on_run);
 
 struct FiberOptParam {
 	uint32_t magic;
@@ -2382,7 +2382,7 @@ static uint32_t FiberLoadState(const FiberObject* fiber) {
 }
 
 static uint64_t FiberCurrentHostThreadId() {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	return static_cast<uint64_t>(::GetCurrentThreadId());
 #else
 	return std::hash<std::thread::id> {}(std::this_thread::get_id());
@@ -2563,7 +2563,7 @@ static void FiberRestoreContext(FiberCpuContext* ctx, uint64_t ret) {
 	const auto      stack_top = reinterpret_cast<uintptr_t>(fiber->addr_context) +
 	                            static_cast<uintptr_t>(fiber->size_context);
 	auto            rsp       = (stack_top & ~static_cast<uintptr_t>(0x0f));
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	rsp -= 4u * sizeof(uint64_t);
 #endif
 	rsp -= sizeof(uint64_t);
@@ -2597,7 +2597,7 @@ static void FiberRestoreContext(FiberCpuContext* ctx, uint64_t ret) {
 	FiberRestoreContext(&g_thread_fiber_context, 1);
 }
 
-int32_t KYTY_SYSV_ABI FiberInitialize(FiberObject* fiber, const char* name, FiberEntry entry,
+int32_t KATY_SYSV_ABI FiberInitialize(FiberObject* fiber, const char* name, FiberEntry entry,
                                       uint64_t arg_on_initialize, void* addr_context,
                                       uint64_t size_context, const FiberOptParam* opt_param,
                                       uint32_t build_version) {
@@ -2653,7 +2653,7 @@ int32_t KYTY_SYSV_ABI FiberInitialize(FiberObject* fiber, const char* name, Fibe
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberInitializeInternal(FiberObject* fiber, const char* name,
+int32_t KATY_SYSV_ABI FiberInitializeInternal(FiberObject* fiber, const char* name,
                                               FiberEntry entry, uint64_t arg_on_initialize,
                                               void* addr_context, uint64_t size_context,
                                               const FiberOptParam* opt_param, uint32_t flags,
@@ -2666,7 +2666,7 @@ int32_t KYTY_SYSV_ABI FiberInitializeInternal(FiberObject* fiber, const char* na
 	return ret;
 }
 
-int32_t KYTY_SYSV_ABI FiberOptParamInitialize(FiberOptParam* opt_param) {
+int32_t KATY_SYSV_ABI FiberOptParamInitialize(FiberOptParam* opt_param) {
 	PRINT_NAME();
 
 	if (opt_param == nullptr) {
@@ -2682,7 +2682,7 @@ int32_t KYTY_SYSV_ABI FiberOptParamInitialize(FiberOptParam* opt_param) {
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberFinalize(FiberObject* fiber) {
+int32_t KATY_SYSV_ABI FiberFinalize(FiberObject* fiber) {
 	PRINT_NAME();
 
 	if (fiber == nullptr) {
@@ -2698,7 +2698,7 @@ int32_t KYTY_SYSV_ABI FiberFinalize(FiberObject* fiber) {
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberRun(FiberObject* fiber, uint64_t arg_on_run, uint64_t* arg_on_return) {
+int32_t KATY_SYSV_ABI FiberRun(FiberObject* fiber, uint64_t arg_on_run, uint64_t* arg_on_return) {
 	PRINT_NAME();
 
 	if (!FiberIsValid(fiber)) {
@@ -2734,7 +2734,7 @@ int32_t KYTY_SYSV_ABI FiberRun(FiberObject* fiber, uint64_t arg_on_run, uint64_t
 	return (FiberLoadState(returned_fiber) == FIBER_STATE_TERMINATED ? FIBER_ERROR_STATE : OK);
 }
 
-int32_t KYTY_SYSV_ABI FiberSwitch(FiberObject* fiber, uint64_t arg_on_run,
+int32_t KATY_SYSV_ABI FiberSwitch(FiberObject* fiber, uint64_t arg_on_run,
                                   uint64_t* arg_on_return) {
 	PRINT_NAME();
 
@@ -2781,7 +2781,7 @@ int32_t KYTY_SYSV_ABI FiberSwitch(FiberObject* fiber, uint64_t arg_on_run,
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberGetSelf(FiberObject** fiber) {
+int32_t KATY_SYSV_ABI FiberGetSelf(FiberObject** fiber) {
 	PRINT_NAME();
 
 	if (fiber == nullptr) {
@@ -2793,7 +2793,7 @@ int32_t KYTY_SYSV_ABI FiberGetSelf(FiberObject** fiber) {
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberReturnToThread(uint64_t arg_on_return, uint64_t* arg_on_run) {
+int32_t KATY_SYSV_ABI FiberReturnToThread(uint64_t arg_on_return, uint64_t* arg_on_run) {
 	PRINT_NAME();
 
 	if (g_current_fiber == nullptr) {
@@ -2820,7 +2820,7 @@ int32_t KYTY_SYSV_ABI FiberReturnToThread(uint64_t arg_on_return, uint64_t* arg_
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberGetInfo(FiberObject* fiber, FiberInfo* fiber_info) {
+int32_t KATY_SYSV_ABI FiberGetInfo(FiberObject* fiber, FiberInfo* fiber_info) {
 	PRINT_NAME();
 
 	if (fiber == nullptr || fiber_info == nullptr) {
@@ -2841,18 +2841,18 @@ int32_t KYTY_SYSV_ABI FiberGetInfo(FiberObject* fiber, FiberInfo* fiber_info) {
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberStartContextSizeCheck(uint32_t flags) {
+int32_t KATY_SYSV_ABI FiberStartContextSizeCheck(uint32_t flags) {
 	PRINT_NAME();
 	LOGF("\t flags = 0x%08" PRIx32 "\n", flags);
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberStopContextSizeCheck() {
+int32_t KATY_SYSV_ABI FiberStopContextSizeCheck() {
 	PRINT_NAME();
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberRename(FiberObject* fiber, const char* name) {
+int32_t KATY_SYSV_ABI FiberRename(FiberObject* fiber, const char* name) {
 	PRINT_NAME();
 
 	if (fiber == nullptr || name == nullptr) {
@@ -2868,7 +2868,7 @@ int32_t KYTY_SYSV_ABI FiberRename(FiberObject* fiber, const char* name) {
 	return OK;
 }
 
-int32_t KYTY_SYSV_ABI FiberGetThreadFramePointerAddress(uint64_t* addr_frame_pointer) {
+int32_t KATY_SYSV_ABI FiberGetThreadFramePointerAddress(uint64_t* addr_frame_pointer) {
 	PRINT_NAME();
 
 	if (addr_frame_pointer == nullptr) {
@@ -2888,7 +2888,7 @@ int chmod(const char* path, int mode) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAioInitializeImpl(void* param, int32_t size) {
+int KATY_SYSV_ABI KernelAioInitializeImpl(void* param, int32_t size) {
 	PRINT_NAME();
 
 	LOGF("\t param = 0x%016" PRIx64 "\n"
@@ -2898,7 +2898,7 @@ int KYTY_SYSV_ABI KernelAioInitializeImpl(void* param, int32_t size) {
 	return OK;
 }
 
-void KYTY_SYSV_ABI KernelAioInitializeParam(void* param) {
+void KATY_SYSV_ABI KernelAioInitializeParam(void* param) {
 	PRINT_NAME();
 
 	LOGF("\t param = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(param));
@@ -2936,7 +2936,7 @@ static bool kernel_aio_is_valid_id(int32_t id) {
 	return id > 0 && id < KERNEL_AIO_MAX_QUEUE;
 }
 
-int KYTY_SYSV_ABI KernelAioSubmitReadCommands(KernelAioRwRequest* req, int32_t size, int32_t prio,
+int KATY_SYSV_ABI KernelAioSubmitReadCommands(KernelAioRwRequest* req, int32_t size, int32_t prio,
                                               int32_t* id) {
 	PRINT_NAME();
 
@@ -2974,7 +2974,7 @@ int KYTY_SYSV_ABI KernelAioSubmitReadCommands(KernelAioRwRequest* req, int32_t s
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAioSubmitWriteCommands(KernelAioRwRequest* req, int32_t size, int32_t prio,
+int KATY_SYSV_ABI KernelAioSubmitWriteCommands(KernelAioRwRequest* req, int32_t size, int32_t prio,
                                                int32_t* id) {
 	PRINT_NAME();
 
@@ -3012,7 +3012,7 @@ int KYTY_SYSV_ABI KernelAioSubmitWriteCommands(KernelAioRwRequest* req, int32_t 
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAioWaitRequest(int32_t id, int32_t* state, uint32_t* usec) {
+int KATY_SYSV_ABI KernelAioWaitRequest(int32_t id, int32_t* state, uint32_t* usec) {
 	PRINT_NAME();
 
 	if (state == nullptr) {
@@ -3040,7 +3040,7 @@ int KYTY_SYSV_ABI KernelAioWaitRequest(int32_t id, int32_t* state, uint32_t* use
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAioDeleteRequest(int32_t id, int32_t* ret) {
+int KATY_SYSV_ABI KernelAioDeleteRequest(int32_t id, int32_t* ret) {
 	PRINT_NAME();
 
 	if (ret == nullptr) {

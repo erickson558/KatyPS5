@@ -19,10 +19,10 @@ struct Elf64_Sym;
 struct Elf64_Rela;
 class RuntimeLinker;
 
-using module_func_t                          = KYTY_SYSV_ABI int (*)(size_t args, const void* argp);
-using application_heap_free_func_t           = KYTY_SYSV_ABI void (*)(void*);
-using application_heap_malloc_func_t         = KYTY_SYSV_ABI void* (*)(uint64_t);
-using application_heap_posix_memalign_func_t = KYTY_SYSV_ABI int (*)(void**, uint64_t, uint64_t);
+using module_func_t                          = KATY_SYSV_ABI int (*)(size_t args, const void* argp);
+using application_heap_free_func_t           = KATY_SYSV_ABI void (*)(void*);
+using application_heap_malloc_func_t         = KATY_SYSV_ABI void* (*)(uint64_t);
+using application_heap_posix_memalign_func_t = KATY_SYSV_ABI int (*)(void**, uint64_t, uint64_t);
 
 struct ModuleId {
 	bool operator==(const ModuleId& other) const {
@@ -140,7 +140,7 @@ public:
 	virtual ~RuntimeLinker();
 	void Clear();
 
-	KYTY_CLASS_NO_COPY(RuntimeLinker);
+	KATY_CLASS_NO_COPY(RuntimeLinker);
 
 	void DbgDump(const std::string& folder);
 
@@ -205,7 +205,7 @@ private:
 	application_heap_posix_memalign_func_t m_application_heap_posix_memalign = nullptr;
 };
 
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 bool TestMainEntryUsesGuestStack();
 bool TestModuleRelocationUsesWritableHostMapping();
 #endif

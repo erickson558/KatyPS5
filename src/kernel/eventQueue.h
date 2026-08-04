@@ -58,34 +58,34 @@ struct KernelEqueueEvent {
 
 [[nodiscard]] KernelEqueueRef KernelPinEqueue(KernelEqueue eq);
 
-int KYTY_SYSV_ABI KernelAddEvent(KernelEqueue eq, const KernelEqueueEvent& event);
-int KYTY_SYSV_ABI KernelTriggerEvent(KernelEqueue eq, uintptr_t ident, int16_t filter,
+int KATY_SYSV_ABI KernelAddEvent(KernelEqueue eq, const KernelEqueueEvent& event);
+int KATY_SYSV_ABI KernelTriggerEvent(KernelEqueue eq, uintptr_t ident, int16_t filter,
                                      void* trigger_data);
-int KYTY_SYSV_ABI KernelDeleteEvent(KernelEqueue eq, uintptr_t ident, int16_t filter);
+int KATY_SYSV_ABI KernelDeleteEvent(KernelEqueue eq, uintptr_t ident, int16_t filter);
 
-int KYTY_SYSV_ABI KernelCreateEqueue(KernelEqueue* eq, const char* name);
-int KYTY_SYSV_ABI KernelDeleteEqueue(KernelEqueue eq);
-int KYTY_SYSV_ABI KernelWaitEqueue(KernelEqueue eq, KernelEvent* ev, int num, int* out,
+int KATY_SYSV_ABI KernelCreateEqueue(KernelEqueue* eq, const char* name);
+int KATY_SYSV_ABI KernelDeleteEqueue(KernelEqueue eq);
+int KATY_SYSV_ABI KernelWaitEqueue(KernelEqueue eq, KernelEvent* ev, int num, int* out,
                                    const KernelUseconds* timo);
-int KYTY_SYSV_ABI KernelAddUserEvent(KernelEqueue eq, int id);
-int KYTY_SYSV_ABI KernelAddUserEventEdge(KernelEqueue eq, int id);
-int KYTY_SYSV_ABI KernelTriggerUserEvent(KernelEqueue eq, int id, void* udata);
-int KYTY_SYSV_ABI KernelTriggerUserEventForAll(int id, void* udata);
-int KYTY_SYSV_ABI KernelDeleteUserEvent(KernelEqueue eq, int id);
-int KYTY_SYSV_ABI KernelAddHRTimerEvent(KernelEqueue eq, int id, const KernelTimespec* ts,
+int KATY_SYSV_ABI KernelAddUserEvent(KernelEqueue eq, int id);
+int KATY_SYSV_ABI KernelAddUserEventEdge(KernelEqueue eq, int id);
+int KATY_SYSV_ABI KernelTriggerUserEvent(KernelEqueue eq, int id, void* udata);
+int KATY_SYSV_ABI KernelTriggerUserEventForAll(int id, void* udata);
+int KATY_SYSV_ABI KernelDeleteUserEvent(KernelEqueue eq, int id);
+int KATY_SYSV_ABI KernelAddHRTimerEvent(KernelEqueue eq, int id, const KernelTimespec* ts,
                                         void* udata);
-int KYTY_SYSV_ABI KernelDeleteHRTimerEvent(KernelEqueue eq, int id);
-int KYTY_SYSV_ABI KernelAddAmprEvent(KernelEqueue eq, int id, void* udata);
-int KYTY_SYSV_ABI KernelAddAmprSystemEvent(KernelEqueue eq, int id, void* udata);
-int KYTY_SYSV_ABI KernelDeleteAmprEvent(KernelEqueue eq, int id);
-int KYTY_SYSV_ABI KernelDeleteAmprSystemEvent(KernelEqueue eq, int id);
+int KATY_SYSV_ABI KernelDeleteHRTimerEvent(KernelEqueue eq, int id);
+int KATY_SYSV_ABI KernelAddAmprEvent(KernelEqueue eq, int id, void* udata);
+int KATY_SYSV_ABI KernelAddAmprSystemEvent(KernelEqueue eq, int id, void* udata);
+int KATY_SYSV_ABI KernelDeleteAmprEvent(KernelEqueue eq, int id);
+int KATY_SYSV_ABI KernelDeleteAmprSystemEvent(KernelEqueue eq, int id);
 
-intptr_t KYTY_SYSV_ABI  KernelGetEventData(const KernelEvent* ev);
-intptr_t KYTY_SYSV_ABI  KernelGetEventFflags(const KernelEvent* ev);
-int KYTY_SYSV_ABI       KernelGetEventFilter(const KernelEvent* ev);
-uintptr_t KYTY_SYSV_ABI KernelGetEventId(const KernelEvent* ev);
-void* KYTY_SYSV_ABI     KernelGetEventUserData(const KernelEvent* ev);
-int KYTY_SYSV_ABI       KernelGetEventError(const KernelEvent* ev);
+intptr_t KATY_SYSV_ABI  KernelGetEventData(const KernelEvent* ev);
+intptr_t KATY_SYSV_ABI  KernelGetEventFflags(const KernelEvent* ev);
+int KATY_SYSV_ABI       KernelGetEventFilter(const KernelEvent* ev);
+uintptr_t KATY_SYSV_ABI KernelGetEventId(const KernelEvent* ev);
+void* KATY_SYSV_ABI     KernelGetEventUserData(const KernelEvent* ev);
+int KATY_SYSV_ABI       KernelGetEventError(const KernelEvent* ev);
 
 } // namespace Libs::LibKernel::EventQueue
 

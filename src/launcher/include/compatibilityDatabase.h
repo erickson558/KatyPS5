@@ -15,7 +15,7 @@ struct CompatibilityEntry {
 
 class CompatibilityDatabase: public QObject {
 	Q_OBJECT
-	KYTY_QT_CLASS_NO_COPY(CompatibilityDatabase);
+	KATY_QT_CLASS_NO_COPY(CompatibilityDatabase);
 
 public:
 	explicit CompatibilityDatabase(bool local, QObject* parent = nullptr);

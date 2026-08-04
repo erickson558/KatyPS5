@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #include <windows.h> // IWYU pragma: keep
 #elif defined(__APPLE__)
 #include <csignal>
@@ -38,7 +38,7 @@ static_assert(decltype(g_install_state)::is_always_lock_free);
 	std::fputs(reason != nullptr ? reason : "unspecified", stderr);
 	std::fputc('\n', stderr);
 	std::fflush(stderr);
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	TerminateProcess(GetCurrentProcess(), static_cast<UINT>(EXCEPTION_NONCONTINUABLE_EXCEPTION));
 #endif
 	std::_Exit(321);
@@ -55,7 +55,7 @@ public:
 
 	~FilterScope() { g_in_exception_filter = false; }
 
-	KYTY_CLASS_NO_COPY(FilterScope);
+	KATY_CLASS_NO_COPY(FilterScope);
 };
 
 static Handler LoadInstalledHandler() noexcept {
@@ -71,7 +71,7 @@ static Handler LoadInstalledHandler() noexcept {
 }
 #endif
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 
 static LONG WINAPI ExceptionFilter(PEXCEPTION_POINTERS exception) {
 	FilterScope filter_scope;
@@ -312,7 +312,7 @@ bool InstallHandler(Handler handler) {
 
 	g_handler.store(handler, std::memory_order_release);
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	if (AddVectoredExceptionHandler(1, ExceptionFilter) == nullptr) {
 		g_handler.store(nullptr, std::memory_order_release);
 		g_install_state.store(0, std::memory_order_release);

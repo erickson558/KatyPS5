@@ -34,7 +34,7 @@ static bool share_feature_flag_valid(uint32_t feature_flags) {
 	return feature_flags != 0 && (feature_flags & share_feature_flag_all) == feature_flags;
 }
 
-static KYTY_SYSV_ABI int ShareCaptureScreenshot(const void* param, int32_t* req_id) {
+static KATY_SYSV_ABI int ShareCaptureScreenshot(const void* param, int32_t* req_id) {
 	PRINT_NAME();
 
 	LOGF("\t param  = 0x%016" PRIx64 "\n"
@@ -48,7 +48,7 @@ static KYTY_SYSV_ABI int ShareCaptureScreenshot(const void* param, int32_t* req_
 	return SHARE_ERROR_NOT_SUPPORTED;
 }
 
-static KYTY_SYSV_ABI int ShareCaptureScreenshotExtended(const void* extended_param,
+static KATY_SYSV_ABI int ShareCaptureScreenshotExtended(const void* extended_param,
                                                         int32_t*    req_id) {
 	PRINT_NAME();
 
@@ -63,7 +63,7 @@ static KYTY_SYSV_ABI int ShareCaptureScreenshotExtended(const void* extended_par
 	return SHARE_ERROR_NOT_SUPPORTED;
 }
 
-static KYTY_SYSV_ABI int ShareCaptureVideoClip(const void* param, int32_t* req_id) {
+static KATY_SYSV_ABI int ShareCaptureVideoClip(const void* param, int32_t* req_id) {
 	PRINT_NAME();
 
 	LOGF("\t param  = 0x%016" PRIx64 "\n"
@@ -77,7 +77,7 @@ static KYTY_SYSV_ABI int ShareCaptureVideoClip(const void* param, int32_t* req_i
 	return SHARE_ERROR_NOT_SUPPORTED;
 }
 
-static KYTY_SYSV_ABI int ShareCaptureVideoClipExtended(const void* extended_param,
+static KATY_SYSV_ABI int ShareCaptureVideoClipExtended(const void* extended_param,
                                                        int32_t*    req_id) {
 	PRINT_NAME();
 
@@ -92,7 +92,7 @@ static KYTY_SYSV_ABI int ShareCaptureVideoClipExtended(const void* extended_para
 	return SHARE_ERROR_NOT_SUPPORTED;
 }
 
-static KYTY_SYSV_ABI int ShareUnregisterContentEventCallback(void* callback) {
+static KATY_SYSV_ABI int ShareUnregisterContentEventCallback(void* callback) {
 	PRINT_NAME();
 
 	LOGF("\t callback = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(callback));
@@ -100,7 +100,7 @@ static KYTY_SYSV_ABI int ShareUnregisterContentEventCallback(void* callback) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareOpenMenuForContent(const void* content_id) {
+static KATY_SYSV_ABI int ShareOpenMenuForContent(const void* content_id) {
 	PRINT_NAME();
 
 	LOGF("\t content_id = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(content_id));
@@ -108,7 +108,7 @@ static KYTY_SYSV_ABI int ShareOpenMenuForContent(const void* content_id) {
 	return SHARE_ERROR_NOT_SUPPORTED;
 }
 
-static KYTY_SYSV_ABI int ShareSetScreenshotOverlayImage(const char* file_path, int32_t margin_x,
+static KATY_SYSV_ABI int ShareSetScreenshotOverlayImage(const char* file_path, int32_t margin_x,
                                                         int32_t margin_y, int32_t origin) {
 	PRINT_NAME();
 
@@ -121,7 +121,7 @@ static KYTY_SYSV_ABI int ShareSetScreenshotOverlayImage(const char* file_path, i
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareSetCaptureSource(uint32_t feature_flags, const void* tap_point) {
+static KATY_SYSV_ABI int ShareSetCaptureSource(uint32_t feature_flags, const void* tap_point) {
 	PRINT_NAME();
 
 	LOGF("\t feature_flags = 0x%08" PRIx32 "\n"
@@ -135,7 +135,7 @@ static KYTY_SYSV_ABI int ShareSetCaptureSource(uint32_t feature_flags, const voi
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareSetContentParam(const char* content_param) {
+static KATY_SYSV_ABI int ShareSetContentParam(const char* content_param) {
 	PRINT_NAME();
 
 	LOGF("\t content_param = %s\n", (content_param != nullptr ? content_param : "<null>"));
@@ -147,7 +147,7 @@ static KYTY_SYSV_ABI int ShareSetContentParam(const char* content_param) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareSetContentParamForApplicationTitle(const char* application_title) {
+static KATY_SYSV_ABI int ShareSetContentParamForApplicationTitle(const char* application_title) {
 	PRINT_NAME();
 
 	LOGF("\t application_title = %s\n",
@@ -160,7 +160,7 @@ static KYTY_SYSV_ABI int ShareSetContentParamForApplicationTitle(const char* app
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareRegisterContentEventCallback(void* callback, void* user_data) {
+static KATY_SYSV_ABI int ShareRegisterContentEventCallback(void* callback, void* user_data) {
 	PRINT_NAME();
 
 	LOGF("\t callback  = 0x%016" PRIx64 "\n"
@@ -170,7 +170,7 @@ static KYTY_SYSV_ABI int ShareRegisterContentEventCallback(void* callback, void*
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareGetCurrentStatus(uint32_t feature_flag, ShareCurrentStatus* status) {
+static KATY_SYSV_ABI int ShareGetCurrentStatus(uint32_t feature_flag, ShareCurrentStatus* status) {
 	PRINT_NAME();
 
 	LOGF("\t feature_flag = 0x%08" PRIx32 "\n"
@@ -185,7 +185,7 @@ static KYTY_SYSV_ABI int ShareGetCurrentStatus(uint32_t feature_flag, ShareCurre
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareGetRunningStatus(uint32_t* feature_flags) {
+static KATY_SYSV_ABI int ShareGetRunningStatus(uint32_t* feature_flags) {
 	PRINT_NAME();
 
 	LOGF("\t feature_flags = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(feature_flags));
@@ -198,7 +198,7 @@ static KYTY_SYSV_ABI int ShareGetRunningStatus(uint32_t* feature_flags) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareFeaturePermit(uint32_t feature_flags) {
+static KATY_SYSV_ABI int ShareFeaturePermit(uint32_t feature_flags) {
 	PRINT_NAME();
 
 	LOGF("\t feature_flags = 0x%08" PRIx32 "\n", feature_flags);
@@ -210,7 +210,7 @@ static KYTY_SYSV_ABI int ShareFeaturePermit(uint32_t feature_flags) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI int ShareFeatureProhibit(uint32_t feature_flags) {
+static KATY_SYSV_ABI int ShareFeatureProhibit(uint32_t feature_flags) {
 	PRINT_NAME();
 
 	LOGF("\t feature_flags = 0x%08" PRIx32 "\n", feature_flags);

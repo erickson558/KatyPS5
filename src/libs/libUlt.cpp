@@ -79,7 +79,7 @@ struct UltRuntimeState {
 	void*    work_area         = nullptr;
 };
 
-using UltUlthreadEntry = KYTY_SYSV_ABI int32_t (*)(uint64_t);
+using UltUlthreadEntry = KATY_SYSV_ABI int32_t (*)(uint64_t);
 
 struct UltUlthreadState {
 	UltUlthreadEntry   entry  = nullptr;
@@ -113,13 +113,13 @@ static int UltQueueGetState(void* queue, std::shared_ptr<UltQueueState>* state) 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltInitialize() {
+static int KATY_SYSV_ABI UltInitialize() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltFinalize() {
+static int KATY_SYSV_ABI UltFinalize() {
 	PRINT_NAME();
 
 	std::vector<std::shared_ptr<UltSemaphoreState>> semaphores;
@@ -147,7 +147,7 @@ static int KYTY_SYSV_ABI UltFinalize() {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltUlthreadRuntimeOptParamInitialize(UltUlthreadRuntimeOptParam* opt_param,
+static int KATY_SYSV_ABI UltUlthreadRuntimeOptParamInitialize(UltUlthreadRuntimeOptParam* opt_param,
                                                               uint32_t build_version) {
 	PRINT_NAME();
 
@@ -164,7 +164,7 @@ static int KYTY_SYSV_ABI UltUlthreadRuntimeOptParamInitialize(UltUlthreadRuntime
 	return OK;
 }
 
-static uint64_t KYTY_SYSV_ABI UltUlthreadRuntimeGetWorkAreaSize(uint32_t max_num_ulthread,
+static uint64_t KATY_SYSV_ABI UltUlthreadRuntimeGetWorkAreaSize(uint32_t max_num_ulthread,
                                                                 uint32_t num_worker_thread) {
 	PRINT_NAME();
 
@@ -173,7 +173,7 @@ static uint64_t KYTY_SYSV_ABI UltUlthreadRuntimeGetWorkAreaSize(uint32_t max_num
 	                    8u);
 }
 
-static int KYTY_SYSV_ABI UltUlthreadRuntimeCreate(void* runtime, const char* name,
+static int KATY_SYSV_ABI UltUlthreadRuntimeCreate(void* runtime, const char* name,
                                                   uint32_t max_num_ulthread,
                                                   uint32_t num_worker_thread, void* work_area,
                                                   const void* opt_param, uint32_t build_version) {
@@ -202,12 +202,12 @@ static int KYTY_SYSV_ABI UltUlthreadRuntimeCreate(void* runtime, const char* nam
 	return OK;
 }
 
-static KYTY_SYSV_ABI void* UltUlthreadRun(void* arg) {
+static KATY_SYSV_ABI void* UltUlthreadRun(void* arg) {
 	auto* state = static_cast<UltUlthreadState*>(arg);
 	return reinterpret_cast<void*>(static_cast<intptr_t>(state->entry(state->arg)));
 }
 
-static int KYTY_SYSV_ABI UltUlthreadCreate(void* ulthread, const char* name, UltUlthreadEntry entry,
+static int KATY_SYSV_ABI UltUlthreadCreate(void* ulthread, const char* name, UltUlthreadEntry entry,
                                            uint64_t arg, void* context, uint64_t size_context,
                                            void* runtime, const void* opt_param,
                                            uint32_t build_version) {
@@ -257,7 +257,7 @@ static int KYTY_SYSV_ABI UltUlthreadCreate(void* ulthread, const char* name, Ult
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltUlthreadJoin(void* ulthread, int32_t* status) {
+static int KATY_SYSV_ABI UltUlthreadJoin(void* ulthread, int32_t* status) {
 	PRINT_NAME();
 
 	LOGF("\t ulthread = 0x%016" PRIx64 "\n"
@@ -291,14 +291,14 @@ static int KYTY_SYSV_ABI UltUlthreadJoin(void* ulthread, int32_t* status) {
 	return OK;
 }
 
-static uint64_t KYTY_SYSV_ABI
+static uint64_t KATY_SYSV_ABI
 UltWaitingQueueResourcePoolGetWorkAreaSize(uint32_t num_threads, uint32_t num_sync_objects) {
 	PRINT_NAME();
 
 	return ult_align_up(static_cast<uint64_t>(num_threads + num_sync_objects) * 256u, 8u);
 }
 
-static int KYTY_SYSV_ABI UltWaitingQueueResourcePoolCreate(void* pool, const char* name,
+static int KATY_SYSV_ABI UltWaitingQueueResourcePoolCreate(void* pool, const char* name,
                                                            uint32_t num_threads,
                                                            uint32_t num_sync_objects,
                                                            void* work_area, const void* opt_param,
@@ -328,7 +328,7 @@ static int KYTY_SYSV_ABI UltWaitingQueueResourcePoolCreate(void* pool, const cha
 	return OK;
 }
 
-static uint64_t KYTY_SYSV_ABI UltQueueDataResourcePoolGetWorkAreaSize(uint32_t num_data,
+static uint64_t KATY_SYSV_ABI UltQueueDataResourcePoolGetWorkAreaSize(uint32_t num_data,
                                                                       uint64_t data_size,
                                                                       uint32_t num_queue_object) {
 	PRINT_NAME();
@@ -344,7 +344,7 @@ static uint64_t KYTY_SYSV_ABI UltQueueDataResourcePoolGetWorkAreaSize(uint32_t n
 	return ult_align_up(data_area + queue_area, 8u);
 }
 
-static int KYTY_SYSV_ABI UltQueueDataResourcePoolCreate(void* pool, const char* name,
+static int KATY_SYSV_ABI UltQueueDataResourcePoolCreate(void* pool, const char* name,
                                                         uint32_t num_data, uint64_t data_size,
                                                         uint32_t num_queue_object,
                                                         void*    waiting_queue_resource_pool,
@@ -383,7 +383,7 @@ static int KYTY_SYSV_ABI UltQueueDataResourcePoolCreate(void* pool, const char* 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltQueueCreate(void* queue, const char* name, uint64_t data_size,
+static int KATY_SYSV_ABI UltQueueCreate(void* queue, const char* name, uint64_t data_size,
                                         void* waiting_queue_resource_pool,
                                         void* queue_data_resource_pool, const void* opt_param,
                                         uint32_t build_version) {
@@ -425,7 +425,7 @@ static int KYTY_SYSV_ABI UltQueueCreate(void* queue, const char* name, uint64_t 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltQueuePush(void* queue, const void* data) {
+static int KATY_SYSV_ABI UltQueuePush(void* queue, const void* data) {
 	PRINT_NAME();
 
 	std::shared_ptr<UltQueueState> state;
@@ -456,7 +456,7 @@ static int KYTY_SYSV_ABI UltQueuePush(void* queue, const void* data) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltQueueTryPop(void* queue, void* data) {
+static int KATY_SYSV_ABI UltQueueTryPop(void* queue, void* data) {
 	PRINT_NAME();
 
 	std::shared_ptr<UltQueueState> state;
@@ -482,7 +482,7 @@ static int KYTY_SYSV_ABI UltQueueTryPop(void* queue, void* data) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltMutexOptParamInitialize(UltMutexOptParam* opt_param,
+static int KATY_SYSV_ABI UltMutexOptParamInitialize(UltMutexOptParam* opt_param,
                                                     uint32_t          build_version) {
 	PRINT_NAME();
 
@@ -499,7 +499,7 @@ static int KYTY_SYSV_ABI UltMutexOptParamInitialize(UltMutexOptParam* opt_param,
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltMutexCreate(void* mutex, const char* name,
+static int KATY_SYSV_ABI UltMutexCreate(void* mutex, const char* name,
                                         void*                   waiting_queue_resource_pool,
                                         const UltMutexOptParam* opt_param, uint32_t build_version) {
 	PRINT_NAME();
@@ -531,7 +531,7 @@ static int KYTY_SYSV_ABI UltMutexCreate(void* mutex, const char* name,
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltMutexLock(void* mutex) {
+static int KATY_SYSV_ABI UltMutexLock(void* mutex) {
 	PRINT_NAME();
 
 	std::shared_ptr<UltMutexState> state;
@@ -549,7 +549,7 @@ static int KYTY_SYSV_ABI UltMutexLock(void* mutex) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltMutexUnlock(void* mutex) {
+static int KATY_SYSV_ABI UltMutexUnlock(void* mutex) {
 	PRINT_NAME();
 
 	std::shared_ptr<UltMutexState> state;
@@ -579,7 +579,7 @@ static int UltSemaphoreGetState(void* semaphore, std::shared_ptr<UltSemaphoreSta
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltSemaphoreCreate(void* semaphore, const char* name,
+static int KATY_SYSV_ABI UltSemaphoreCreate(void* semaphore, const char* name,
                                             int32_t     num_initial_resource,
                                             void*       waiting_queue_resource_pool,
                                             const void* opt_param, uint32_t build_version) {
@@ -614,7 +614,7 @@ static int KYTY_SYSV_ABI UltSemaphoreCreate(void* semaphore, const char* name,
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltSemaphoreAcquire(void* semaphore, int32_t num_resource) {
+static int KATY_SYSV_ABI UltSemaphoreAcquire(void* semaphore, int32_t num_resource) {
 	PRINT_NAME();
 
 	if (num_resource <= 0) {
@@ -639,7 +639,7 @@ static int KYTY_SYSV_ABI UltSemaphoreAcquire(void* semaphore, int32_t num_resour
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltSemaphoreTryAcquire(void* semaphore, int32_t num_resource) {
+static int KATY_SYSV_ABI UltSemaphoreTryAcquire(void* semaphore, int32_t num_resource) {
 	PRINT_NAME();
 
 	if (num_resource <= 0) {
@@ -661,7 +661,7 @@ static int KYTY_SYSV_ABI UltSemaphoreTryAcquire(void* semaphore, int32_t num_res
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltSemaphoreRelease(void* semaphore, int32_t num_resource) {
+static int KATY_SYSV_ABI UltSemaphoreRelease(void* semaphore, int32_t num_resource) {
 	PRINT_NAME();
 
 	if (num_resource <= 0) {
@@ -686,7 +686,7 @@ static int KYTY_SYSV_ABI UltSemaphoreRelease(void* semaphore, int32_t num_resour
 	return OK;
 }
 
-static int KYTY_SYSV_ABI UltSemaphoreDestroy(void* semaphore) {
+static int KATY_SYSV_ABI UltSemaphoreDestroy(void* semaphore) {
 	PRINT_NAME();
 
 	if (semaphore == nullptr) {

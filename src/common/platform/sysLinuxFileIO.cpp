@@ -1,7 +1,7 @@
 #include "common/common.h"
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_LINUX
-// #error "KYTY_PLATFORM != KYTY_PLATFORM_LINUX"
+#if KATY_PLATFORM != KATY_PLATFORM_LINUX
+// #error "KATY_PLATFORM != KATY_PLATFORM_LINUX"
 #else
 
 #include "common/assert.h"
@@ -45,11 +45,11 @@ struct sys_file_t {
 
 // Darwin uses BSD timestamp member names.
 #if defined(__APPLE__)
-#define KYTY_STAT_ATIME_NS(st) ((st).st_atimespec.tv_nsec)
-#define KYTY_STAT_MTIME_NS(st) ((st).st_mtimespec.tv_nsec)
+#define KATY_STAT_ATIME_NS(st) ((st).st_atimespec.tv_nsec)
+#define KATY_STAT_MTIME_NS(st) ((st).st_mtimespec.tv_nsec)
 #else
-#define KYTY_STAT_ATIME_NS(st) ((st).st_atim.tv_nsec)
-#define KYTY_STAT_MTIME_NS(st) ((st).st_mtim.tv_nsec)
+#define KATY_STAT_ATIME_NS(st) ((st).st_atim.tv_nsec)
+#define KATY_STAT_MTIME_NS(st) ((st).st_mtim.tv_nsec)
 #endif
 
 static std::filesystem::path get_internal_name(const std::filesystem::path& name) {
@@ -439,7 +439,7 @@ SysFileTimeStruct SysFileGetLastAccessTimeUtc(const std::filesystem::path& name)
 	} else {
 		r.is_invalid = false;
 		r.time       = s.st_atime;
-		r.nanos      = KYTY_STAT_ATIME_NS(s);
+		r.nanos      = KATY_STAT_ATIME_NS(s);
 	}
 
 	return r;
@@ -458,7 +458,7 @@ SysFileTimeStruct SysFileGetLastWriteTimeUtc(const std::filesystem::path& name) 
 	} else {
 		r.is_invalid = false;
 		r.time       = s.st_mtime;
-		r.nanos      = KYTY_STAT_MTIME_NS(s);
+		r.nanos      = KATY_STAT_MTIME_NS(s);
 	}
 
 	return r;
@@ -478,9 +478,9 @@ void SysFileGetLastAccessAndWriteTimeUtc(const std::filesystem::path& name, SysF
 		a.is_invalid = false;
 		w.is_invalid = false;
 		a.time       = s.st_atime;
-		a.nanos      = KYTY_STAT_ATIME_NS(s);
+		a.nanos      = KATY_STAT_ATIME_NS(s);
 		w.time       = s.st_mtime;
-		w.nanos      = KYTY_STAT_MTIME_NS(s);
+		w.nanos      = KATY_STAT_MTIME_NS(s);
 	}
 }
 
@@ -495,9 +495,9 @@ void SysFileGetLastAccessAndWriteTimeUtc(sys_file_t& f, SysFileTimeStruct& a,
 
 		if (ok) {
 			a.time  = s.st_atime;
-			a.nanos = KYTY_STAT_ATIME_NS(s);
+			a.nanos = KATY_STAT_ATIME_NS(s);
 			w.time  = s.st_mtime;
-			w.nanos = KYTY_STAT_MTIME_NS(s);
+			w.nanos = KATY_STAT_MTIME_NS(s);
 		}
 	} else if (f.type == SYS_FILE_MEMORY_STAT || f.type == SYS_FILE_MEMORY_DYN) {
 		// Memory-backed files use the current time.
@@ -646,10 +646,10 @@ void SysFileFindFiles(const std::filesystem::path& path, std::vector<sys_file_fi
 			r.size                        = static_cast<uint64_t>(s.st_size);
 			r.last_access_time.is_invalid = false;
 			r.last_access_time.time       = s.st_atime;
-			r.last_access_time.nanos      = KYTY_STAT_ATIME_NS(s);
+			r.last_access_time.nanos      = KATY_STAT_ATIME_NS(s);
 			r.last_write_time.is_invalid  = false;
 			r.last_write_time.time        = s.st_mtime;
-			r.last_write_time.nanos       = KYTY_STAT_MTIME_NS(s);
+			r.last_write_time.nanos       = KATY_STAT_MTIME_NS(s);
 
 			out.push_back(r);
 		}

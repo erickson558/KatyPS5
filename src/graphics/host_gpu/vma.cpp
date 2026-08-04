@@ -58,7 +58,7 @@ void VulkanUntrackAllocation(const VulkanMemory& memory) {
 }
 
 bool GraphicContext::CreateAllocator() {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(instance == nullptr || physical_device == nullptr || device == nullptr ||
 	        allocator != nullptr);
 
@@ -164,7 +164,7 @@ uint64_t GraphicContext::GetTotalMemoryBudget() const {
 }
 
 void GraphicContext::CreateBuffer(uint64_t size, VulkanBuffer& buffer) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(allocator == nullptr || buffer.buffer != nullptr ||
 	        buffer.memory.allocation != nullptr || size == 0);
 
@@ -200,7 +200,7 @@ void GraphicContext::CreateBuffer(uint64_t size, VulkanBuffer& buffer) {
 }
 
 void GraphicContext::DeleteBuffer(VulkanBuffer& buffer) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(allocator == nullptr || buffer.buffer == nullptr ||
 	        buffer.memory.allocation == nullptr);
 
@@ -214,7 +214,7 @@ void GraphicContext::DeleteBuffer(VulkanBuffer& buffer) {
 }
 
 bool GraphicContext::CreateImage(const vk::ImageCreateInfo& image_info, VulkanImage& image) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(allocator == nullptr || image.image != nullptr || image.memory.allocation != nullptr);
 
 	auto&                   memory = image.memory;
@@ -243,7 +243,7 @@ bool GraphicContext::CreateImage(const vk::ImageCreateInfo& image_info, VulkanIm
 }
 
 void GraphicContext::DeleteImage(VulkanImage& image) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(allocator == nullptr || image.image == nullptr || image.memory.allocation == nullptr);
 
 	auto& memory = image.memory;
@@ -257,14 +257,14 @@ void GraphicContext::DeleteImage(VulkanImage& image) {
 }
 
 void GraphicContext::MapMemory(VulkanMemory& memory, void*& data) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(allocator == nullptr || memory.allocation == nullptr);
 	EXIT_NOT_IMPLEMENTED(static_cast<vk::Result>(vmaMapMemory(allocator, memory.allocation,
 	                                                          &data)) != vk::Result::eSuccess);
 }
 
 void GraphicContext::UnmapMemory(VulkanMemory& memory) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(allocator == nullptr || memory.allocation == nullptr);
 	vmaUnmapMemory(allocator, memory.allocation);
 }

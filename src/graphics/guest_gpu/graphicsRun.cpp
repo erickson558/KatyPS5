@@ -90,7 +90,7 @@ public:
 	}
 	~GpuState();
 
-	KYTY_CLASS_NO_COPY(GpuState);
+	KATY_CLASS_NO_COPY(GpuState);
 
 	void Submit(uint32_t* cmd_draw_buffer, uint32_t num_draw_dw, uint32_t* cmd_const_buffer,
 	            uint32_t num_const_dw, bool trigger_agc_interrupt_on_done);
@@ -516,7 +516,7 @@ void GpuState::WaitForIdle() {
 void GpuState::ThreadRun(void* data) {
 	auto* gpu = static_cast<GpuState*>(data);
 	EXIT_IF(gpu == nullptr);
-	KYTY_PROFILER_THREAD("Thread_Gpu");
+	KATY_PROFILER_THREAD("Thread_Gpu");
 	g_gpu_thread = true;
 	g_gpu_state  = gpu;
 
@@ -707,7 +707,7 @@ bool GpuState::Process(Submission& submission) {
 
 Pm4ProcessResult CommandProcessor::Process(Pm4Execution& execution, uint32_t* buffer,
                                            uint32_t size_dw) {
-	KYTY_PROFILER_BLOCK("CommandProcessor::Process");
+	KATY_PROFILER_BLOCK("CommandProcessor::Process");
 	EXIT_IF(g_current_execution != nullptr);
 	if (execution.m_buffer_stack.empty() && size_dw != 0) {
 		execution.m_buffer_stack.push_back({buffer, size_dw, size_dw, 0});
@@ -790,20 +790,20 @@ void CommandProcessor::ProcessPm4(Pm4Execution& execution, size_t stop_depth) {
 		if (GraphicsRunDebugDumpEnabled()) {
 			LOGF("CP packet: offset=0x%05" PRIx32 " cmd_id=0x%08" PRIx32 " op=0x%02" PRIx32
 			     " len=%" PRIu32 "\n",
-			     total_dw - remaining_dw, packet_header, opcode, KYTY_PM4_LEN(packet_header));
+			     total_dw - remaining_dw, packet_header, opcode, KATY_PM4_LEN(packet_header));
 		}
 
 		if ((packet_header & 1u) != 0 && ShouldSkipPredicatedPackets()) {
-			auto packet_dw = KYTY_PM4_LEN(packet_header);
+			auto packet_dw = KATY_PM4_LEN(packet_header);
 			EXIT_NOT_IMPLEMENTED(packet_dw == 0 || packet_dw > remaining_dw);
 			static std::atomic<uint32_t> skip_log_count {0};
 			if (skip_log_count.fetch_add(1) < 2048) {
 				LOGF("\t predicated skip: op=0x%02" PRIx32 ", r=0x%02" PRIx32 ", len=%" PRIu32
 				     ", packet=0x%016" PRIx64 ", cmd_id=0x%08" PRIx32 "\n",
-				     opcode, KYTY_PM4_R(packet_header), packet_dw,
+				     opcode, KATY_PM4_R(packet_header), packet_dw,
 				     reinterpret_cast<uint64_t>(packet), packet_header);
 			}
-			if (opcode == Pm4::IT_NOP && KYTY_PM4_R(packet_header) == Pm4::R_RELEASE_MEM &&
+			if (opcode == Pm4::IT_NOP && KATY_PM4_R(packet_header) == Pm4::R_RELEASE_MEM &&
 			    packet_dw >= 7) {
 				static std::atomic<uint32_t> log_count {0};
 				if (log_count.fetch_add(1) < 128) {

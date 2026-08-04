@@ -271,7 +271,7 @@ public:
 	[[nodiscard]] std::vector<const Elf64_Dyn*> GetDynList(Elf64_Sxword tag) const;
 	[[nodiscard]] bool HasDynValue(Elf64_Sxword tag) const { return GetDynValue(tag) != nullptr; }
 
-	KYTY_CLASS_NO_COPY(Elf64);
+	KATY_CLASS_NO_COPY(Elf64);
 
 	[[nodiscard]] const Elf64_Dyn* GetDynamic() const {
 		return reinterpret_cast<const Elf64_Dyn*>(m_dynamic.get());

@@ -108,7 +108,7 @@ void InitSubsystems() {
 	Check("InitSubsystems", slist->InitAll(false), "failed to initialize logging subsystem");
 
 	const auto param_json = std::filesystem::temp_directory_path() /
-	                        ("kyty_virtual_memory_" +
+	                        ("katy_virtual_memory_" +
 	                         std::to_string(reinterpret_cast<uintptr_t>(&initialized)) + ".json");
 	constexpr char json[] = R"({"kernel":{"flexibleMemorySize":3221225472}})";
 	Common::File   param_file;
@@ -772,7 +772,7 @@ void TestDirectMapQueryOffsetAndPartialMunmap() {
 	        "KernelMapNamedDirectMemory(alias)");
 	const auto alias_base = reinterpret_cast<uint64_t>(alias);
 
-	constexpr uint64_t alias_test_value = 0x4b595459444d454dull; // "KYTYDMEM"
+	constexpr uint64_t alias_test_value = 0x4b595459444d454dull; // "KATYDMEM"
 	*reinterpret_cast<uint64_t*>(base)  = alias_test_value;
 	Check(test, *reinterpret_cast<const uint64_t*>(alias_base) == alias_test_value,
 	      "direct mappings of the same physical offset must share backing storage");
@@ -1137,7 +1137,7 @@ void TestNonzeroDirectOffsetAliasesSharedBacking() {
 	            "prospero_nonzero_b"),
 	        "KernelMapNamedDirectMemory(second alias)");
 
-	*reinterpret_cast<uint64_t*>(first_alias) = 0x4b59545931364b42ull; // "KYTY16KB"
+	*reinterpret_cast<uint64_t*>(first_alias) = 0x4b59545931364b42ull; // "KATY16KB"
 	Check(test, *reinterpret_cast<const uint64_t*>(second_alias) == 0x4b59545931364b42ull,
 	      "nonzero-offset mappings must share backing storage");
 
@@ -1290,7 +1290,7 @@ void TestDefaultDirectMapUsesSystemAddressRange() {
 	                                                            SceKernelPageSize, "system_direct"),
 	        "KernelMapNamedDirectMemory");
 	Check(test, address != nullptr, "direct mapping returned null");
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	constexpr uint64_t SystemManagedMin = 0x0000040000ull;
 	constexpr uint64_t SystemManagedMax = 0x07fffeffffull;
 	const auto         mapped           = reinterpret_cast<uint64_t>(address);
@@ -1430,7 +1430,7 @@ void TestDirectMemoryContentPersistsAcrossRemap() {
 	        "KernelMapNamedDirectMemory(first)");
 	const auto base = reinterpret_cast<uint64_t>(address);
 	for (uint64_t offset = 0; offset < MapSize; offset += sizeof(uint64_t)) {
-		*reinterpret_cast<uint64_t*>(base + offset) = offset ^ 0x4b5954595045525aull; // "KYTYPERZ"
+		*reinterpret_cast<uint64_t*>(base + offset) = offset ^ 0x4b5954595045525aull; // "KATYPERZ"
 	}
 	CheckOk(test, Libs::LibKernel::Memory::KernelMunmap(base, MapSize), "KernelMunmap(first)");
 
@@ -1544,7 +1544,7 @@ void TestFixedReserveReplacesPartialDirectMapping() {
 	            "partial_replace_alias"),
 	        "KernelMapNamedDirectMemory(alias)");
 	*reinterpret_cast<uint64_t*>(reinterpret_cast<uint64_t>(alias) + keep_size) =
-	    0x4b595459414c4941ull; // "KYTYALIA"
+	    0x4b595459414c4941ull; // "KATYALIA"
 
 	void* reserve = nullptr;
 	CheckOk(test,
@@ -1560,7 +1560,7 @@ void TestFixedReserveReplacesPartialDirectMapping() {
 	            phys_addr, SceKernelPageSize, "partial_replace_direct"),
 	        "KernelMapNamedDirectMemory");
 	Check(test, mapped == reserve, "fixed direct mapping moved");
-	*reinterpret_cast<uint64_t*>(base) = 0x4b5954594b454550ull; // "KYTYKEEP"
+	*reinterpret_cast<uint64_t*>(base) = 0x4b5954594b454550ull; // "KATYKEEP"
 
 	void* replacement = reinterpret_cast<void*>(base + keep_size);
 	CheckOk(test,
@@ -1587,7 +1587,7 @@ void TestFixedReserveReplacesPartialDirectMapping() {
 	Check(test, remapped == replacement, "replacement reservation was not reusable in place");
 	Check(test, *reinterpret_cast<uint64_t*>(remapped) == 0x4b595459414c4941ull,
 	      "replacement remap did not preserve its direct-memory backing offset");
-	*reinterpret_cast<uint64_t*>(remapped) = 0x4b59545952455553ull; // "KYTYREUS"
+	*reinterpret_cast<uint64_t*>(remapped) = 0x4b59545952455553ull; // "KATYREUS"
 	Check(test,
 	      *reinterpret_cast<uint64_t*>(reinterpret_cast<uint64_t>(alias) + keep_size) ==
 	          0x4b59545952455553ull,
@@ -1642,8 +1642,8 @@ void TestFixedReserveRollbackSkipsUntouchedChunks() {
 	            &right, part_size, SceKernelProtCpuRw, SceKernelMapFixed | SceKernelMapNoCoalesce,
 	            right_phys, SceKernelPageSize, "rollback_right"),
 	        "KernelMapNamedDirectMemory(right)");
-	*reinterpret_cast<uint64_t*>(left)  = 0x4b5954594c454654ull; // "KYTYLEFT"
-	*reinterpret_cast<uint64_t*>(right) = 0x4b59545952474854ull; // "KYTYRGHT"
+	*reinterpret_cast<uint64_t*>(left)  = 0x4b5954594c454654ull; // "KATYLEFT"
+	*reinterpret_cast<uint64_t*>(right) = 0x4b59545952474854ull; // "KATYRGHT"
 
 	Libs::LibKernel::Memory::TestFailPhysicalMemoryUnmapAfter(1);
 	void* replacement = reserve;
@@ -1696,7 +1696,7 @@ void TestFixedReserveRollbackConsumesRestoredPlaceholder() {
 	            &mapped, total_size, SceKernelProtCpuRw, SceKernelMapFixed | SceKernelMapNoCoalesce,
 	            phys_addr, SceKernelPageSize, "rollback_direct"),
 	        "KernelMapNamedDirectMemory");
-	*reinterpret_cast<uint64_t*>(base) = 0x4b595459524f4c4cull; // "KYTYROLL"
+	*reinterpret_cast<uint64_t*>(base) = 0x4b595459524f4c4cull; // "KATYROLL"
 
 	Libs::LibKernel::Memory::TestFailNextPhysicalMemoryUnmap();
 	void* replacement = reserve;
@@ -1798,7 +1798,7 @@ void TestLargeHintedReserveHostsSmallDirectMap() {
 	            SceKernelMapFixed | SceKernelMapNoCoalesce, phys, 0, "prospero_large_reserve"),
 	        "KernelMapNamedDirectMemory");
 	Check(test, mapped == window, "fixed direct mapping moved away from the reserved window");
-	*reinterpret_cast<uint64_t*>(mapped) = 0x4b59545952455356ull; // "KYTYRESV"
+	*reinterpret_cast<uint64_t*>(mapped) = 0x4b59545952455356ull; // "KATYRESV"
 
 	CheckOk(test,
 	        Libs::LibKernel::Memory::KernelMunmap(reinterpret_cast<uint64_t>(mapped),

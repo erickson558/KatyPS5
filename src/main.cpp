@@ -8,7 +8,7 @@
 #include "common/stringUtils.h"
 #include "common/threads.h"
 #include "emulator.h"
-#include "kytyGitVersion.h"
+#include "katyGitVersion.h"
 
 #include <charconv>
 #include <cstdio>
@@ -20,9 +20,9 @@ using namespace Emulator;
 static std::string GetBuildString() {
 	Date date = Date::FromMacros(std::string(__DATE__));
 
-#if KYTY_BUILD == KYTY_BUILD_DEBUG
+#if KATY_BUILD == KATY_BUILD_DEBUG
 	std::string type = "Debug";
-#elif KYTY_BUILD == KYTY_BUILD_RELEASE
+#elif KATY_BUILD == KATY_BUILD_RELEASE
 	std::string type = "Release";
 #else
 	std::string type = "????";
@@ -33,14 +33,14 @@ static std::string GetBuildString() {
 
 	std::string str =
 	    fmt::format("{}, {}, ver = {}, git = {}, date = {}", type.c_str(), compiler.c_str(),
-	                KYTY_VERSION, KYTY_GIT_VERSION, date.ToString().c_str());
+	                KATY_VERSION, KATY_GIT_VERSION, date.ToString().c_str());
 
 	return str;
 }
 
 static void PrintUsage() {
 	::printf("%s\n", GetBuildString().c_str());
-	::printf("kyty_emulator --game <dir|elf> [options]\n\n");
+	::printf("katy_emulator --game <dir|elf> [options]\n\n");
 	::printf("Options:\n");
 	::printf("  --game <dir|elf>                     Game directory or ELF to load.\n");
 	::printf(

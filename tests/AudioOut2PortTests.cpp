@@ -232,7 +232,7 @@ uint32_t AudioOutOutputs(const OutputParam* /*params*/, uint32_t /*num*/, bool /
 
 namespace Libs::LibKernel {
 
-uint64_t KYTY_SYSV_ABI KernelGetProcessTime() {
+uint64_t KATY_SYSV_ABI KernelGetProcessTime() {
 	static std::atomic_uint64_t now {0};
 	return now.fetch_add(1000);
 }

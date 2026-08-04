@@ -15,7 +15,7 @@ struct SelectionState {
 	int kind;
 };
 
-void* KYTY_SYSV_ABI FontSelectLibraryFt(int value) {
+void* KATY_SYSV_ABI FontSelectLibraryFt(int value) {
 	PRINT_NAME();
 
 	static SelectionState s_selection {};
@@ -25,7 +25,7 @@ void* KYTY_SYSV_ABI FontSelectLibraryFt(int value) {
 	return &s_selection;
 }
 
-void* KYTY_SYSV_ABI FontSelectRendererFt(int value) {
+void* KATY_SYSV_ABI FontSelectRendererFt(int value) {
 	PRINT_NAME();
 
 	static SelectionState s_selection {};

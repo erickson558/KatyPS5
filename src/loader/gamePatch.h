@@ -1,5 +1,5 @@
-#ifndef KYTY_LOADER_GAME_PATCH_H_
-#define KYTY_LOADER_GAME_PATCH_H_
+#ifndef KATY_LOADER_GAME_PATCH_H_
+#define KATY_LOADER_GAME_PATCH_H_
 
 #include "common/common.h"
 
@@ -17,4 +17,4 @@ bool Apply(const std::filesystem::path& plan_path, Program* program);
 
 } // namespace Loader
 
-#endif // KYTY_LOADER_GAME_PATCH_H_
+#endif // KATY_LOADER_GAME_PATCH_H_

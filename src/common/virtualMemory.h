@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_VIRTUALMEMORY_H_
-#define KYTY_COMMON_VIRTUALMEMORY_H_
+#ifndef KATY_COMMON_VIRTUALMEMORY_H_
+#define KATY_COMMON_VIRTUALMEMORY_H_
 
 #include "common/common.h"
 
@@ -42,4 +42,4 @@ bool     FlushInstructionCache(uint64_t address, uint64_t size);
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_VIRTUALMEMORY_H_ */
+#endif /* KATY_COMMON_VIRTUALMEMORY_H_ */

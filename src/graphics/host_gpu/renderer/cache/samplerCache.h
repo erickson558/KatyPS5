@@ -22,7 +22,7 @@ public:
 		EXIT_NOT_IMPLEMENTED(!Common::Thread::IsMainThread());
 	}
 	~SamplerCache();
-	KYTY_CLASS_NO_COPY(SamplerCache);
+	KATY_CLASS_NO_COPY(SamplerCache);
 
 	vk::Sampler GetSampler(const ShaderSamplerResource& r);
 

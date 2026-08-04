@@ -192,7 +192,7 @@ public:
 		EXIT_NOT_IMPLEMENTED(!Common::Thread::IsMainThread());
 	}
 	~FlipQueue();
-	KYTY_CLASS_NO_COPY(FlipQueue);
+	KATY_CLASS_NO_COPY(FlipQueue);
 
 	bool Reserve(VideoOutConfig& cfg, int index, int64_t flip_arg, FlipRequestSource source,
 	             uint64_t& request_id);
@@ -242,7 +242,7 @@ public:
 		m_present_thread = std::jthread([this](std::stop_token token) { PresentThread(token); });
 	}
 	~Impl();
-	KYTY_CLASS_NO_COPY(Impl);
+	KATY_CLASS_NO_COPY(Impl);
 
 	int             Open();
 	bool            Close(int handle);
@@ -1075,7 +1075,7 @@ void FlipQueue::Wait(VideoOutConfig& cfg, int index) {
 }
 
 bool FlipQueue::Flip(uint32_t micros) {
-	KYTY_PROFILER_BLOCK("FlipQueue::Flip");
+	KATY_PROFILER_BLOCK("FlipQueue::Flip");
 
 	m_mutex.Lock();
 	if (m_requests.empty()) {
@@ -1155,7 +1155,7 @@ void FlipQueue::GetFlipStatus(VideoOutConfig& cfg, VideoOutFlipStatus& out) {
 	out = cfg.flip_status;
 }
 
-KYTY_SYSV_ABI int VideoOutOpen(int user_id, int bus_type, int index, const void* param) {
+KATY_SYSV_ABI int VideoOutOpen(int user_id, int bus_type, int index, const void* param) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(user_id != 255 && user_id != 0);
@@ -1173,13 +1173,13 @@ KYTY_SYSV_ABI int VideoOutOpen(int user_id, int bus_type, int index, const void*
 	return handle;
 }
 
-KYTY_SYSV_ABI int VideoOutClose(int handle) {
+KATY_SYSV_ABI int VideoOutClose(int handle) {
 	PRINT_NAME();
 
 	return DriverState().Close(handle) ? OK : VIDEO_OUT_ERROR_INVALID_HANDLE;
 }
 
-KYTY_SYSV_ABI void VideoOutSetBufferAttribute2(VideoOutBufferAttribute2* attribute,
+KATY_SYSV_ABI void VideoOutSetBufferAttribute2(VideoOutBufferAttribute2* attribute,
                                                uint64_t pixel_format, uint32_t tiling_mode,
                                                uint32_t width, uint32_t height, uint64_t option,
                                                uint32_t dcc_control,
@@ -1211,7 +1211,7 @@ KYTY_SYSV_ABI void VideoOutSetBufferAttribute2(VideoOutBufferAttribute2* attribu
 	attribute->dcc_control                 = dcc_control;
 }
 
-KYTY_SYSV_ABI int VideoOutSetFlipRate(int handle, int rate) {
+KATY_SYSV_ABI int VideoOutSetFlipRate(int handle, int rate) {
 	PRINT_NAME();
 
 	LOGF("\trate = %d\n", rate);
@@ -1231,45 +1231,45 @@ KYTY_SYSV_ABI int VideoOutSetFlipRate(int handle, int rate) {
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutDeleteFlipEvent(EventQueue::KernelEqueue eq, int handle) {
+KATY_SYSV_ABI int VideoOutDeleteFlipEvent(EventQueue::KernelEqueue eq, int handle) {
 	PRINT_NAME();
 	return DeleteVideoOutEvent(handle, eq, VideoOutEventKind::Flip);
 }
 
-KYTY_SYSV_ABI int VideoOutAddFlipEvent(EventQueue::KernelEqueue eq, int handle, void* udata) {
+KATY_SYSV_ABI int VideoOutAddFlipEvent(EventQueue::KernelEqueue eq, int handle, void* udata) {
 	PRINT_NAME();
 	return RegisterVideoOutEvent(handle, eq, VideoOutEventKind::Flip, udata);
 }
 
-KYTY_SYSV_ABI int VideoOutDeleteVblankEvent(EventQueue::KernelEqueue eq, int handle) {
+KATY_SYSV_ABI int VideoOutDeleteVblankEvent(EventQueue::KernelEqueue eq, int handle) {
 	PRINT_NAME();
 	return DeleteVideoOutEvent(handle, eq, VideoOutEventKind::Vblank);
 }
 
-KYTY_SYSV_ABI int VideoOutDeletePreVblankStartEvent(EventQueue::KernelEqueue eq, int handle) {
+KATY_SYSV_ABI int VideoOutDeletePreVblankStartEvent(EventQueue::KernelEqueue eq, int handle) {
 	PRINT_NAME();
 	return DeleteVideoOutEvent(handle, eq, VideoOutEventKind::PreVblankStart);
 }
 
-KYTY_SYSV_ABI int VideoOutAddVblankEvent(LibKernel::EventQueue::KernelEqueue eq, int handle,
+KATY_SYSV_ABI int VideoOutAddVblankEvent(LibKernel::EventQueue::KernelEqueue eq, int handle,
                                          void* udata) {
 	PRINT_NAME();
 	return RegisterVideoOutEvent(handle, eq, VideoOutEventKind::Vblank, udata);
 }
 
-KYTY_SYSV_ABI int VideoOutAddPreVblankStartEvent(LibKernel::EventQueue::KernelEqueue eq, int handle,
+KATY_SYSV_ABI int VideoOutAddPreVblankStartEvent(LibKernel::EventQueue::KernelEqueue eq, int handle,
                                                  void* udata) {
 	PRINT_NAME();
 	return RegisterVideoOutEvent(handle, eq, VideoOutEventKind::PreVblankStart, udata);
 }
 
-KYTY_SYSV_ABI int VideoOutAddOutputModeEvent(LibKernel::EventQueue::KernelEqueue eq, int handle,
+KATY_SYSV_ABI int VideoOutAddOutputModeEvent(LibKernel::EventQueue::KernelEqueue eq, int handle,
                                              void* udata) {
 	PRINT_NAME();
 	return RegisterVideoOutEvent(handle, eq, VideoOutEventKind::OutputMode, udata);
 }
 
-KYTY_SYSV_ABI int VideoOutRegisterBuffers2(int handle, int set_index, int buffer_index_start,
+KATY_SYSV_ABI int VideoOutRegisterBuffers2(int handle, int set_index, int buffer_index_start,
                                            const VideoOutBuffers* buffers, int buffer_num,
                                            const VideoOutBufferAttribute2* attribute, int category,
                                            void* option) {
@@ -1367,7 +1367,7 @@ KYTY_SYSV_ABI int VideoOutRegisterBuffers2(int handle, int set_index, int buffer
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutSubmitChangeBufferAttribute2(int handle, int set_index,
+KATY_SYSV_ABI int VideoOutSubmitChangeBufferAttribute2(int handle, int set_index,
                                                        const VideoOutBufferAttribute2* attribute,
                                                        void*                           option) {
 	PRINT_NAME();
@@ -1409,7 +1409,7 @@ KYTY_SYSV_ABI int VideoOutSubmitChangeBufferAttribute2(int handle, int set_index
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutUnregisterBuffers(int handle, int set_index) {
+KATY_SYSV_ABI int VideoOutUnregisterBuffers(int handle, int set_index) {
 	PRINT_NAME();
 
 	auto* ctx = DriverState().Get(handle);
@@ -1437,7 +1437,7 @@ KYTY_SYSV_ABI int VideoOutUnregisterBuffers(int handle, int set_index) {
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutSubmitFlip(int handle, int index, int flip_mode, int64_t flip_arg) {
+KATY_SYSV_ABI int VideoOutSubmitFlip(int handle, int index, int flip_mode, int64_t flip_arg) {
 	PRINT_NAME();
 
 	uint64_t  request_id = 0;
@@ -1492,7 +1492,7 @@ void VideoOutDriver::WaitFlipDone(int handle, int index) {
 	m_impl->GetFlipQueue().Wait(*ctx, index);
 }
 
-KYTY_SYSV_ABI int VideoOutGetFlipStatus(int handle, VideoOutFlipStatus* status) {
+KATY_SYSV_ABI int VideoOutGetFlipStatus(int handle, VideoOutFlipStatus* status) {
 	PRINT_NAME();
 
 	if (status == nullptr) {
@@ -1521,7 +1521,7 @@ KYTY_SYSV_ABI int VideoOutGetFlipStatus(int handle, VideoOutFlipStatus* status) 
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutIsFlipPending(int handle) {
+KATY_SYSV_ABI int VideoOutIsFlipPending(int handle) {
 	PRINT_NAME();
 
 	auto* ctx = DriverState().Get(handle);
@@ -1537,7 +1537,7 @@ KYTY_SYSV_ABI int VideoOutIsFlipPending(int handle) {
 	return status.flipPendingNum;
 }
 
-KYTY_SYSV_ABI int VideoOutGetVblankStatus(int handle, VideoOutVblankStatus* status) {
+KATY_SYSV_ABI int VideoOutGetVblankStatus(int handle, VideoOutVblankStatus* status) {
 	PRINT_NAME();
 
 	if (status == nullptr) {
@@ -1561,7 +1561,7 @@ KYTY_SYSV_ABI int VideoOutGetVblankStatus(int handle, VideoOutVblankStatus* stat
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutGetEventId(const EventQueue::KernelEvent* ev) {
+KATY_SYSV_ABI int VideoOutGetEventId(const EventQueue::KernelEvent* ev) {
 	PRINT_NAME();
 
 	if (ev == nullptr) {
@@ -1581,7 +1581,7 @@ KYTY_SYSV_ABI int VideoOutGetEventId(const EventQueue::KernelEvent* ev) {
 	}
 }
 
-KYTY_SYSV_ABI int VideoOutGetEventData(const EventQueue::KernelEvent* ev, int64_t* data) {
+KATY_SYSV_ABI int VideoOutGetEventData(const EventQueue::KernelEvent* ev, int64_t* data) {
 	PRINT_NAME();
 
 	if (ev == nullptr || data == nullptr) {
@@ -1603,7 +1603,7 @@ KYTY_SYSV_ABI int VideoOutGetEventData(const EventQueue::KernelEvent* ev, int64_
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutGetEventCount(const EventQueue::KernelEvent* ev) {
+KATY_SYSV_ABI int VideoOutGetEventCount(const EventQueue::KernelEvent* ev) {
 	PRINT_NAME();
 
 	if (ev == nullptr) {
@@ -1617,7 +1617,7 @@ KYTY_SYSV_ABI int VideoOutGetEventCount(const EventQueue::KernelEvent* ev) {
 	return static_cast<int>((static_cast<uint64_t>(ev->data) >> 12u) & 0xfu);
 }
 
-KYTY_SYSV_ABI int VideoOutWaitVblank(int handle) {
+KATY_SYSV_ABI int VideoOutWaitVblank(int handle) {
 	PRINT_NAME();
 
 	auto* ctx = DriverState().Get(handle);
@@ -1634,7 +1634,7 @@ KYTY_SYSV_ABI int VideoOutWaitVblank(int handle) {
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutGetOutputStatus(int handle, VideoOutOutputStatus* status) {
+KATY_SYSV_ABI int VideoOutGetOutputStatus(int handle, VideoOutOutputStatus* status) {
 	PRINT_NAME();
 
 	if (status == nullptr) {
@@ -1687,7 +1687,7 @@ static int ValidateOutputConfig(int handle, uint64_t mode, const VideoOutOutputO
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutInitializeOutputOptions(VideoOutOutputOptions* options) {
+KATY_SYSV_ABI int VideoOutInitializeOutputOptions(VideoOutOutputOptions* options) {
 	PRINT_NAME();
 
 	if (options == nullptr) {
@@ -1699,7 +1699,7 @@ KYTY_SYSV_ABI int VideoOutInitializeOutputOptions(VideoOutOutputOptions* options
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutIsOutputSupported(int handle, uint64_t mode,
+KATY_SYSV_ABI int VideoOutIsOutputSupported(int handle, uint64_t mode,
                                             const VideoOutOutputOptions* options,
                                             void* reserved_ptr, uint64_t reserved) {
 	PRINT_NAME();
@@ -1718,7 +1718,7 @@ KYTY_SYSV_ABI int VideoOutIsOutputSupported(int handle, uint64_t mode,
 	return VIDEO_OUT_TRUE;
 }
 
-KYTY_SYSV_ABI int VideoOutConfigureOutput(int handle, uint64_t mode,
+KATY_SYSV_ABI int VideoOutConfigureOutput(int handle, uint64_t mode,
                                           const VideoOutOutputOptions* options, void* reserved_ptr,
                                           uint64_t reserved) {
 	PRINT_NAME();
@@ -1747,7 +1747,7 @@ KYTY_SYSV_ABI int VideoOutConfigureOutput(int handle, uint64_t mode,
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutSetWindowModeMargins(int handle, int top, int bottom) {
+KATY_SYSV_ABI int VideoOutSetWindowModeMargins(int handle, int top, int bottom) {
 	PRINT_NAME();
 
 	[[maybe_unused]] auto* ctx = DriverState().Get(handle);
@@ -1762,7 +1762,7 @@ KYTY_SYSV_ABI int VideoOutSetWindowModeMargins(int handle, int top, int bottom) 
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutLatencyControlWaitBeforeInput(int handle) {
+KATY_SYSV_ABI int VideoOutLatencyControlWaitBeforeInput(int handle) {
 	PRINT_NAME();
 
 	[[maybe_unused]] auto* ctx = DriverState().Get(handle);
@@ -1773,7 +1773,7 @@ KYTY_SYSV_ABI int VideoOutLatencyControlWaitBeforeInput(int handle) {
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutLatencyMeasureSetStartPoint(int handle, uint32_t point) {
+KATY_SYSV_ABI int VideoOutLatencyMeasureSetStartPoint(int handle, uint32_t point) {
 	PRINT_NAME();
 
 	[[maybe_unused]] auto* ctx = DriverState().Get(handle);
@@ -1786,7 +1786,7 @@ KYTY_SYSV_ABI int VideoOutLatencyMeasureSetStartPoint(int handle, uint32_t point
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutColorSettingsSetGamma(VideoOutColorSettings* settings, float gamma) {
+KATY_SYSV_ABI int VideoOutColorSettingsSetGamma(VideoOutColorSettings* settings, float gamma) {
 	PRINT_NAME();
 
 	if (settings == nullptr) {
@@ -1801,7 +1801,7 @@ KYTY_SYSV_ABI int VideoOutColorSettingsSetGamma(VideoOutColorSettings* settings,
 	return OK;
 }
 
-KYTY_SYSV_ABI int VideoOutAdjustColor(int handle, const VideoOutColorSettings* settings) {
+KATY_SYSV_ABI int VideoOutAdjustColor(int handle, const VideoOutColorSettings* settings) {
 	PRINT_NAME();
 
 	if (settings == nullptr) {

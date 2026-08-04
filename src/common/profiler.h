@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_PROFILER_H_
-#define KYTY_COMMON_PROFILER_H_
+#ifndef KATY_COMMON_PROFILER_H_
+#define KATY_COMMON_PROFILER_H_
 
 #include "common/common.h"
 #include "common/subsystems.h"
@@ -42,37 +42,37 @@ private:
 void EndBlock();
 void SetThreadName(const char* name);
 
-KYTY_SUBSYSTEM_DEFINE(Profiler);
+KATY_SUBSYSTEM_DEFINE(Profiler);
 
 } // namespace Profiler
 
-#define KYTY_PROFILER_CONCAT_IMPL(a, b) a##b
-#define KYTY_PROFILER_CONCAT(a, b)      KYTY_PROFILER_CONCAT_IMPL(a, b)
-#define KYTY_PROFILER_COLOR_OR_DEFAULT(default_color, ...)                                         \
-	KYTY_PROFILER_COLOR_OR_DEFAULT_IMPL(default_color __VA_OPT__(, ) __VA_ARGS__, default_color)
-#define KYTY_PROFILER_COLOR_OR_DEFAULT_IMPL(default_color, color, ...) color
+#define KATY_PROFILER_CONCAT_IMPL(a, b) a##b
+#define KATY_PROFILER_CONCAT(a, b)      KATY_PROFILER_CONCAT_IMPL(a, b)
+#define KATY_PROFILER_COLOR_OR_DEFAULT(default_color, ...)                                         \
+	KATY_PROFILER_COLOR_OR_DEFAULT_IMPL(default_color __VA_OPT__(, ) __VA_ARGS__, default_color)
+#define KATY_PROFILER_COLOR_OR_DEFAULT_IMPL(default_color, color, ...) color
 
-#define KYTY_PROFILER_BLOCK(name, ...)                                                             \
-	KYTY_PROFILER_BLOCK_IMPL(__LINE__, name __VA_OPT__(, ) __VA_ARGS__)
-#define KYTY_PROFILER_BLOCK_IMPL(line, name, ...)                                                  \
-	static constexpr tracy::SourceLocationData KYTY_PROFILER_CONCAT(                               \
-	    kyty_profiler_source_location_, line) {name, TracyFunction, TracyFile,                     \
+#define KATY_PROFILER_BLOCK(name, ...)                                                             \
+	KATY_PROFILER_BLOCK_IMPL(__LINE__, name __VA_OPT__(, ) __VA_ARGS__)
+#define KATY_PROFILER_BLOCK_IMPL(line, name, ...)                                                  \
+	static constexpr tracy::SourceLocationData KATY_PROFILER_CONCAT(                               \
+	    katy_profiler_source_location_, line) {name, TracyFunction, TracyFile,                     \
 	                                           static_cast<uint32_t>(line),                        \
-	                                           KYTY_PROFILER_COLOR_OR_DEFAULT(0, __VA_ARGS__)};    \
-	Profiler::ScopedBlock KYTY_PROFILER_CONCAT(kyty_profiler_block_, line)(                        \
-	    &KYTY_PROFILER_CONCAT(kyty_profiler_source_location_, line))
+	                                           KATY_PROFILER_COLOR_OR_DEFAULT(0, __VA_ARGS__)};    \
+	Profiler::ScopedBlock KATY_PROFILER_CONCAT(katy_profiler_block_, line)(                        \
+	    &KATY_PROFILER_CONCAT(katy_profiler_source_location_, line))
 
-#define KYTY_PROFILER_FUNCTION(...) KYTY_PROFILER_FUNCTION_IMPL(__LINE__ __VA_OPT__(, ) __VA_ARGS__)
-#define KYTY_PROFILER_FUNCTION_IMPL(line, ...)                                                     \
-	static constexpr tracy::SourceLocationData KYTY_PROFILER_CONCAT(                               \
-	    kyty_profiler_source_location_, line) {nullptr, TracyFunction, TracyFile,                  \
+#define KATY_PROFILER_FUNCTION(...) KATY_PROFILER_FUNCTION_IMPL(__LINE__ __VA_OPT__(, ) __VA_ARGS__)
+#define KATY_PROFILER_FUNCTION_IMPL(line, ...)                                                     \
+	static constexpr tracy::SourceLocationData KATY_PROFILER_CONCAT(                               \
+	    katy_profiler_source_location_, line) {nullptr, TracyFunction, TracyFile,                  \
 	                                           static_cast<uint32_t>(line),                        \
-	                                           KYTY_PROFILER_COLOR_OR_DEFAULT(0, __VA_ARGS__)};    \
-	Profiler::ScopedBlock KYTY_PROFILER_CONCAT(kyty_profiler_block_, line)(                        \
-	    &KYTY_PROFILER_CONCAT(kyty_profiler_source_location_, line))
+	                                           KATY_PROFILER_COLOR_OR_DEFAULT(0, __VA_ARGS__)};    \
+	Profiler::ScopedBlock KATY_PROFILER_CONCAT(katy_profiler_block_, line)(                        \
+	    &KATY_PROFILER_CONCAT(katy_profiler_source_location_, line))
 
-#define KYTY_PROFILER_END_BLOCK Profiler::EndBlock()
+#define KATY_PROFILER_END_BLOCK Profiler::EndBlock()
 
-#define KYTY_PROFILER_THREAD(name) Profiler::SetThreadName(name)
+#define KATY_PROFILER_THREAD(name) Profiler::SetThreadName(name)
 
-#endif /* KYTY_COMMON_PROFILER_H_ */
+#endif /* KATY_COMMON_PROFILER_H_ */

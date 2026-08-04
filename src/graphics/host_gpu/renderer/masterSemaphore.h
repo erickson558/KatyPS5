@@ -14,7 +14,7 @@ class MasterSemaphore {
 public:
 	explicit MasterSemaphore(GraphicContext& graphics);
 	~MasterSemaphore();
-	KYTY_CLASS_NO_COPY(MasterSemaphore);
+	KATY_CLASS_NO_COPY(MasterSemaphore);
 
 	[[nodiscard]] uint64_t CurrentTick() const noexcept {
 		return m_current_tick.load(std::memory_order_acquire);

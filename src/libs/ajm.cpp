@@ -261,7 +261,7 @@ public:
 	    : m_channels(channels), m_sample_rate(sample_rate), m_sample_encoding(encoding) {}
 	virtual ~AjmDecoder() = default;
 
-	KYTY_CLASS_NO_COPY(AjmDecoder);
+	KATY_CLASS_NO_COPY(AjmDecoder);
 
 	virtual AjmDecodeResult Initialize(const void* codec_parameters, size_t codec_parameters_size) {
 		(void)codec_parameters;
@@ -318,7 +318,7 @@ namespace Libs::Audio::Ajm {
 
 static_assert(sizeof(AjmDecAt9ConfigDataInfo) == 20);
 
-int KYTY_SYSV_ABI AjmDecAt9ParseConfigData(const void*              config_data,
+int KATY_SYSV_ABI AjmDecAt9ParseConfigData(const void*              config_data,
                                            AjmDecAt9ConfigDataInfo* config_info) {
 	PRINT_NAME();
 	if (config_data == nullptr || config_info == nullptr) {
@@ -884,7 +884,7 @@ static AjmSidebandFormat AjmGetInstanceFormat(uint32_t          instance,
 	return state->decoder->GetFormat();
 }
 
-int KYTY_SYSV_ABI AjmInitialize(int64_t reserved, uint32_t* context) {
+int KATY_SYSV_ABI AjmInitialize(int64_t reserved, uint32_t* context) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(context == nullptr);
@@ -897,13 +897,13 @@ int KYTY_SYSV_ABI AjmInitialize(int64_t reserved, uint32_t* context) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmFinalize(uint32_t context) {
+int KATY_SYSV_ABI AjmFinalize(uint32_t context) {
 	PRINT_NAME();
 	LOGF("\t context = %" PRIu32 "\n", context);
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmModuleRegister(uint32_t context, uint32_t codec, int64_t reserved) {
+int KATY_SYSV_ABI AjmModuleRegister(uint32_t context, uint32_t codec, int64_t reserved) {
 	PRINT_NAME();
 
 	if (reserved != 0) {
@@ -931,13 +931,13 @@ int KYTY_SYSV_ABI AjmModuleRegister(uint32_t context, uint32_t codec, int64_t re
 	return result;
 }
 
-int KYTY_SYSV_ABI AjmModuleUnregister(uint32_t context, uint32_t codec) {
+int KATY_SYSV_ABI AjmModuleUnregister(uint32_t context, uint32_t codec) {
 	PRINT_NAME();
 	LOGF("\t context = %" PRIu32 ", codec = %" PRIu32 "\n", context, codec);
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmInstanceCreate(uint32_t context, uint32_t codec, uint64_t flags,
+int KATY_SYSV_ABI AjmInstanceCreate(uint32_t context, uint32_t codec, uint64_t flags,
                                     uint32_t* instance) {
 	PRINT_NAME();
 
@@ -970,7 +970,7 @@ int KYTY_SYSV_ABI AjmInstanceCreate(uint32_t context, uint32_t codec, uint64_t f
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmInstanceDestroy(uint32_t context, uint32_t instance) {
+int KATY_SYSV_ABI AjmInstanceDestroy(uint32_t context, uint32_t instance) {
 	PRINT_NAME();
 	LOGF("\t context = %" PRIu32 ", instance = 0x%08" PRIx32 "\n", context, instance);
 
@@ -980,21 +980,21 @@ int KYTY_SYSV_ABI AjmInstanceDestroy(uint32_t context, uint32_t instance) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmMemoryRegister(uint32_t context, void* ptr, size_t pages) {
+int KATY_SYSV_ABI AjmMemoryRegister(uint32_t context, void* ptr, size_t pages) {
 	PRINT_NAME();
 	LOGF("\t context = %" PRIu32 ", ptr = 0x%016" PRIx64 ", pages = 0x%016" PRIx64 "\n", context,
 	     reinterpret_cast<uint64_t>(ptr), static_cast<uint64_t>(pages));
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmMemoryUnregister(uint32_t context, void* ptr) {
+int KATY_SYSV_ABI AjmMemoryUnregister(uint32_t context, void* ptr) {
 	PRINT_NAME();
 	LOGF("\t context = %" PRIu32 ", ptr = 0x%016" PRIx64 "\n", context,
 	     reinterpret_cast<uint64_t>(ptr));
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmBatchInitialize(void* buffer, size_t size, AjmBatchInfo* info) {
+int KATY_SYSV_ABI AjmBatchInitialize(void* buffer, size_t size, AjmBatchInfo* info) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(buffer == nullptr);
@@ -1009,7 +1009,7 @@ int KYTY_SYSV_ABI AjmBatchInitialize(void* buffer, size_t size, AjmBatchInfo* in
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmBatchStart(uint32_t context, const AjmBatchInfo* info, int priority,
+int KATY_SYSV_ABI AjmBatchStart(uint32_t context, const AjmBatchInfo* info, int priority,
                                 AjmBatchError* error, uint32_t* batch) {
 	PRINT_NAME();
 
@@ -1028,7 +1028,7 @@ int KYTY_SYSV_ABI AjmBatchStart(uint32_t context, const AjmBatchInfo* info, int 
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmBatchWait(uint32_t context, uint32_t batch, uint32_t timeout,
+int KATY_SYSV_ABI AjmBatchWait(uint32_t context, uint32_t batch, uint32_t timeout,
                                AjmBatchError* error) {
 	(void)context;
 	(void)batch;
@@ -1041,13 +1041,13 @@ int KYTY_SYSV_ABI AjmBatchWait(uint32_t context, uint32_t batch, uint32_t timeou
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmBatchCancel(uint32_t context, uint32_t batch) {
+int KATY_SYSV_ABI AjmBatchCancel(uint32_t context, uint32_t batch) {
 	PRINT_NAME();
 	LOGF("\t context = %" PRIu32 ", batch = %" PRIu32 "\n", context, batch);
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmBatchErrorDump(const AjmBatchInfo* info, AjmBatchError* error) {
+int KATY_SYSV_ABI AjmBatchErrorDump(const AjmBatchInfo* info, AjmBatchError* error) {
 	PRINT_NAME();
 	if (error != nullptr) {
 		std::memset(error, 0, sizeof(AjmBatchError));
@@ -1056,7 +1056,7 @@ int KYTY_SYSV_ABI AjmBatchErrorDump(const AjmBatchInfo* info, AjmBatchError* err
 	return OK;
 }
 
-int KYTY_SYSV_ABI AjmBatchJobInitialize(AjmBatchInfo* info, uint32_t instance,
+int KATY_SYSV_ABI AjmBatchJobInitialize(AjmBatchInfo* info, uint32_t instance,
                                         const void* codec_parameters, size_t codec_parameters_size,
                                         void* result) {
 	PRINT_NAME();
@@ -1073,7 +1073,7 @@ int KYTY_SYSV_ABI AjmBatchJobInitialize(AjmBatchInfo* info, uint32_t instance,
 	return AjmAppendJob(info, AJM_JOB_CONTROL_SIZE, "initialize");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobClearContext(AjmBatchInfo* info, uint32_t instance, void* result) {
+int KATY_SYSV_ABI AjmBatchJobClearContext(AjmBatchInfo* info, uint32_t instance, void* result) {
 	PRINT_NAME();
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
 
@@ -1095,7 +1095,7 @@ int KYTY_SYSV_ABI AjmBatchJobClearContext(AjmBatchInfo* info, uint32_t instance,
 	return AjmAppendJob(info, AJM_JOB_CONTROL_SIZE, "clear-context");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobDecode(AjmBatchInfo* info, uint32_t instance,
+int KATY_SYSV_ABI AjmBatchJobDecode(AjmBatchInfo* info, uint32_t instance,
                                     const void* bitstream_input, size_t bitstream_input_size,
                                     void* pcm_output, size_t pcm_output_size, void* result) {
 	PRINT_NAME();
@@ -1115,7 +1115,7 @@ int KYTY_SYSV_ABI AjmBatchJobDecode(AjmBatchInfo* info, uint32_t instance,
 	return AjmAppendJob(info, AJM_JOB_RUN_SIZE, "decode");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobDecodeSingle(AjmBatchInfo* info, uint32_t instance,
+int KATY_SYSV_ABI AjmBatchJobDecodeSingle(AjmBatchInfo* info, uint32_t instance,
                                           const void* bitstream_input, size_t bitstream_input_size,
                                           void* pcm_output, size_t pcm_output_size, void* result) {
 	PRINT_NAME();
@@ -1130,7 +1130,7 @@ int KYTY_SYSV_ABI AjmBatchJobDecodeSingle(AjmBatchInfo* info, uint32_t instance,
 	return AjmAppendJob(info, AJM_JOB_RUN_SIZE, "decode-single");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobDecodeSplit(AjmBatchInfo* info, uint32_t instance,
+int KATY_SYSV_ABI AjmBatchJobDecodeSplit(AjmBatchInfo* info, uint32_t instance,
                                          const AjmBuffer* input_buffers, size_t input_buffers_num,
                                          const AjmBuffer* output_buffers, size_t output_buffers_num,
                                          void* result) {
@@ -1152,7 +1152,7 @@ int KYTY_SYSV_ABI AjmBatchJobDecodeSplit(AjmBatchInfo* info, uint32_t instance,
 	return AjmAppendJob(info, 16 * (input_buffers_num + output_buffers_num) + 32, "decode-split");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobEncode(AjmBatchInfo* info, uint32_t instance, const void* pcm_input,
+int KATY_SYSV_ABI AjmBatchJobEncode(AjmBatchInfo* info, uint32_t instance, const void* pcm_input,
                                     size_t pcm_input_size, void* bitstream_output,
                                     size_t bitstream_output_size, void* result) {
 	PRINT_NAME();
@@ -1176,7 +1176,7 @@ int KYTY_SYSV_ABI AjmBatchJobEncode(AjmBatchInfo* info, uint32_t instance, const
 	return AjmAppendJob(info, AJM_JOB_RUN_SIZE, "encode");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobGetInfo(AjmBatchInfo* info, uint32_t instance, void* result) {
+int KATY_SYSV_ABI AjmBatchJobGetInfo(AjmBatchInfo* info, uint32_t instance, void* result) {
 	PRINT_NAME();
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
 
@@ -1189,7 +1189,7 @@ int KYTY_SYSV_ABI AjmBatchJobGetInfo(AjmBatchInfo* info, uint32_t instance, void
 	return AjmAppendJob(info, AJM_JOB_RUN_SIZE, "get-info");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobGetCodecInfo(AjmBatchInfo* info, uint32_t instance, void* result,
+int KATY_SYSV_ABI AjmBatchJobGetCodecInfo(AjmBatchInfo* info, uint32_t instance, void* result,
                                           size_t result_size) {
 	PRINT_NAME();
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
@@ -1205,7 +1205,7 @@ int KYTY_SYSV_ABI AjmBatchJobGetCodecInfo(AjmBatchInfo* info, uint32_t instance,
 	return AjmAppendJob(info, AJM_JOB_RUN_SIZE, "get-codec-info");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobSetGaplessDecode(AjmBatchInfo* info, uint32_t instance,
+int KATY_SYSV_ABI AjmBatchJobSetGaplessDecode(AjmBatchInfo* info, uint32_t instance,
                                               const void* gapless_decode, int reset, void* result) {
 	PRINT_NAME();
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
@@ -1216,7 +1216,7 @@ int KYTY_SYSV_ABI AjmBatchJobSetGaplessDecode(AjmBatchInfo* info, uint32_t insta
 	return AjmAppendJob(info, AJM_JOB_CONTROL_SIZE, "set-gapless");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobGetGaplessDecode(AjmBatchInfo* info, uint32_t instance, void* result) {
+int KATY_SYSV_ABI AjmBatchJobGetGaplessDecode(AjmBatchInfo* info, uint32_t instance, void* result) {
 	PRINT_NAME();
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
 
@@ -1234,7 +1234,7 @@ int KYTY_SYSV_ABI AjmBatchJobGetGaplessDecode(AjmBatchInfo* info, uint32_t insta
 	return AjmAppendJob(info, AJM_JOB_RUN_SIZE, "get-gapless");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobSetResampleParameters(AjmBatchInfo* info, uint32_t instance,
+int KATY_SYSV_ABI AjmBatchJobSetResampleParameters(AjmBatchInfo* info, uint32_t instance,
                                                    float ratio, uint32_t flags, void* result) {
 	PRINT_NAME();
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
@@ -1244,7 +1244,7 @@ int KYTY_SYSV_ABI AjmBatchJobSetResampleParameters(AjmBatchInfo* info, uint32_t 
 	return AjmAppendJob(info, AJM_JOB_SET_RESAMPLE_PARAMETERS_SIZE, "set-resample");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobSetResampleParametersEx(AjmBatchInfo* info, uint32_t instance,
+int KATY_SYSV_ABI AjmBatchJobSetResampleParametersEx(AjmBatchInfo* info, uint32_t instance,
                                                      float ratio_start,
                                                      float ratio_change_per_sample, uint32_t flags,
                                                      void* result) {
@@ -1258,7 +1258,7 @@ int KYTY_SYSV_ABI AjmBatchJobSetResampleParametersEx(AjmBatchInfo* info, uint32_
 	return AjmAppendJob(info, AJM_JOB_SET_RESAMPLE_PARAMETERS_SIZE, "set-resample-ex");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobGetResampleInfo(AjmBatchInfo* info, uint32_t instance, void* result) {
+int KATY_SYSV_ABI AjmBatchJobGetResampleInfo(AjmBatchInfo* info, uint32_t instance, void* result) {
 	PRINT_NAME();
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
 
@@ -1275,7 +1275,7 @@ int KYTY_SYSV_ABI AjmBatchJobGetResampleInfo(AjmBatchInfo* info, uint32_t instan
 	return AjmAppendJob(info, AJM_JOB_RUN_SIZE, "get-resample-info");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobGetStatistics(AjmBatchInfo* info, float interval, void* result) {
+int KATY_SYSV_ABI AjmBatchJobGetStatistics(AjmBatchInfo* info, float interval, void* result) {
 	PRINT_NAME();
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
 	AjmWriteResult(result, sizeof(AjmGetStatisticsResult));
@@ -1283,7 +1283,7 @@ int KYTY_SYSV_ABI AjmBatchJobGetStatistics(AjmBatchInfo* info, float interval, v
 	return AjmAppendJob(info, AJM_JOB_GET_STATISTICS_SIZE, "get-statistics");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobControl(AjmBatchInfo* info, uint32_t instance, uint64_t flags,
+int KATY_SYSV_ABI AjmBatchJobControl(AjmBatchInfo* info, uint32_t instance, uint64_t flags,
                                      const void* sideband_input, size_t sideband_input_size,
                                      void* sideband_output, size_t sideband_output_size) {
 	PRINT_NAME();
@@ -1304,7 +1304,7 @@ int KYTY_SYSV_ABI AjmBatchJobControl(AjmBatchInfo* info, uint32_t instance, uint
 	return AjmAppendJob(info, AJM_JOB_CONTROL_SIZE, "control");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobRun(AjmBatchInfo* info, uint32_t instance, uint64_t flags,
+int KATY_SYSV_ABI AjmBatchJobRun(AjmBatchInfo* info, uint32_t instance, uint64_t flags,
                                  const void* data_input, size_t data_input_size, void* data_output,
                                  size_t data_output_size, void* sideband_output,
                                  size_t sideband_output_size) {
@@ -1328,7 +1328,7 @@ int KYTY_SYSV_ABI AjmBatchJobRun(AjmBatchInfo* info, uint32_t instance, uint64_t
 	return AjmAppendJob(info, AJM_JOB_RUN_SIZE, "run");
 }
 
-int KYTY_SYSV_ABI AjmBatchJobRunSplit(AjmBatchInfo* info, uint32_t instance, uint64_t flags,
+int KATY_SYSV_ABI AjmBatchJobRunSplit(AjmBatchInfo* info, uint32_t instance, uint64_t flags,
                                       const AjmBuffer* input_buffers, size_t input_buffers_num,
                                       const AjmBuffer* output_buffers, size_t output_buffers_num,
                                       void* sideband_output, size_t sideband_output_size) {
@@ -1352,7 +1352,7 @@ int KYTY_SYSV_ABI AjmBatchJobRunSplit(AjmBatchInfo* info, uint32_t instance, uin
 	return AjmAppendJob(info, 16 * (input_buffers_num + output_buffers_num) + 32, "run-split");
 }
 
-const char* KYTY_SYSV_ABI AjmStrError(int error) {
+const char* KATY_SYSV_ABI AjmStrError(int error) {
 	PRINT_NAME();
 	LOGF("\t error = %d\n", error);
 	return "AJM";

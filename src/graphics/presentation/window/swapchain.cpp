@@ -53,8 +53,8 @@
 
 // IWYU pragma: no_include <intrin.h>
 
-#define KYTY_ENABLE_DEBUG_PRINTF
-#define KYTY_DBG_INPUT
+#define KATY_ENABLE_DEBUG_PRINTF
+#define KATY_DBG_INPUT
 
 namespace Libs::Graphics {
 
@@ -83,7 +83,7 @@ public:
 			}
 		}
 	}
-	KYTY_CLASS_NO_COPY(FramePool);
+	KATY_CLASS_NO_COPY(FramePool);
 
 	void Initialize(uint32_t count, vk::Format format) {
 		if (count == 0 || format == vk::Format::eUndefined) {
@@ -324,7 +324,7 @@ public:
 
 	explicit Swapchain(WindowContext& window): m_window(window) {}
 	~Swapchain();
-	KYTY_CLASS_NO_COPY(Swapchain);
+	KATY_CLASS_NO_COPY(Swapchain);
 
 	void                 Create();
 	void                 Recreate(bool surface_lost = false);
@@ -717,7 +717,7 @@ Presenter::Presenter(WindowContext& window): m_impl(std::make_unique<Impl>(windo
 Presenter::~Presenter() = default;
 
 Presenter::Frame& Presenter::PrepareFrame(CommandBuffer& buffer, const ImageInfo& info) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(buffer.IsInvalid());
 	auto*             frame = m_impl->frames.Acquire();
 	Common::LockGuard render_lock(m_impl->renderer.GetMutex());
@@ -740,7 +740,7 @@ Presenter::Frame& Presenter::PrepareFrame(CommandBuffer& buffer, const ImageInfo
 
 Presenter::Frame& Presenter::PrepareBlankFrame(uint32_t width, uint32_t height, bool opaque,
                                                CommandBuffer* producer) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	auto              format = m_impl->frames.GetFormat();
 	auto*             frame  = m_impl->frames.Acquire();
 	Common::LockGuard render_lock(m_impl->renderer.GetMutex());
@@ -777,7 +777,7 @@ RenderContext& Presenter::Renderer() const noexcept {
 }
 
 void Presenter::Present(Frame& frame, bool reuse) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	m_impl->frames.ValidateForPresent(&frame, reuse);
 
 	auto& window = m_impl->window;

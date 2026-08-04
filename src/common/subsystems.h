@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_SUBSYSTEMS_H_
-#define KYTY_COMMON_SUBSYSTEMS_H_
+#ifndef KATY_COMMON_SUBSYSTEMS_H_
+#define KATY_COMMON_SUBSYSTEMS_H_
 
 #include "common/common.h"
 #include "common/singleton.h"
@@ -35,7 +35,7 @@ public:
 
 	static SubsystemsList* Instance() { return Common::Singleton<SubsystemsList>::Instance(); }
 
-	KYTY_CLASS_NO_COPY(SubsystemsList);
+	KATY_CLASS_NO_COPY(SubsystemsList);
 
 private:
 	std::unique_ptr<SubsystemsListPrivate> m_p;
@@ -55,16 +55,16 @@ public:
 
 	friend class SubsystemsListPrivate;
 
-	KYTY_CLASS_NO_COPY(Subsystem);
+	KATY_CLASS_NO_COPY(Subsystem);
 
 protected:
-	void Fail(const char* format, ...) KYTY_FORMAT_PRINTF(2, 3);
+	void Fail(const char* format, ...) KATY_FORMAT_PRINTF(2, 3);
 
 private:
 	std::unique_ptr<SubsystemPrivate> m_p;
 };
 
-#define KYTY_SUBSYSTEM_DEFINE(s)                                                                   \
+#define KATY_SUBSYSTEM_DEFINE(s)                                                                   \
 	class s##Subsystem: public Common::Subsystem {                                                 \
 	public:                                                                                        \
 		static Subsystem* Instance() { return Common::Singleton<s##Subsystem>::Instance(); }       \
@@ -75,17 +75,17 @@ private:
 	};                                                                                             \
 	typedef Common::Singleton<s##Subsystem> s##SubsystemSingleton;
 
-#define KYTY_SUBSYSTEM_INIT(s)                                                                     \
+#define KATY_SUBSYSTEM_INIT(s)                                                                     \
 	void s##Subsystem::Init([[maybe_unused]] Common::SubsystemsList* parent)
-#define KYTY_SUBSYSTEM_DESTROY(s)                                                                  \
+#define KATY_SUBSYSTEM_DESTROY(s)                                                                  \
 	void s##Subsystem::Destroy([[maybe_unused]] Common::SubsystemsList* parent)
-#define KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(s)                                                      \
+#define KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(s)                                                      \
 	void s##Subsystem::UnexpectedShutdown([[maybe_unused]] Common::SubsystemsList* parent)
 
-// #define KYTY_SUBSYSTEM_ADD(list, s, ...) list.push_back(s##SubsystemSingleton::Instance(), #s,
-// __VA_ARGS__); #define KYTY_SUBSYSTEM_ADD2(list, ...) list.Add2(s##SubsystemSingleton::Instance(),
+// #define KATY_SUBSYSTEM_ADD(list, s, ...) list.push_back(s##SubsystemSingleton::Instance(), #s,
+// __VA_ARGS__); #define KATY_SUBSYSTEM_ADD2(list, ...) list.Add2(s##SubsystemSingleton::Instance(),
 // __VA_ARGS__);
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_SUBSYSTEMS_H_ */
+#endif /* KATY_COMMON_SUBSYSTEMS_H_ */

@@ -10,7 +10,7 @@ namespace LibRazorCpu {
 
 LIB_VERSION("RazorCpu", 1, "RazorCpu", 1, 1);
 
-static KYTY_SYSV_ABI uint32_t RazorCpuIsCapturing() {
+static KATY_SYSV_ABI uint32_t RazorCpuIsCapturing() {
 	PRINT_NAME();
 
 	return 0;

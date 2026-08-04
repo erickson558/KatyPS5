@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_TIMER_H_
-#define KYTY_COMMON_TIMER_H_
+#ifndef KATY_COMMON_TIMER_H_
+#define KATY_COMMON_TIMER_H_
 
 #include "common/common.h"
 
@@ -30,7 +30,7 @@ public:
 	// return ticks frequency
 	[[nodiscard]] uint64_t GetFrequency() const;
 
-	KYTY_CLASS_NO_COPY(Timer);
+	KATY_CLASS_NO_COPY(Timer);
 
 	[[nodiscard]] static uint64_t QueryPerformanceFrequency();
 	[[nodiscard]] static uint64_t QueryPerformanceCounter();
@@ -44,4 +44,4 @@ private:
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_TIMER_H_ */
+#endif /* KATY_COMMON_TIMER_H_ */

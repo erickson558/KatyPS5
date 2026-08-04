@@ -1,34 +1,34 @@
 # Keep the existing Linux IWYU warnings non-fatal.
-set(KYTY_IWYU_COMMON "-Xiwyu;--cxx17ns;-Qunused-arguments")
+set(KATY_IWYU_COMMON "-Xiwyu;--cxx17ns;-Qunused-arguments")
 if (LINUX)
-	set(KYTY_IWYU_STRICT "")
+	set(KATY_IWYU_STRICT "")
 else()
-	set(KYTY_IWYU_STRICT ";-Werror")
+	set(KATY_IWYU_STRICT ";-Werror")
 endif()
 
 function(include_what_you_use target dirs)
-  if (CLANG AND ("${target}" IN_LIST KYTY_IWYU))
+  if (CLANG AND ("${target}" IN_LIST KATY_IWYU))
     find_program (CLANG_IWYU_EXE NAMES "include-what-you-use")
     if (CLANG_IWYU_EXE)
-		set_target_properties(${target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${CLANG_IWYU_EXE};${KYTY_IWYU_COMMON}${KYTY_IWYU_STRICT}")
+		set_target_properties(${target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${CLANG_IWYU_EXE};${KATY_IWYU_COMMON}${KATY_IWYU_STRICT}")
     endif()
   endif()
 endfunction()
 
 function(include_what_you_use_with_mappings target dirs mappings)
-  if (CLANG AND ("${target}" IN_LIST KYTY_IWYU))
+  if (CLANG AND ("${target}" IN_LIST KATY_IWYU))
     find_program (CLANG_IWYU_EXE NAMES "include-what-you-use")
     if (CLANG_IWYU_EXE)
 		foreach(map ${mappings})
 			list(APPEND mapdirs ";-Xiwyu;--mapping_file=${map}")
 		endforeach()
-		set_target_properties(${target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${CLANG_IWYU_EXE};${mapdirs};${KYTY_IWYU_COMMON}${KYTY_IWYU_STRICT}")
+		set_target_properties(${target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${CLANG_IWYU_EXE};${mapdirs};${KATY_IWYU_COMMON}${KATY_IWYU_STRICT}")
     endif()
   endif()
 endfunction()
 
 function(clang_tidy_check target config headers dirs)
-  if (KYTY_ENABLE_CLANG_TIDY AND CLANG AND ("${target}" IN_LIST KYTY_CLANG_TIDY) AND NOT KYTY_CLANG_CL)
+  if (KATY_ENABLE_CLANG_TIDY AND CLANG AND ("${target}" IN_LIST KATY_CLANG_TIDY) AND NOT KATY_CLANG_CL)
     find_program (CLANG_TIDY_EXE NAMES "clang-tidy")
     if (CLANG_TIDY_EXE)
 		set(std_arg "-extra-arg=-std=c++${CMAKE_CXX_STANDARD}")
@@ -49,7 +49,7 @@ function(clang_tidy_check target config headers dirs)
 endfunction()
 
 function(clang_tidy_fix target config headers dirs)
-  if (KYTY_ENABLE_CLANG_TIDY AND CLANG AND ("${target}" IN_LIST KYTY_CLANG_TIDY))
+  if (KATY_ENABLE_CLANG_TIDY AND CLANG AND ("${target}" IN_LIST KATY_CLANG_TIDY))
     find_program (CLANG_TIDY_EXE NAMES "clang-tidy")
     if (CLANG_TIDY_EXE)
 		set(std_arg "-extra-arg=-std=c++${CMAKE_CXX_STANDARD}")
@@ -71,10 +71,10 @@ endfunction()
 
 macro(config_compiler_and_linker)
 
-set(KYTY_WARNINGS_ARE_ERRORS OFF)
+set(KATY_WARNINGS_ARE_ERRORS OFF)
 
-set(KYTY_C_FLAGS "")
-set(KYTY_CPP_FLAGS "")
+set(KATY_C_FLAGS "")
+set(KATY_CPP_FLAGS "")
 
 # Apple's /usr/bin/ar does not understand @response-file syntax, and macOS has a
 # large ARG_MAX so response files aren't needed. Note: the Ninja generator forces a
@@ -86,7 +86,7 @@ else()
 	SET(CMAKE_NINJA_FORCE_RESPONSE_FILE 1 CACHE INTERNAL "")
 endif()
 
-if(KYTY_CLANG_CL)
+if(KATY_CLANG_CL)
 	if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
 		string(REGEX REPLACE "/W[0-4]" "/W3" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 	else()
@@ -100,12 +100,12 @@ if(KYTY_CLANG_CL)
 	string(REGEX REPLACE "/MD" "/MT" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 	string(REGEX REPLACE "/MD" "/MT" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 			
-	set(KYTY_CPP_FLAGS "${KYTY_CPP_FLAGS} /utf-8 /Oy- /wd4244 /wd4305 /wd4800 /wd4345")
+	set(KATY_CPP_FLAGS "${KATY_CPP_FLAGS} /utf-8 /Oy- /wd4244 /wd4305 /wd4800 /wd4345")
 	
 	add_link_options("$<$<CONFIG:RELEASE>:/OPT:NOREF>")
   
-	if(KYTY_WARNINGS_ARE_ERRORS)
-		#set(KYTY_CPP_FLAGS "${KYTY_CPP_FLAGS} /WX")
+	if(KATY_WARNINGS_ARE_ERRORS)
+		#set(KATY_CPP_FLAGS "${KATY_CPP_FLAGS} /WX")
 	    add_compile_options(/WX)
 	endif()
 
@@ -114,21 +114,21 @@ if(KYTY_CLANG_CL)
 	add_compile_options("$<$<CONFIG:RelWithDebInfo>:/O2>")
 	add_compile_options("$<$<CONFIG:RelWithDebInfo>:/DNDEBUG>")
 
-	set(KYTY_C_FLAGS "${KYTY_CPP_FLAGS}")
+	set(KATY_C_FLAGS "${KATY_CPP_FLAGS}")
 	
 elseif(CLANG OR GCC)
 
 	if (CLANG)
-	    set(KYTY_CPP_FLAGS "${KYTY_CPP_FLAGS} -fno-rtti -fno-exceptions -fcolor-diagnostics -finput-charset=UTF-8 -fexec-charset=UTF-8 -g -fno-strict-aliasing -fno-omit-frame-pointer -Wall -fmessage-length=0")
+	    set(KATY_CPP_FLAGS "${KATY_CPP_FLAGS} -fno-rtti -fno-exceptions -fcolor-diagnostics -finput-charset=UTF-8 -fexec-charset=UTF-8 -g -fno-strict-aliasing -fno-omit-frame-pointer -Wall -fmessage-length=0")
 	    if (WIN32)
-	    	set(KYTY_CPP_FLAGS "${KYTY_CPP_FLAGS} -static")
+	    	set(KATY_CPP_FLAGS "${KATY_CPP_FLAGS} -static")
 	    endif()
 	else()
-		set(KYTY_CPP_FLAGS "${KYTY_CPP_FLAGS} -fno-exceptions -fdiagnostics-color=always -finput-charset=UTF-8 -fexec-charset=UTF-8 -static-libgcc -static-libstdc++ -g -fno-strict-aliasing -fno-omit-frame-pointer -Wall -Wno-unused-value -fmessage-length=0")
+		set(KATY_CPP_FLAGS "${KATY_CPP_FLAGS} -fno-exceptions -fdiagnostics-color=always -finput-charset=UTF-8 -fexec-charset=UTF-8 -static-libgcc -static-libstdc++ -g -fno-strict-aliasing -fno-omit-frame-pointer -Wall -Wno-unused-value -fmessage-length=0")
 	endif()
 	
-    if(KYTY_WARNINGS_ARE_ERRORS)
-        #set(KYTY_CPP_FLAGS "${KYTY_CPP_FLAGS} -Werror")
+    if(KATY_WARNINGS_ARE_ERRORS)
+        #set(KATY_CPP_FLAGS "${KATY_CPP_FLAGS} -Werror")
 	add_compile_options(-Werror)
     endif()	
 
@@ -137,11 +137,11 @@ elseif(CLANG OR GCC)
 	unset(CMAKE_CXX_STANDARD_LIBRARIES CACHE)
 	unset(CMAKE_C_STANDARD_LIBRARIES CACHE)
 	
-	set(KYTY_C_FLAGS "${KYTY_CPP_FLAGS}")
+	set(KATY_C_FLAGS "${KATY_CPP_FLAGS}")
 	
 endif()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${KYTY_C_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KYTY_CPP_FLAGS}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${KATY_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KATY_CPP_FLAGS}")
 
 endmacro()

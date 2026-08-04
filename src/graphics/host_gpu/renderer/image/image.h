@@ -36,7 +36,7 @@ struct CachedImageView {
 
 struct ImageViewCache {
 	ImageViewCache() = default;
-	KYTY_CLASS_NO_COPY(ImageViewCache);
+	KATY_CLASS_NO_COPY(ImageViewCache);
 
 	std::mutex                   mutex;
 	std::vector<CachedImageView> views;
@@ -61,7 +61,7 @@ class Image final {
 public:
 	Image(GraphicContext& graphics, CommandScheduler& scheduler, const ImageInfo& info);
 	~Image();
-	KYTY_CLASS_NO_COPY(Image);
+	KATY_CLASS_NO_COPY(Image);
 
 	[[nodiscard]] vk::ImageView FindView(const ImageViewInfo& view_info);
 	void                        AssociateDepth(ImageId image_id) { depth_id = image_id; }

@@ -58,7 +58,7 @@ struct VulkanImageState {
 
 struct VulkanImage {
 	VulkanImage() = default;
-	KYTY_CLASS_NO_COPY(VulkanImage);
+	KATY_CLASS_NO_COPY(VulkanImage);
 
 	vk::Format                    format      = vk::Format::eUndefined;
 	vk::ImageType                 image_type  = vk::ImageType::e2D;

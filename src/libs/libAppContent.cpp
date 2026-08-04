@@ -78,7 +78,7 @@ static bool ResolveTitleId(std::string* title_id) {
 	return false;
 }
 
-int KYTY_SYSV_ABI AppContentInitialize(const AppContentInitParam* init_param,
+int KATY_SYSV_ABI AppContentInitialize(const AppContentInitParam* init_param,
                                        AppContentBootParam*       boot_param) {
 	PRINT_NAME();
 
@@ -99,7 +99,7 @@ int KYTY_SYSV_ABI AppContentInitialize(const AppContentInitParam* init_param,
 	return OK;
 }
 
-int KYTY_SYSV_ABI AppContentAppParamGetInt(uint32_t param_id, int32_t* value) {
+int KATY_SYSV_ABI AppContentAppParamGetInt(uint32_t param_id, int32_t* value) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(value == nullptr);
@@ -155,13 +155,13 @@ static int GetAvailableSpaceKb(const AppContentMountPoint* mount_point,
 	return OK;
 }
 
-int KYTY_SYSV_ABI AppContentDownloadDataGetAvailableSpaceKb(const AppContentMountPoint* mount_point,
+int KATY_SYSV_ABI AppContentDownloadDataGetAvailableSpaceKb(const AppContentMountPoint* mount_point,
                                                             size_t* available_space_kb) {
 	PRINT_NAME();
 	return GetAvailableSpaceKb(mount_point, available_space_kb);
 }
 
-int KYTY_SYSV_ABI AppContentAddcontMount(uint32_t                         service_label,
+int KATY_SYSV_ABI AppContentAddcontMount(uint32_t                         service_label,
                                          const NpUnifiedEntitlementLabel* entitlement_label,
                                          AppContentMountPoint*            mount_point) {
 	PRINT_NAME();
@@ -181,7 +181,7 @@ int KYTY_SYSV_ABI AppContentAddcontMount(uint32_t                         servic
 	return APP_CONTENT_ERROR_DRM_NO_ENTITLEMENT;
 }
 
-int KYTY_SYSV_ABI AppContentAddcontUnmount(const AppContentMountPoint* mount_point) {
+int KATY_SYSV_ABI AppContentAddcontUnmount(const AppContentMountPoint* mount_point) {
 	PRINT_NAME();
 
 	LOGF("\t mount_point = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(mount_point));
@@ -205,7 +205,7 @@ namespace AppContentTemporary {
 
 using AppContentMountPoint = AppContent::AppContentMountPoint;
 
-static int KYTY_SYSV_ABI AppContentTemporaryDataMount2(uint32_t              option,
+static int KATY_SYSV_ABI AppContentTemporaryDataMount2(uint32_t              option,
                                                        AppContentMountPoint* mount_point) {
 	PRINT_NAME();
 
@@ -225,7 +225,7 @@ static int KYTY_SYSV_ABI AppContentTemporaryDataMount2(uint32_t              opt
 	return OK;
 }
 
-static int KYTY_SYSV_ABI AppContentTemporaryDataFormat(const AppContentMountPoint* mount_point) {
+static int KATY_SYSV_ABI AppContentTemporaryDataFormat(const AppContentMountPoint* mount_point) {
 	PRINT_NAME();
 
 	LOGF("\t mount_point = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(mount_point));
@@ -237,7 +237,7 @@ static int KYTY_SYSV_ABI AppContentTemporaryDataFormat(const AppContentMountPoin
 	return OK;
 }
 
-static int KYTY_SYSV_ABI AppContentTemporaryDataGetAvailableSpaceKb(
+static int KATY_SYSV_ABI AppContentTemporaryDataGetAvailableSpaceKb(
     const AppContentMountPoint* mount_point, size_t* available_space_kb) {
 	PRINT_NAME();
 	return AppContent::GetAvailableSpaceKb(mount_point, available_space_kb);

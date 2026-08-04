@@ -40,8 +40,8 @@ LIB_VERSION("libc", 1, "libc", 1, 1);
 
 static uint32_t g_need_flag = 1;
 
-using cxa_destructor_func_t = KYTY_SYSV_ABI void (*)(void*);
-using atexit_func_t         = KYTY_SYSV_ABI void (*)();
+using cxa_destructor_func_t = KATY_SYSV_ABI void (*)(void*);
+using atexit_func_t         = KATY_SYSV_ABI void (*)();
 
 struct CxaDestructor {
 	cxa_destructor_func_t destructor_func;
@@ -72,7 +72,7 @@ const char** GetArgv() {
 	return const_cast<const char**>(g_argv);
 }
 
-static KYTY_SYSV_ABI void exit(int code) {
+static KATY_SYSV_ABI void exit(int code) {
 	PRINT_NAME();
 
 	::exit(code);
@@ -186,7 +186,7 @@ static void PrintAbortPointerArrayCandidate(const char* name, uint64_t addr) {
 	}
 }
 
-[[noreturn]] static KYTY_SYSV_ABI void abort(uint64_t arg0, uint64_t arg1, uint64_t arg2,
+[[noreturn]] static KATY_SYSV_ABI void abort(uint64_t arg0, uint64_t arg1, uint64_t arg2,
                                              uint64_t arg3, uint64_t arg4, uint64_t arg5) {
 	PRINT_NAME();
 
@@ -255,13 +255,13 @@ static void PrintAbortPointerArrayCandidate(const char* name, uint64_t addr) {
 	std::abort();
 }
 
-static KYTY_SYSV_ABI int* libc_error() {
+static KATY_SYSV_ABI int* libc_error() {
 	PRINT_NAME();
 
 	return Posix::GetErrorAddr();
 }
 
-static KYTY_SYSV_ABI void init_env(const InitEnvParams* params) {
+static KATY_SYSV_ABI void init_env(const InitEnvParams* params) {
 	PRINT_NAME();
 
 	if (params == nullptr) {
@@ -289,7 +289,7 @@ static KYTY_SYSV_ABI void init_env(const InitEnvParams* params) {
 	}
 }
 
-static KYTY_SYSV_ABI int atexit(atexit_func_t func) {
+static KATY_SYSV_ABI int atexit(atexit_func_t func) {
 	PRINT_NAME();
 
 	if (func != nullptr) {
@@ -299,7 +299,7 @@ static KYTY_SYSV_ABI int atexit(atexit_func_t func) {
 	return 0;
 }
 
-static KYTY_SYSV_ABI int libc_printf(VA_ARGS) {
+static KATY_SYSV_ABI int libc_printf(VA_ARGS) {
 	VA_CONTEXT(ctx); // NOLINT(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
 
 	PRINT_NAME();
@@ -307,13 +307,13 @@ static KYTY_SYSV_ABI int libc_printf(VA_ARGS) {
 	return GetGuestPrintfCtxFunc()(&ctx);
 }
 
-static KYTY_SYSV_ABI int puts(const char* s) {
+static KATY_SYSV_ABI int puts(const char* s) {
 	PRINT_NAME();
 
 	return GetGuestPrintfStdFunc()("%s\n", s);
 }
 
-static KYTY_SYSV_ABI int setenv(const char* name, const char* value, int overwrite) {
+static KATY_SYSV_ABI int setenv(const char* name, const char* value, int overwrite) {
 	PRINT_NAME();
 
 	LOGF("\t name      = %s\n"
@@ -331,7 +331,7 @@ static KYTY_SYSV_ABI int setenv(const char* name, const char* value, int overwri
 		return 0;
 	}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	const auto ret = ::_putenv_s(name, value);
 	if (ret != 0) {
 		*Posix::GetErrorAddr() = ret;
@@ -348,7 +348,7 @@ static KYTY_SYSV_ABI int setenv(const char* name, const char* value, int overwri
 #endif
 }
 
-static KYTY_SYSV_ABI int64_t libc_time(int64_t* timer) {
+static KATY_SYSV_ABI int64_t libc_time(int64_t* timer) {
 	const auto now = static_cast<int64_t>(std::time(nullptr));
 	if (timer != nullptr) {
 		*timer = now;
@@ -356,11 +356,11 @@ static KYTY_SYSV_ABI int64_t libc_time(int64_t* timer) {
 	return now;
 }
 
-static KYTY_SYSV_ABI double libc_difftime(int64_t time1, int64_t time0) {
+static KATY_SYSV_ABI double libc_difftime(int64_t time1, int64_t time0) {
 	return std::difftime(static_cast<std::time_t>(time1), static_cast<std::time_t>(time0));
 }
 
-static KYTY_SYSV_ABI std::tm* libc_gmtime(const int64_t* timer) {
+static KATY_SYSV_ABI std::tm* libc_gmtime(const int64_t* timer) {
 	if (timer == nullptr) {
 		return nullptr;
 	}
@@ -368,7 +368,7 @@ static KYTY_SYSV_ABI std::tm* libc_gmtime(const int64_t* timer) {
 	thread_local std::tm result {};
 	const auto           t = static_cast<std::time_t>(*timer);
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	if (_gmtime64_s(&result, &t) != 0) {
 		return nullptr;
 	}
@@ -381,7 +381,7 @@ static KYTY_SYSV_ABI std::tm* libc_gmtime(const int64_t* timer) {
 	return &result;
 }
 
-static KYTY_SYSV_ABI std::tm* libc_localtime(const int64_t* timer) {
+static KATY_SYSV_ABI std::tm* libc_localtime(const int64_t* timer) {
 	if (timer == nullptr) {
 		return nullptr;
 	}
@@ -389,7 +389,7 @@ static KYTY_SYSV_ABI std::tm* libc_localtime(const int64_t* timer) {
 	thread_local std::tm result {};
 	const auto           t = static_cast<std::time_t>(*timer);
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	if (_localtime64_s(&result, &t) != 0) {
 		return nullptr;
 	}
@@ -402,25 +402,25 @@ static KYTY_SYSV_ABI std::tm* libc_localtime(const int64_t* timer) {
 	return &result;
 }
 
-static KYTY_SYSV_ABI int64_t libc_mktime(std::tm* timeptr) {
+static KATY_SYSV_ABI int64_t libc_mktime(std::tm* timeptr) {
 	if (timeptr == nullptr) {
 		return -1;
 	}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	return static_cast<int64_t>(_mktime64(timeptr));
 #else
 	return static_cast<int64_t>(std::mktime(timeptr));
 #endif
 }
 
-static KYTY_SYSV_ABI size_t libc_strftime(char* str, size_t count, const char* format,
+static KATY_SYSV_ABI size_t libc_strftime(char* str, size_t count, const char* format,
                                           const std::tm* timeptr) {
 	if (str == nullptr || format == nullptr || timeptr == nullptr) {
 		return 0;
 	}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_LINUX && !defined(__APPLE__)
+#if KATY_PLATFORM == KATY_PLATFORM_LINUX && !defined(__APPLE__)
 	// Guest-created tm values do not initialize glibc's tm_zone pointer.
 	std::tm sanitized = *timeptr;
 	sanitized.tm_zone = nullptr;
@@ -431,7 +431,7 @@ static KYTY_SYSV_ABI size_t libc_strftime(char* str, size_t count, const char* f
 #endif
 }
 
-static KYTY_SYSV_ABI void catchReturnFromMain(int status) {
+static KATY_SYSV_ABI void catchReturnFromMain(int status) {
 	PRINT_NAME();
 
 	uint64_t ret_addr = reinterpret_cast<uint64_t>(__builtin_return_address(0));
@@ -472,7 +472,7 @@ static int mtx_result(int result) {
 	                     : static_cast<int>(ThrdResult::Error));
 }
 
-static KYTY_SYSV_ABI int MtxInit(LibKernel::PthreadMutex* mtx, int type) {
+static KATY_SYSV_ABI int MtxInit(LibKernel::PthreadMutex* mtx, int type) {
 	PRINT_NAME();
 
 	if (mtx == nullptr) {
@@ -493,21 +493,21 @@ static KYTY_SYSV_ABI int MtxInit(LibKernel::PthreadMutex* mtx, int type) {
 	return mtx_result(result);
 }
 
-static KYTY_SYSV_ABI int MtxInitWithName(LibKernel::PthreadMutex* mtx, int type,
+static KATY_SYSV_ABI int MtxInitWithName(LibKernel::PthreadMutex* mtx, int type,
                                          const char* /*name*/) {
 	PRINT_NAME();
 
 	return MtxInit(mtx, type);
 }
 
-static KYTY_SYSV_ABI int MtxInitWithDefaultNameOverride(LibKernel::PthreadMutex* mtx, int type,
+static KATY_SYSV_ABI int MtxInitWithDefaultNameOverride(LibKernel::PthreadMutex* mtx, int type,
                                                         const char* /*name*/) {
 	PRINT_NAME();
 
 	return MtxInit(mtx, type);
 }
 
-static KYTY_SYSV_ABI void MtxDestroy(LibKernel::PthreadMutex* mtx) {
+static KATY_SYSV_ABI void MtxDestroy(LibKernel::PthreadMutex* mtx) {
 	PRINT_NAME();
 
 	if (mtx != nullptr) {
@@ -515,13 +515,13 @@ static KYTY_SYSV_ABI void MtxDestroy(LibKernel::PthreadMutex* mtx) {
 	}
 }
 
-static KYTY_SYSV_ABI int MtxLock(LibKernel::PthreadMutex* mtx) {
+static KATY_SYSV_ABI int MtxLock(LibKernel::PthreadMutex* mtx) {
 	PRINT_NAME();
 
 	return mtx_result(LibKernel::PthreadMutexLock(mtx));
 }
 
-static KYTY_SYSV_ABI int MtxTrylock(LibKernel::PthreadMutex* mtx) {
+static KATY_SYSV_ABI int MtxTrylock(LibKernel::PthreadMutex* mtx) {
 	PRINT_NAME();
 
 	const auto result = LibKernel::PthreadMutexTrylock(mtx);
@@ -531,30 +531,30 @@ static KYTY_SYSV_ABI int MtxTrylock(LibKernel::PthreadMutex* mtx) {
 	return static_cast<int>(ThrdResult::Busy);
 }
 
-static KYTY_SYSV_ABI int MtxTimedlock(LibKernel::PthreadMutex* mtx, const void* /*xtime*/) {
+static KATY_SYSV_ABI int MtxTimedlock(LibKernel::PthreadMutex* mtx, const void* /*xtime*/) {
 	PRINT_NAME();
 
 	return mtx_result(LibKernel::PthreadMutexLock(mtx));
 }
 
-static KYTY_SYSV_ABI int MtxUnlock(LibKernel::PthreadMutex* mtx) {
+static KATY_SYSV_ABI int MtxUnlock(LibKernel::PthreadMutex* mtx) {
 	PRINT_NAME();
 
 	return mtx_result(LibKernel::PthreadMutexUnlock(mtx));
 }
 
-static KYTY_SYSV_ABI int MtxCurrentOwns(LibKernel::PthreadMutex* /*mtx*/) {
+static KATY_SYSV_ABI int MtxCurrentOwns(LibKernel::PthreadMutex* /*mtx*/) {
 	PRINT_NAME();
 
 	return 0;
 }
 
-using execute_once_func_t = KYTY_SYSV_ABI int (*)(void*, void*, void**);
+using execute_once_func_t = KATY_SYSV_ABI int (*)(void*, void*, void**);
 
 static std::mutex              g_execute_once_mutex;
 static std::condition_variable g_execute_once_cv;
 
-static KYTY_SYSV_ABI int std_execute_once(int* flag, execute_once_func_t func, void* arg) {
+static KATY_SYSV_ABI int std_execute_once(int* flag, execute_once_func_t func, void* arg) {
 	PRINT_NAME();
 
 	if (flag == nullptr || func == nullptr) {
@@ -593,7 +593,7 @@ static KYTY_SYSV_ABI int std_execute_once(int* flag, execute_once_func_t func, v
 	return result;
 }
 
-static KYTY_SYSV_ABI int cxa_atexit(cxa_destructor_func_t func, void* arg, void* d) {
+static KATY_SYSV_ABI int cxa_atexit(cxa_destructor_func_t func, void* arg, void* d) {
 	PRINT_NAME();
 
 	auto* cc = Common::Singleton<CContext>::Instance();
@@ -608,7 +608,7 @@ static KYTY_SYSV_ABI int cxa_atexit(cxa_destructor_func_t func, void* arg, void*
 	return 0;
 }
 
-void KYTY_SYSV_ABI cxa_finalize(void* d) {
+void KATY_SYSV_ABI cxa_finalize(void* d) {
 	PRINT_NAME();
 
 	auto* cc = Common::Singleton<CContext>::Instance();
@@ -633,7 +633,7 @@ LIB_VERSION("LibcInternalExt", 1, "LibcInternal", 1, 1);
 static uint64_t g_mspace_atomic_id_mask = 0;
 static uint64_t g_mstate_table[64]      = {0};
 
-using thread_atexit_destructor_t = KYTY_SYSV_ABI void (*)(void*);
+using thread_atexit_destructor_t = KATY_SYSV_ABI void (*)(void*);
 
 struct ThreadAtexitDestructor {
 	thread_atexit_destructor_t destructor;
@@ -650,7 +650,7 @@ struct Info {
 	uint64_t* mstate_table;
 };
 
-void KYTY_SYSV_ABI LibcHeapGetTraceInfo(Info* info) {
+void KATY_SYSV_ABI LibcHeapGetTraceInfo(Info* info) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(info->size != 32);
@@ -659,7 +659,7 @@ void KYTY_SYSV_ABI LibcHeapGetTraceInfo(Info* info) {
 	info->mstate_table          = g_mstate_table;
 }
 
-int KYTY_SYSV_ABI LibcInternalExtCxaThreadAtexit(thread_atexit_destructor_t destructor, void* object,
+int KATY_SYSV_ABI LibcInternalExtCxaThreadAtexit(thread_atexit_destructor_t destructor, void* object,
                                                  void* /*module_id*/) {
 	PRINT_NAME();
 
@@ -692,13 +692,13 @@ LIB_VERSION("LibcInternal", 1, "LibcInternal", 1, 1);
 
 static uint32_t g_need_flag = 1;
 
-int KYTY_SYSV_ABI vprintf(const char* str, VaList* c) {
+int KATY_SYSV_ABI vprintf(const char* str, VaList* c) {
 	PRINT_NAME();
 
 	return GetGuestVprintfFunc()(str, c);
 }
 
-static KYTY_SYSV_ABI int snprintf(VA_ARGS) {
+static KATY_SYSV_ABI int snprintf(VA_ARGS) {
 	VA_CONTEXT(ctx); // NOLINT(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
 
 	PRINT_NAME();
@@ -706,7 +706,7 @@ static KYTY_SYSV_ABI int snprintf(VA_ARGS) {
 	return GetGuestSnprintfCtxFunc()(&ctx);
 }
 
-int KYTY_SYSV_ABI fflush(FILE* stream) {
+int KATY_SYSV_ABI fflush(FILE* stream) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(stream != stdout);
@@ -714,57 +714,57 @@ int KYTY_SYSV_ABI fflush(FILE* stream) {
 	return ::fflush(stream);
 }
 
-void* KYTY_SYSV_ABI memset(void* s, int c, size_t n) {
+void* KATY_SYSV_ABI memset(void* s, int c, size_t n) {
 	PRINT_NAME();
 
 	return ::memset(s, c, n);
 }
 
-void* KYTY_SYSV_ABI memcpy(void* dest, const void* src, size_t n) {
+void* KATY_SYSV_ABI memcpy(void* dest, const void* src, size_t n) {
 	return ::memcpy(dest, src, n);
 }
 
-void* KYTY_SYSV_ABI memmove(void* dest, const void* src, size_t n) {
+void* KATY_SYSV_ABI memmove(void* dest, const void* src, size_t n) {
 	return ::memmove(dest, src, n);
 }
 
-int KYTY_SYSV_ABI memcmp(const void* s1, const void* s2, size_t n) {
+int KATY_SYSV_ABI memcmp(const void* s1, const void* s2, size_t n) {
 	return ::memcmp(s1, s2, n);
 }
 
-int KYTY_SYSV_ABI strcmp(const char* s1, const char* s2) {
+int KATY_SYSV_ABI strcmp(const char* s1, const char* s2) {
 	return ::strcmp(s1, s2);
 }
 
-int KYTY_SYSV_ABI strncmp(const char* s1, const char* s2, size_t n) {
+int KATY_SYSV_ABI strncmp(const char* s1, const char* s2, size_t n) {
 	return ::strncmp(s1, s2, n);
 }
 
-size_t KYTY_SYSV_ABI strlen(const char* s) {
+size_t KATY_SYSV_ABI strlen(const char* s) {
 	return ::strlen(s);
 }
 
-char* KYTY_SYSV_ABI strcpy(char* dest, const char* src) {
+char* KATY_SYSV_ABI strcpy(char* dest, const char* src) {
 	return ::strcpy(dest, src);
 }
 
-char* KYTY_SYSV_ABI strncpy(char* dest, const char* src, size_t count) {
+char* KATY_SYSV_ABI strncpy(char* dest, const char* src, size_t count) {
 	return ::strncpy(dest, src, count);
 }
 
-char* KYTY_SYSV_ABI strcat(char* dest, const char* src) {
+char* KATY_SYSV_ABI strcat(char* dest, const char* src) {
 	return ::strcat(dest, src);
 }
 
-const char* KYTY_SYSV_ABI strchr(const char* s, int c) {
+const char* KATY_SYSV_ABI strchr(const char* s, int c) {
 	return ::strchr(s, c);
 }
 
-char* KYTY_SYSV_ABI strrchr(const char* s, int c) {
+char* KATY_SYSV_ABI strrchr(const char* s, int c) {
 	return const_cast<char*>(::strrchr(s, c));
 }
 
-char* KYTY_SYSV_ABI strstr(const char* haystack, const char* needle) {
+char* KATY_SYSV_ABI strstr(const char* haystack, const char* needle) {
 	static int log_count = 0;
 	if (log_count++ < 8) {
 		LOGF("LibcInternal::strstr(\"%s\", \"%s\")\n", (haystack != nullptr ? haystack : "<null>"),
@@ -773,7 +773,7 @@ char* KYTY_SYSV_ABI strstr(const char* haystack, const char* needle) {
 	return const_cast<char*>(::strstr(haystack, needle));
 }
 
-long KYTY_SYSV_ABI strtol(const char* str, char** endptr, int base) {
+long KATY_SYSV_ABI strtol(const char* str, char** endptr, int base) {
 	static int log_count = 0;
 	if (log_count++ < 16) {
 		LOGF("LibcInternal::strtol(\"%s\", base=%d)\n", (str != nullptr ? str : "<null>"), base);
@@ -781,7 +781,7 @@ long KYTY_SYSV_ABI strtol(const char* str, char** endptr, int base) {
 	return ::strtol(str, endptr, base);
 }
 
-unsigned long KYTY_SYSV_ABI strtoul(const char* str, char** endptr, int base) {
+unsigned long KATY_SYSV_ABI strtoul(const char* str, char** endptr, int base) {
 	static int log_count = 0;
 	if (log_count++ < 16) {
 		LOGF("LibcInternal::strtoul(\"%s\", base=%d)\n", (str != nullptr ? str : "<null>"), base);
@@ -789,19 +789,19 @@ unsigned long KYTY_SYSV_ABI strtoul(const char* str, char** endptr, int base) {
 	return ::strtoul(str, endptr, base);
 }
 
-int KYTY_SYSV_ABI atoi(const char* str) {
+int KATY_SYSV_ABI atoi(const char* str) {
 	return ::atoi(str);
 }
 
-float KYTY_SYSV_ABI sinf(float x) {
+float KATY_SYSV_ABI sinf(float x) {
 	return std::sin(x);
 }
 
-float KYTY_SYSV_ABI cosf(float x) {
+float KATY_SYSV_ABI cosf(float x) {
 	return std::cos(x);
 }
 
-void KYTY_SYSV_ABI sincosf(float x, float* sinp, float* cosp) {
+void KATY_SYSV_ABI sincosf(float x, float* sinp, float* cosp) {
 	if (sinp != nullptr) {
 		*sinp = std::sin(x);
 	}
@@ -810,15 +810,15 @@ void KYTY_SYSV_ABI sincosf(float x, float* sinp, float* cosp) {
 	}
 }
 
-double KYTY_SYSV_ABI sin(double x) {
+double KATY_SYSV_ABI sin(double x) {
 	return std::sin(x);
 }
 
-double KYTY_SYSV_ABI cos(double x) {
+double KATY_SYSV_ABI cos(double x) {
 	return std::cos(x);
 }
 
-void KYTY_SYSV_ABI sincos(double x, double* sinp, double* cosp) {
+void KATY_SYSV_ABI sincos(double x, double* sinp, double* cosp) {
 	if (sinp != nullptr) {
 		*sinp = std::sin(x);
 	}
@@ -827,7 +827,7 @@ void KYTY_SYSV_ABI sincos(double x, double* sinp, double* cosp) {
 	}
 }
 
-int KYTY_SYSV_ABI LibcHeapErrorReportForGame(uint64_t msp, uint64_t ptr, uint64_t error,
+int KATY_SYSV_ABI LibcHeapErrorReportForGame(uint64_t msp, uint64_t ptr, uint64_t error,
                                              uint64_t arg3, uint64_t arg4, uint64_t arg5) {
 	PRINT_NAME();
 

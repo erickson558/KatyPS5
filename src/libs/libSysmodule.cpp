@@ -12,17 +12,17 @@ LIB_VERSION("Sysmodule", 1, "Sysmodule", 1, 1);
 
 namespace LibKernel {
 struct ModuleInfoForUnwind;
-int KYTY_SYSV_ABI KernelGetModuleInfoForUnwind(uint64_t addr, int flags, ModuleInfoForUnwind* info);
+int KATY_SYSV_ABI KernelGetModuleInfoForUnwind(uint64_t addr, int flags, ModuleInfoForUnwind* info);
 } // namespace LibKernel
 
 namespace Sysmodule {
 
-static KYTY_SYSV_ABI int SysmoduleGetModuleInfoForUnwind(uint64_t addr, int flags,
+static KATY_SYSV_ABI int SysmoduleGetModuleInfoForUnwind(uint64_t addr, int flags,
                                                          LibKernel::ModuleInfoForUnwind* info) {
 	return LibKernel::KernelGetModuleInfoForUnwind(addr, flags, info);
 }
 
-static KYTY_SYSV_ABI int SysmoduleLoadModule(uint16_t id) {
+static KATY_SYSV_ABI int SysmoduleLoadModule(uint16_t id) {
 	PRINT_NAME();
 
 	LOGF("\t id = %d\n", static_cast<int>(id));
@@ -30,7 +30,7 @@ static KYTY_SYSV_ABI int SysmoduleLoadModule(uint16_t id) {
 	return 0;
 }
 
-static KYTY_SYSV_ABI int SysmoduleUnloadModule(uint16_t id) {
+static KATY_SYSV_ABI int SysmoduleUnloadModule(uint16_t id) {
 	PRINT_NAME();
 
 	LOGF("\t id = %d\n", static_cast<int>(id));
@@ -38,7 +38,7 @@ static KYTY_SYSV_ABI int SysmoduleUnloadModule(uint16_t id) {
 	return 0;
 }
 
-static KYTY_SYSV_ABI int SysmoduleLoadModuleInternalWithArg(uint16_t id, int arg1, int arg2,
+static KATY_SYSV_ABI int SysmoduleLoadModuleInternalWithArg(uint16_t id, int arg1, int arg2,
                                                             int arg3, int* ret) {
 	PRINT_NAME();
 
@@ -54,7 +54,7 @@ static KYTY_SYSV_ABI int SysmoduleLoadModuleInternalWithArg(uint16_t id, int arg
 	return 0;
 }
 
-static KYTY_SYSV_ABI int SysmoduleIsLoaded(uint16_t id) {
+static KATY_SYSV_ABI int SysmoduleIsLoaded(uint16_t id) {
 	PRINT_NAME();
 
 	LOGF("\t id = %d\n", static_cast<int>(id));

@@ -11,13 +11,13 @@
 #include <mutex>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS && KYTY_COMPILER == KYTY_COMPILER_CLANG
-#define KYTY_WIN_CS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS && KATY_COMPILER == KATY_COMPILER_CLANG
+#define KATY_WIN_CS
 #endif
 
 // macOS has no clock_nanosleep.
-#if KYTY_PLATFORM != KYTY_PLATFORM_WINDOWS && !defined(__APPLE__)
-#define KYTY_POSIX_HIGH_RES_SLEEP
+#if KATY_PLATFORM != KATY_PLATFORM_WINDOWS && !defined(__APPLE__)
+#define KATY_POSIX_HIGH_RES_SLEEP
 #include <ctime>
 #endif
 
@@ -25,10 +25,10 @@
 #include <string>
 #include <thread>
 
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 #include <windows.h> // IWYU pragma: keep
 // IWYU pragma: no_include <winbase.h>
-constexpr DWORD KYTY_CS_SPIN_COUNT = 4000;
+constexpr DWORD KATY_CS_SPIN_COUNT = 4000;
 
 #ifndef CREATE_WAITABLE_TIMER_HIGH_RESOLUTION
 #define CREATE_WAITABLE_TIMER_HIGH_RESOLUTION 0x00000002
@@ -128,7 +128,7 @@ static SleepConditionVariableCS_func_t ResolveSleepConditionVariableCS() {
 
 #endif
 
-#ifdef KYTY_POSIX_HIGH_RES_SLEEP
+#ifdef KATY_POSIX_HIGH_RES_SLEEP
 // Spin for very short waits; use an absolute deadline for longer waits.
 static void SleepHighResolutionNanos(uint64_t nanos) {
 	if (nanos == 0) {
@@ -169,10 +169,10 @@ namespace Common {
 using thread_id_t = std::thread::id;
 
 struct MutexPrivate {
-#ifdef KYTY_WIN_CS
-	MutexPrivate() { InitializeCriticalSectionAndSpinCount(&m_cs, KYTY_CS_SPIN_COUNT); }
+#ifdef KATY_WIN_CS
+	MutexPrivate() { InitializeCriticalSectionAndSpinCount(&m_cs, KATY_CS_SPIN_COUNT); }
 	~MutexPrivate() { DeleteCriticalSection(&m_cs); }
-	KYTY_CLASS_NO_COPY(MutexPrivate);
+	KATY_CLASS_NO_COPY(MutexPrivate);
 	CRITICAL_SECTION m_cs {};
 #else
 	std::recursive_mutex m_mutex;
@@ -180,14 +180,14 @@ struct MutexPrivate {
 };
 
 struct CondVarPrivate {
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	CondVarPrivate() {
 		static auto func = ResolveInitializeConditionVariable();
 		EXIT_NOT_IMPLEMENTED(func == nullptr);
 		func(&m_cv);
 	}
 	~CondVarPrivate() = default;
-	KYTY_CLASS_NO_COPY(CondVarPrivate);
+	KATY_CLASS_NO_COPY(CondVarPrivate);
 	CONDITION_VARIABLE m_cv {};
 #else
 	std::condition_variable_any m_cv;
@@ -199,7 +199,7 @@ static std::vector<std::pair<int, CondVarPrivate*>> g_cond_waiters;
 static wait_poll_func_t                             g_cond_wait_poll_callback = nullptr;
 
 static void WakeCondVar(CondVarPrivate* cond_var) {
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	static auto func = ResolveWakeAllConditionVariable();
 	EXIT_NOT_IMPLEMENTED(func == nullptr);
 	func(&cond_var->m_cv);
@@ -248,14 +248,14 @@ static thread_id_t      g_main_thread;
 static int              g_main_thread_int;
 static std::atomic<int> g_thread_counter = 0;
 
-KYTY_SUBSYSTEM_INIT(Threads) {
+KATY_SUBSYSTEM_INIT(Threads) {
 	g_main_thread     = std::this_thread::get_id();
 	g_main_thread_int = Thread::GetThreadIdUnique();
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Threads) {}
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Threads) {}
 
-KYTY_SUBSYSTEM_DESTROY(Threads) {}
+KATY_SUBSYSTEM_DESTROY(Threads) {}
 
 Thread::Thread(thread_func_t func, void* arg)
     : m_thread(std::make_unique<ThreadPrivate>(func, arg)) {
@@ -290,9 +290,9 @@ void Thread::Sleep(uint32_t millis) {
 }
 
 void Thread::SleepMicro(uint32_t micros) {
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	SleepHighResolution100ns(static_cast<uint64_t>(micros) * 10);
-#elif defined(KYTY_POSIX_HIGH_RES_SLEEP)
+#elif defined(KATY_POSIX_HIGH_RES_SLEEP)
 	SleepHighResolutionNanos(static_cast<uint64_t>(micros) * 1000);
 #else
 	std::this_thread::sleep_for(std::chrono::microseconds(micros));
@@ -300,9 +300,9 @@ void Thread::SleepMicro(uint32_t micros) {
 }
 
 void Thread::SleepNano(uint64_t nanos) {
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	SleepHighResolution100ns((nanos + 99) / 100);
-#elif defined(KYTY_POSIX_HIGH_RES_SLEEP)
+#elif defined(KATY_POSIX_HIGH_RES_SLEEP)
 	SleepHighResolutionNanos(nanos);
 #else
 	std::this_thread::sleep_for(std::chrono::nanoseconds(nanos));
@@ -336,7 +336,7 @@ Mutex::~Mutex() {
 }
 
 void Mutex::Lock() {
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	EnterCriticalSection(&m_mutex->m_cs);
 #else
 	m_mutex->m_mutex.lock();
@@ -344,7 +344,7 @@ void Mutex::Lock() {
 }
 
 void Mutex::Unlock() {
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	LeaveCriticalSection(&m_mutex->m_cs);
 #else
 	m_mutex->m_mutex.unlock();
@@ -352,7 +352,7 @@ void Mutex::Unlock() {
 }
 
 bool Mutex::TryLock() {
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	return (TryEnterCriticalSection(&m_mutex->m_cs) != 0);
 #else
 	return m_mutex->m_mutex.try_lock();
@@ -367,7 +367,7 @@ CondVar::~CondVar() {
 
 void CondVar::Wait(Mutex* mutex) {
 	RegisterCondWaiter(m_cond_var.get());
-#ifndef KYTY_WIN_CS
+#ifndef KATY_WIN_CS
 	std::unique_lock<std::recursive_mutex> cpp_lock(mutex->m_mutex->m_mutex, std::adopt_lock_t());
 #endif
 	auto poll_callback = [&] {
@@ -375,7 +375,7 @@ void CondVar::Wait(Mutex* mutex) {
 		if (callback == nullptr) {
 			return;
 		}
-#if defined(KYTY_WIN_CS)
+#if defined(KATY_WIN_CS)
 		LeaveCriticalSection(&mutex->m_mutex->m_cs);
 		callback();
 		EnterCriticalSection(&mutex->m_mutex->m_cs);
@@ -385,7 +385,7 @@ void CondVar::Wait(Mutex* mutex) {
 		cpp_lock.lock();
 #endif
 	};
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	static auto func = ResolveSleepConditionVariableCS();
 	EXIT_NOT_IMPLEMENTED(func == nullptr);
 	if (g_cond_wait_poll_callback == nullptr) {
@@ -417,10 +417,10 @@ void CondVar::SetWaitPollCallback(wait_poll_func_t callback) {
 bool CondVar::WaitFor(Mutex* mutex, uint32_t micros) {
 	bool ok = false;
 	RegisterCondWaiter(m_cond_var.get());
-#ifndef KYTY_WIN_CS
+#ifndef KATY_WIN_CS
 	std::unique_lock<std::recursive_mutex> cpp_lock(mutex->m_mutex->m_mutex, std::adopt_lock_t());
 #endif
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	static auto func = ResolveSleepConditionVariableCS();
 	EXIT_NOT_IMPLEMENTED(func == nullptr);
 	ok = !(func(&m_cond_var->m_cv, &mutex->m_mutex->m_cs, (micros < 1000 ? 1 : micros / 1000)) ==
@@ -436,7 +436,7 @@ bool CondVar::WaitFor(Mutex* mutex, uint32_t micros) {
 }
 
 void CondVar::Signal() {
-#ifdef KYTY_WIN_CS
+#ifdef KATY_WIN_CS
 	static auto func = ResolveWakeConditionVariable();
 	EXIT_NOT_IMPLEMENTED(func == nullptr);
 	func(&m_cond_var->m_cv);

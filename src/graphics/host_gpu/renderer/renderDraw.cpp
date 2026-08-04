@@ -348,7 +348,7 @@ static PipelineDynamicParameters BuildGraphicsDynamicParams(const RenderCommandB
 
 static void SetDynamicParams(const RenderCommandBuffer& buffer, vk::CommandBuffer vk_buffer,
                              const PipelineDynamicParameters& dynamic_params) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	vk::Viewport viewport {};
 	viewport.x        = dynamic_params.viewport_offset[0] - dynamic_params.viewport_scale[0];
@@ -641,7 +641,7 @@ static bool ConsumeMetadataColorOperation(const RenderCommandBuffer& buffer) {
 	const auto  mode = ctx.GetColorControl().mode;
 	// These AGC CB modes run color-buffer metadata/decompression operations. The shader is a
 	// dummy vehicle for the CB, and its exported color must not be applied as a normal draw.
-	// Kyty currently stores host images as expanded Vulkan images and does not track CMASK/DCC
+	// Katy currently stores host images as expanded Vulkan images and does not track CMASK/DCC
 	// metadata state, so the matching host operation is a no-op.
 	return mode == static_cast<uint8_t>(CbColorMode::EliminateFastClear) ||
 	       mode == static_cast<uint8_t>(CbColorMode::FmaskDecompress) ||
@@ -1097,7 +1097,7 @@ void RenderExecutor::DrawIndex(uint64_t submit_id, RenderCommandBuffer& buffer,
                                const void* index_addr, uint32_t flags, uint32_t type,
                                uint32_t instance_count, uint32_t render_target_slice_offset,
                                int32_t vertex_offset_add, uint32_t first_instance) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_IF(buffer.IsInvalid());
 	auto& ucfg   = buffer.GetUserConfig();
@@ -1227,7 +1227,7 @@ void RenderExecutor::DrawAuto(uint64_t submit_id, RenderCommandBuffer& buffer, u
                               uint32_t flags, uint32_t render_target_slice_offset,
                               uint32_t instance_count, uint32_t first_vertex,
                               uint32_t first_instance) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_IF(buffer.IsInvalid());
 	auto& ucfg   = buffer.GetUserConfig();

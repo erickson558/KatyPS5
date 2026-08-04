@@ -21,7 +21,7 @@ public:
 	explicit MemoryTracker(PageManager& page_manager);
 	~MemoryTracker();
 
-	KYTY_CLASS_NO_COPY(MemoryTracker);
+	KATY_CLASS_NO_COPY(MemoryTracker);
 
 	[[nodiscard]] bool IsRegionCpuModified(uint64_t vaddr, uint64_t size);
 	[[nodiscard]] bool IsRegionGpuModified(uint64_t vaddr, uint64_t size);
@@ -53,7 +53,7 @@ public:
 			}
 		});
 	}
-#if KYTY_BUILD == KYTY_BUILD_DEBUG
+#if KATY_BUILD == KATY_BUILD_DEBUG
 	void ValidateGpuDirtyPages(const RangeSet& dirty, uint64_t vaddr, uint64_t size,
 	                           const char* operation) const noexcept;
 	void ValidateGpuDirtyOwnership(const RangeSet& dirty, uint64_t vaddr, uint64_t size,

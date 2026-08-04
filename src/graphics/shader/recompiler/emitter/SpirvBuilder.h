@@ -12,7 +12,7 @@ class Builder {
 public:
 	explicit Builder(uint32_t version = 0x00010300u);
 	~Builder() = default;
-	KYTY_CLASS_DEFAULT_COPY(Builder);
+	KATY_CLASS_DEFAULT_COPY(Builder);
 
 	uint32_t AllocateId();
 

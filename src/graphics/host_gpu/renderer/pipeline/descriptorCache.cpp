@@ -147,7 +147,7 @@ DescriptorCache::GetDescriptorSetLayoutInternal(Stage                           
 }
 
 void DescriptorCache::CreatePool() {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	constexpr uint32_t           MaxSets = 512;
 	const vk::DescriptorPoolSize sizes[] = {
 	    {vk::DescriptorType::eStorageBuffer,
@@ -172,7 +172,7 @@ void DescriptorCache::CreatePool() {
 
 VulkanDescriptorSet* DescriptorCache::Allocate(Stage                                stage,
                                                const ShaderRecompiler::IR::Program& program) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	Common::LockGuard lock(m_mutex);
 	const auto        layout = GetDescriptorSetLayoutInternal(stage, program);
 	EXIT_IF(layout == nullptr);
@@ -221,7 +221,7 @@ void DescriptorCache::Recycle(VulkanDescriptorSet& set) {
 VulkanDescriptorSet& DescriptorCache::GetDescriptor(Stage                                stage,
                                                     const ShaderRecompiler::IR::Program& program,
                                                     const NativeDescriptors&             data) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(data.buffers.size() != program.info.buffers.size() ||
 	        data.images.size() != program.info.images.size() ||
 	        data.samplers.size() != program.info.samplers.size() ||

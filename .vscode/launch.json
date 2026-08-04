@@ -13,10 +13,10 @@
             "externalConsole": false
         },
         {
-            "name": "Debug kyty_emulator",
+            "name": "Debug katy_emulator",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\_Build\\vscode-clang\\kyty_emulator.exe",
+            "program": "${workspaceFolder}\\_Build\\vscode-clang\\katy_emulator.exe",
             "args": [
                 "--game", "D:/gamesps5/PPSA07429",
                 "--printf-direction", "File",
@@ -28,7 +28,7 @@
             "externalConsole": true
         },
         {
-            "name": "Attach to running kyty_emulator",
+            "name": "Attach to running katy_emulator",
             "type": "cppvsdbg",
             "request": "attach",
             "processId": "${command:pickProcess}"

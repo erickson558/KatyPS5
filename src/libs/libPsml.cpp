@@ -110,7 +110,7 @@ static bool HasKnownObjectMagic(const void* object) {
 	return magic == SHARED_RESOURCES_MAGIC || magic == CONTEXT_MAGIC;
 }
 
-static int KYTY_SYSV_ABI PsmlInitialize() {
+static int KATY_SYSV_ABI PsmlInitialize() {
 	PRINT_NAME();
 
 	g_initialized      = true;
@@ -120,7 +120,7 @@ static int KYTY_SYSV_ABI PsmlInitialize() {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlGetMainMemoryRequirements(MainMemoryRequirements*     out,
+static int KATY_SYSV_ABI PsmlGetMainMemoryRequirements(MainMemoryRequirements*     out,
                                                        const MainMemoryParameters* params) {
 	PRINT_NAME();
 
@@ -142,7 +142,7 @@ static int KYTY_SYSV_ABI PsmlGetMainMemoryRequirements(MainMemoryRequirements*  
 	return OK;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 PsmlSharedResourcesInitialize(void* resources, const SharedResourcesInitParameters* params) {
 	PRINT_NAME();
 
@@ -164,7 +164,7 @@ PsmlSharedResourcesInitialize(void* resources, const SharedResourcesInitParamete
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlSharedResourcesFinalize(void* resources) {
+static int KATY_SYSV_ABI PsmlSharedResourcesFinalize(void* resources) {
 	PRINT_NAME();
 
 	const auto init_error = CheckInitialized();
@@ -180,7 +180,7 @@ static int KYTY_SYSV_ABI PsmlSharedResourcesFinalize(void* resources) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlGetContextMemoryRequirements(MainMemoryRequirements* out,
+static int KATY_SYSV_ABI PsmlGetContextMemoryRequirements(MainMemoryRequirements* out,
                                                           uint64_t /*params*/) {
 	PRINT_NAME();
 
@@ -199,7 +199,7 @@ static int KYTY_SYSV_ABI PsmlGetContextMemoryRequirements(MainMemoryRequirements
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlContextInitialize(void* context, const void* params) {
+static int KATY_SYSV_ABI PsmlContextInitialize(void* context, const void* params) {
 	PRINT_NAME();
 
 	const auto init_error = CheckInitialized();
@@ -224,7 +224,7 @@ static int KYTY_SYSV_ABI PsmlContextInitialize(void* context, const void* params
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlContextFinalize(void* context) {
+static int KATY_SYSV_ABI PsmlContextFinalize(void* context) {
 	PRINT_NAME();
 
 	const auto init_error = CheckInitialized();
@@ -240,7 +240,7 @@ static int KYTY_SYSV_ABI PsmlContextFinalize(void* context) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlGetWorkAreaSize(const void* object, uint32_t* out_size) {
+static int KATY_SYSV_ABI PsmlGetWorkAreaSize(const void* object, uint32_t* out_size) {
 	PRINT_NAME();
 
 	const auto init_error = CheckInitialized();
@@ -259,7 +259,7 @@ static int KYTY_SYSV_ABI PsmlGetWorkAreaSize(const void* object, uint32_t* out_s
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlDispatch(void* context, uint64_t command, uint64_t params) {
+static int KATY_SYSV_ABI PsmlDispatch(void* context, uint64_t command, uint64_t params) {
 	PRINT_NAME();
 
 	const auto init_error = CheckInitialized();
@@ -276,7 +276,7 @@ static int KYTY_SYSV_ABI PsmlDispatch(void* context, uint64_t command, uint64_t 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlGetProgress(const void* object, float* out_progress,
+static int KATY_SYSV_ABI PsmlGetProgress(const void* object, float* out_progress,
                                          uint32_t /*frame_index*/) {
 	PRINT_NAME();
 
@@ -296,7 +296,7 @@ static int KYTY_SYSV_ABI PsmlGetProgress(const void* object, float* out_progress
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlRequestCapture(const void* object) {
+static int KATY_SYSV_ABI PsmlRequestCapture(const void* object) {
 	PRINT_NAME();
 
 	const auto init_error = CheckInitialized();
@@ -310,7 +310,7 @@ static int KYTY_SYSV_ABI PsmlRequestCapture(const void* object) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PsmlValidateObject(const void* object) {
+static int KATY_SYSV_ABI PsmlValidateObject(const void* object) {
 	PRINT_NAME();
 
 	const auto init_error = CheckInitialized();

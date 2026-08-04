@@ -1522,7 +1522,7 @@ bool TileGetRenderTargetMipLayout(uint32_t width, uint32_t height, uint32_t pitc
 void TileGetTextureSize(uint32_t format, uint32_t width, uint32_t height, uint32_t pitch,
                         uint32_t levels, uint32_t tile, TileSizeAlign* total_size,
                         TileSizeOffset* level_sizes, TilePaddedSize* padded_size) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_IF(levels == 0 || levels > 16);
 

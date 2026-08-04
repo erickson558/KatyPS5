@@ -6,16 +6,16 @@ file(GLOB common_src CONFIGURE_DEPENDS
 
 file(GLOB_RECURSE common_headers CONFIGURE_DEPENDS "*.h")
 
-if(KYTY_CLANG_CL)
+if(KATY_CLANG_CL)
 	set_source_files_properties(${common_src} PROPERTIES COMPILE_FLAGS "-Wno-pragma-pack")
 endif()
 
 add_library(common STATIC ${common_src} ${common_headers})
 
 target_include_directories(common
-	PUBLIC ${KYTY_SOURCE_DIR}
+	PUBLIC ${KATY_SOURCE_DIR}
 	PRIVATE
-		${KYTY_THIRD_PARTY_DIR}/cpuinfo/include
+		${KATY_THIRD_PARTY_DIR}/cpuinfo/include
 )
 
 target_link_libraries(common

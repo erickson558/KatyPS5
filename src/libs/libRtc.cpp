@@ -49,7 +49,7 @@ struct RtcTick {
 
 static_assert(sizeof(RtcTick) == 8);
 
-static int KYTY_SYSV_ABI RtcCheckValid(const RtcDateTime* time) {
+static int KATY_SYSV_ABI RtcCheckValid(const RtcDateTime* time) {
 	if (time == nullptr) {
 		return RTC_ERROR_INVALID_POINTER;
 	}
@@ -93,7 +93,7 @@ static int RtcGetDaysInMonth(int year, int month) {
 	return Common::Date::DaysInMonth(month);
 }
 
-static int KYTY_SYSV_ABI RtcIsLeapYear(int year) {
+static int KATY_SYSV_ABI RtcIsLeapYear(int year) {
 	PRINT_NAME();
 
 	if (year <= 0 || year > 9999) {
@@ -103,7 +103,7 @@ static int KYTY_SYSV_ABI RtcIsLeapYear(int year) {
 	return Common::Date::IsLeapYear(year) ? 1 : 0;
 }
 
-static int KYTY_SYSV_ABI RtcGetDayOfWeek(int year, int month, int day) {
+static int KATY_SYSV_ABI RtcGetDayOfWeek(int year, int month, int day) {
 	PRINT_NAME();
 
 	const auto days = RtcGetDaysInMonth(year, month);
@@ -118,19 +118,19 @@ static int KYTY_SYSV_ABI RtcGetDayOfWeek(int year, int month, int day) {
 	return (dow == 7 ? 0 : dow);
 }
 
-static int KYTY_SYSV_ABI RtcGetDaysInMonthExport(int year, int month) {
+static int KATY_SYSV_ABI RtcGetDaysInMonthExport(int year, int month) {
 	PRINT_NAME();
 
 	return RtcGetDaysInMonth(year, month);
 }
 
-static int KYTY_SYSV_ABI RtcGetTickResolution() {
+static int KATY_SYSV_ABI RtcGetTickResolution() {
 	PRINT_NAME();
 
 	return 1000000;
 }
 
-static int KYTY_SYSV_ABI RtcGetCurrentClockLocalTime(RtcDateTime* time) {
+static int KATY_SYSV_ABI RtcGetCurrentClockLocalTime(RtcDateTime* time) {
 	PRINT_NAME();
 
 	if (time == nullptr) {
@@ -152,7 +152,7 @@ static int KYTY_SYSV_ABI RtcGetCurrentClockLocalTime(RtcDateTime* time) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcSetTick(RtcDateTime* time, const RtcTick* tick) {
+static int KATY_SYSV_ABI RtcSetTick(RtcDateTime* time, const RtcTick* tick) {
 	PRINT_NAME();
 
 	if (time == nullptr || tick == nullptr) {
@@ -203,7 +203,7 @@ static int KYTY_SYSV_ABI RtcSetTick(RtcDateTime* time, const RtcTick* tick) {
 	return RtcCheckValid(time);
 }
 
-static int KYTY_SYSV_ABI RtcGetTick(const RtcDateTime* time, RtcTick* tick) {
+static int KATY_SYSV_ABI RtcGetTick(const RtcDateTime* time, RtcTick* tick) {
 	PRINT_NAME();
 
 	if (time == nullptr || tick == nullptr) {
@@ -241,7 +241,7 @@ static int KYTY_SYSV_ABI RtcGetTick(const RtcDateTime* time, RtcTick* tick) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcGetCurrentTick(RtcTick* tick) {
+static int KATY_SYSV_ABI RtcGetCurrentTick(RtcTick* tick) {
 	PRINT_NAME();
 
 	if (tick == nullptr) {
@@ -256,13 +256,13 @@ static int KYTY_SYSV_ABI RtcGetCurrentTick(RtcTick* tick) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcGetCurrentNetworkTick(RtcTick* tick) {
+static int KATY_SYSV_ABI RtcGetCurrentNetworkTick(RtcTick* tick) {
 	PRINT_NAME();
 
 	return RtcGetCurrentTick(tick);
 }
 
-static int KYTY_SYSV_ABI RtcGetCurrentClock(RtcDateTime* time, int time_zone_minutes) {
+static int KATY_SYSV_ABI RtcGetCurrentClock(RtcDateTime* time, int time_zone_minutes) {
 	PRINT_NAME();
 
 	if (time == nullptr) {
@@ -280,33 +280,33 @@ static int KYTY_SYSV_ABI RtcGetCurrentClock(RtcDateTime* time, int time_zone_min
 	return RtcSetTick(time, &tick);
 }
 
-static int KYTY_SYSV_ABI RtcConvertUtcToLocalTime(const RtcTick* utc, RtcTick* local_time) {
+static int KATY_SYSV_ABI RtcConvertUtcToLocalTime(const RtcTick* utc, RtcTick* local_time) {
 	PRINT_NAME();
 
 	if (utc == nullptr || local_time == nullptr) {
 		return RTC_ERROR_INVALID_POINTER;
 	}
 
-	// Keep host-independent behavior for now; Kyty stores RTC ticks in UTC.
+	// Keep host-independent behavior for now; Katy stores RTC ticks in UTC.
 	*local_time = *utc;
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcConvertLocalTimeToUtc(const RtcTick* local_time, RtcTick* utc) {
+static int KATY_SYSV_ABI RtcConvertLocalTimeToUtc(const RtcTick* local_time, RtcTick* utc) {
 	PRINT_NAME();
 
 	if (local_time == nullptr || utc == nullptr) {
 		return RTC_ERROR_INVALID_POINTER;
 	}
 
-	// Keep host-independent behavior for now; Kyty stores RTC ticks in UTC.
+	// Keep host-independent behavior for now; Katy stores RTC ticks in UTC.
 	*utc = *local_time;
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcFormatRFC3339(char* date_time, const RtcTick* utc,
+static int KATY_SYSV_ABI RtcFormatRFC3339(char* date_time, const RtcTick* utc,
                                           int time_zone_minutes) {
 	PRINT_NAME();
 
@@ -354,7 +354,7 @@ static int KYTY_SYSV_ABI RtcFormatRFC3339(char* date_time, const RtcTick* utc,
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcParseRFC3339(RtcTick* utc, const char* date_time) {
+static int KATY_SYSV_ABI RtcParseRFC3339(RtcTick* utc, const char* date_time) {
 	PRINT_NAME();
 
 	if (utc == nullptr || date_time == nullptr) {
@@ -420,7 +420,7 @@ static int KYTY_SYSV_ABI RtcParseRFC3339(RtcTick* utc, const char* date_time) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcGetTime_t(const RtcDateTime* time, int64_t* seconds) {
+static int KATY_SYSV_ABI RtcGetTime_t(const RtcDateTime* time, int64_t* seconds) {
 	PRINT_NAME();
 
 	if (time == nullptr || seconds == nullptr) {
@@ -440,7 +440,7 @@ static int KYTY_SYSV_ABI RtcGetTime_t(const RtcDateTime* time, int64_t* seconds)
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcGetWin32FileTime(const RtcDateTime* time, uint64_t* win32_time) {
+static int KATY_SYSV_ABI RtcGetWin32FileTime(const RtcDateTime* time, uint64_t* win32_time) {
 	PRINT_NAME();
 
 	if (time == nullptr || win32_time == nullptr) {
@@ -460,7 +460,7 @@ static int KYTY_SYSV_ABI RtcGetWin32FileTime(const RtcDateTime* time, uint64_t* 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcSetWin32FileTime(RtcDateTime* time, uint64_t win32_time) {
+static int KATY_SYSV_ABI RtcSetWin32FileTime(RtcDateTime* time, uint64_t win32_time) {
 	PRINT_NAME();
 
 	if (time == nullptr) {
@@ -478,7 +478,7 @@ static int KYTY_SYSV_ABI RtcSetWin32FileTime(RtcDateTime* time, uint64_t win32_t
 	return RtcSetTick(time, &tick);
 }
 
-static int KYTY_SYSV_ABI RtcSetTime_t(RtcDateTime* time, int64_t seconds) {
+static int KATY_SYSV_ABI RtcSetTime_t(RtcDateTime* time, int64_t seconds) {
 	PRINT_NAME();
 
 	if (time == nullptr) {
@@ -499,7 +499,7 @@ static int KYTY_SYSV_ABI RtcSetTime_t(RtcDateTime* time, int64_t seconds) {
 	return RtcSetTick(time, &tick);
 }
 
-static int KYTY_SYSV_ABI RtcTickAddTicks(RtcTick* dst, const RtcTick* src, int64_t ticks) {
+static int KATY_SYSV_ABI RtcTickAddTicks(RtcTick* dst, const RtcTick* src, int64_t ticks) {
 	PRINT_NAME();
 
 	if (dst == nullptr || src == nullptr) {
@@ -511,37 +511,37 @@ static int KYTY_SYSV_ABI RtcTickAddTicks(RtcTick* dst, const RtcTick* src, int64
 	return OK;
 }
 
-static int KYTY_SYSV_ABI RtcTickAddMicroseconds(RtcTick* dst, const RtcTick* src, int64_t usec) {
+static int KATY_SYSV_ABI RtcTickAddMicroseconds(RtcTick* dst, const RtcTick* src, int64_t usec) {
 	PRINT_NAME();
 
 	return RtcTickAddTicks(dst, src, usec);
 }
 
-static int KYTY_SYSV_ABI RtcTickAddSeconds(RtcTick* dst, const RtcTick* src, int64_t seconds) {
+static int KATY_SYSV_ABI RtcTickAddSeconds(RtcTick* dst, const RtcTick* src, int64_t seconds) {
 	PRINT_NAME();
 
 	return RtcTickAddTicks(dst, src, seconds * 1000000ll);
 }
 
-static int KYTY_SYSV_ABI RtcTickAddMinutes(RtcTick* dst, const RtcTick* src, int64_t minutes) {
+static int KATY_SYSV_ABI RtcTickAddMinutes(RtcTick* dst, const RtcTick* src, int64_t minutes) {
 	PRINT_NAME();
 
 	return RtcTickAddTicks(dst, src, minutes * 60000000ll);
 }
 
-static int KYTY_SYSV_ABI RtcTickAddHours(RtcTick* dst, const RtcTick* src, int32_t hours) {
+static int KATY_SYSV_ABI RtcTickAddHours(RtcTick* dst, const RtcTick* src, int32_t hours) {
 	PRINT_NAME();
 
 	return RtcTickAddTicks(dst, src, static_cast<int64_t>(hours) * 3600000000ll);
 }
 
-static int KYTY_SYSV_ABI RtcTickAddDays(RtcTick* dst, const RtcTick* src, int32_t days) {
+static int KATY_SYSV_ABI RtcTickAddDays(RtcTick* dst, const RtcTick* src, int32_t days) {
 	PRINT_NAME();
 
 	return RtcTickAddTicks(dst, src, static_cast<int64_t>(days) * 86400000000ll);
 }
 
-static int KYTY_SYSV_ABI RtcTickAddWeeks(RtcTick* dst, const RtcTick* src, int32_t weeks) {
+static int KATY_SYSV_ABI RtcTickAddWeeks(RtcTick* dst, const RtcTick* src, int32_t weeks) {
 	PRINT_NAME();
 
 	return RtcTickAddTicks(dst, src, static_cast<int64_t>(weeks) * 604800000000ll);

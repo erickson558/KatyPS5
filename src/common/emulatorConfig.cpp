@@ -9,15 +9,15 @@ namespace Config {
 
 static std::unique_ptr<ConfigOptions> g_config;
 
-KYTY_SUBSYSTEM_INIT(Config) {
+KATY_SUBSYSTEM_INIT(Config) {
 	EXIT_IF(g_config != nullptr);
 
 	g_config = std::make_unique<ConfigOptions>();
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Config) {}
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Config) {}
 
-KYTY_SUBSYSTEM_DESTROY(Config) {}
+KATY_SUBSYSTEM_DESTROY(Config) {}
 
 void Load(const ConfigOptions& cfg) {
 	EXIT_IF(g_config == nullptr);

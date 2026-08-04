@@ -12,7 +12,7 @@
 #include <filesystem>
 #include <string>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -111,7 +111,7 @@ static RenderDocDevicePointer GetRenderDocDevicePointer(vk::Instance instance) {
 	return VulkanHandleToPointer(instance);
 }
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 
 static bool BindRenderDocApi(HMODULE module) {
 	auto* get_api = reinterpret_cast<pRENDERDOC_GetAPI>(GetProcAddress(module, "RENDERDOC_GetAPI"));
@@ -127,7 +127,7 @@ static bool BindRenderDocApi(HMODULE module) {
 	g_module = module;
 	g_api    = static_cast<RenderDocApi*>(api);
 
-	g_api->SetCaptureFilePathTemplate("_RenderDoc/kyty");
+	g_api->SetCaptureFilePathTemplate("_RenderDoc/katy");
 	static RenderDocInputButton capture_keys[] = {eRENDERDOC_Key_F1};
 	g_api->SetCaptureKeys(capture_keys, 1);
 	g_api->UnloadCrashHandler();
@@ -169,7 +169,7 @@ static bool BindRenderDocApi(HMODULE module) {
 	g_module = module;
 	g_api    = static_cast<RenderDocApi*>(api);
 
-	g_api->SetCaptureFilePathTemplate("_RenderDoc/kyty");
+	g_api->SetCaptureFilePathTemplate("_RenderDoc/katy");
 	static RenderDocInputButton capture_keys[] = {eRENDERDOC_Key_F1};
 	g_api->SetCaptureKeys(capture_keys, 1);
 	g_api->UnloadCrashHandler();
@@ -215,7 +215,7 @@ static RenderDocWindowHandle GetRenderDocWindowHandle(SDL_Window* window) {
 
 #endif
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 
 static bool IsAvailable() {
 	return g_api != nullptr && g_device != nullptr && g_window != nullptr;
@@ -229,7 +229,7 @@ static bool IsAvailable() {
 
 #endif
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 
 void RenderDocInit() {
 	bool expected = false;

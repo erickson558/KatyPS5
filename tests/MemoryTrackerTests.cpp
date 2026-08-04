@@ -11,7 +11,7 @@
 #include <thread>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -38,7 +38,7 @@ void Check(bool value, const char *text) {
   }
 }
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM != KATY_PLATFORM_WINDOWS
 using DWORD = uint32_t;
 constexpr uint32_t PAGE_NOACCESS = 1;
 constexpr uint32_t PAGE_READONLY = 2;
@@ -622,7 +622,7 @@ void TestFullRegionGpuUnmarkBatching() {
 }
 
 void CheckDeathCase(const char *name) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
   char path[MAX_PATH]{};
   Check(GetModuleFileNameA(nullptr, path, MAX_PATH) != 0,
         "GetModuleFileName failed");

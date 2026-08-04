@@ -1,11 +1,11 @@
-#ifndef KYTY_COMMON_PLATFORM_SYSDBG_H_
-#define KYTY_COMMON_PLATFORM_SYSDBG_H_
+#ifndef KATY_COMMON_PLATFORM_SYSDBG_H_
+#define KATY_COMMON_PLATFORM_SYSDBG_H_
 
 #include "common/common.h"
 
 // NOLINTNEXTLINE(readability-identifier-naming)
 struct sys_dbg_stack_info_t {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	uintptr_t addr;
 
 	uintptr_t reserved_addr;
@@ -16,7 +16,7 @@ struct sys_dbg_stack_info_t {
 	size_t    commited_size;
 
 	size_t total_size;
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 	uintptr_t code_addr;
 	uintptr_t addr;
 	uintptr_t commited_addr;
@@ -34,4 +34,4 @@ void SysStackWalk(void** stack, int* depth);
 void SysStackUsage(sys_dbg_stack_info_t& s);          // NOLINT(google-runtime-references)
 void SysStackUsagePrint(sys_dbg_stack_info_t& stack); // NOLINT(google-runtime-references)
 
-#endif /* KYTY_COMMON_PLATFORM_SYSDBG_H_ */
+#endif /* KATY_COMMON_PLATFORM_SYSDBG_H_ */

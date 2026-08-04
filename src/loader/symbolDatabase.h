@@ -48,7 +48,7 @@ public:
 
 	void DbgDump(const std::string& folder, const std::string& file_name);
 
-	KYTY_CLASS_NO_COPY(SymbolDatabase);
+	KATY_CLASS_NO_COPY(SymbolDatabase);
 
 	static std::string GenerateName(const SymbolResolve& s);
 

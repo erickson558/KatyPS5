@@ -15,7 +15,7 @@ class QResizeEvent;
 class Configuration;
 class MainDialog: public QDialog {
 	Q_OBJECT
-	KYTY_QT_CLASS_NO_COPY(MainDialog);
+	KATY_QT_CLASS_NO_COPY(MainDialog);
 
 signals:
 	void Start();

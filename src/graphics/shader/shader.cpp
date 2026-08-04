@@ -34,7 +34,7 @@
 #include <utility>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -484,7 +484,7 @@ static void GetNextGenFallbackShaderId(uint64_t addr, uint32_t& hash0, uint32_t&
 }
 
 static void ShaderDetectBuffers(ShaderVertexInputInfo& info) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	info.buffers_num = 0;
 
@@ -645,7 +645,7 @@ static void ShaderApplyAttribSemantics(ShaderVertexInputInfo& info,
                                        const ShaderSemantic*  input_semantics,
                                        uint32_t num_input_semantics, const uint32_t* attrib,
                                        const uint32_t* buffer) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_IF(attrib == nullptr || buffer == nullptr);
 
@@ -768,7 +768,7 @@ static uint32_t ShaderCalcPsSystemInputBase(const HW::ShaderRegisters& regs) {
 
 static bool ShaderGetStaticInputInfoVS(const HW::VertexShaderInfo& regs,
                                        const HW::ShaderRegisters& sh, ShaderVertexInputInfo& info) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	info = {};
 
@@ -830,7 +830,7 @@ static void ShaderGetStaticInputInfoPS(
     const ShaderVertexInputInfo&                        vs_info,
     std::span<const Prospero::ColorComponentMapping, 8> target_export_mapping,
     ShaderPixelInputInfo&                               ps_info) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	ps_info = {};
 
@@ -1215,7 +1215,7 @@ bool ShaderCompileInfoCS(const HW::ComputeShaderInfo& regs, const HW::ShaderRegi
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void ShaderDbgDumpInputInfo(const ShaderVertexInputInfo& info) {
-	KYTY_PROFILER_BLOCK("ShaderDbgDumpInputInfo(Vs)");
+	KATY_PROFILER_BLOCK("ShaderDbgDumpInputInfo(Vs)");
 
 	LOGF("ShaderDbgDumpInputInfo()\n");
 
@@ -1273,7 +1273,7 @@ void ShaderDbgDumpInputInfo(const ShaderVertexInputInfo& info) {
 }
 
 void ShaderDbgDumpInputInfo(const ShaderPixelInputInfo& info) {
-	KYTY_PROFILER_BLOCK("ShaderDbgDumpInputInfo(Ps)");
+	KATY_PROFILER_BLOCK("ShaderDbgDumpInputInfo(Ps)");
 
 	LOGF("ShaderDbgDumpInputInfo()\n");
 
@@ -1411,7 +1411,7 @@ static void DumpShaderRecompilerOriginal(const char* type, uint64_t shader_hash,
 bool ShaderCompileSpirvVS(const HW::VertexShaderInfo& regs, const HW::ShaderRegisters& sh,
                           ShaderLaneMaskMode lane_mask_mode, ShaderVertexInputInfo& input_info,
                           std::vector<uint32_t>& spirv) {
-	KYTY_PROFILER_FUNCTION(profiler::colors::Amber300);
+	KATY_PROFILER_FUNCTION(profiler::colors::Amber300);
 
 	EXIT_NOT_IMPLEMENTED(regs.es_regs.data_addr == 0 || regs.gs_regs.chksum == 0);
 
@@ -1466,7 +1466,7 @@ bool ShaderCompileSpirvVS(const HW::VertexShaderInfo& regs, const HW::ShaderRegi
 bool ShaderCompileSpirvPS(const HW::PixelShaderInfo& regs, const HW::ShaderRegisters& sh,
                           ShaderLaneMaskMode lane_mask_mode, ShaderPixelInputInfo& input_info,
                           std::vector<uint32_t>& spirv) {
-	KYTY_PROFILER_FUNCTION(profiler::colors::Blue300);
+	KATY_PROFILER_FUNCTION(profiler::colors::Blue300);
 
 	const uint64_t shader_addr = regs.ps_regs.data_addr;
 	const uint64_t shader_hash = regs.ps_regs.chksum != 0 ? regs.ps_regs.chksum : shader_addr;
@@ -1517,7 +1517,7 @@ bool ShaderCompileSpirvPS(const HW::PixelShaderInfo& regs, const HW::ShaderRegis
 
 bool ShaderCompileSpirvCS(const HW::ComputeShaderInfo& regs, const HW::ShaderRegisters& sh,
                           ShaderComputeInputInfo& input_info, std::vector<uint32_t>& spirv) {
-	KYTY_PROFILER_FUNCTION(profiler::colors::CyanA700);
+	KATY_PROFILER_FUNCTION(profiler::colors::CyanA700);
 
 	const uint64_t shader_addr = regs.cs_regs.data_addr;
 	const auto     code = ShaderGetMappedCode(shader_addr, "ShaderRecompiler CS", shader_addr);
@@ -1567,7 +1567,7 @@ bool ShaderCompileSpirvCS(const HW::ComputeShaderInfo& regs, const HW::ShaderReg
 
 ShaderId ShaderGetIdVS(const HW::VertexShaderInfo& regs, const ShaderVertexInputInfo& input_info,
                        bool include_bind_specialization) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	ShaderId ret;
 
@@ -1624,7 +1624,7 @@ ShaderId ShaderGetIdVS(const HW::VertexShaderInfo& regs, const ShaderVertexInput
 
 ShaderId ShaderGetIdPS(const HW::PixelShaderInfo& regs, const ShaderPixelInputInfo& input_info,
                        bool include_bind_specialization) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	ShaderId ret;
 

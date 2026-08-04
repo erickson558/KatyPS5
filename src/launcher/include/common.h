@@ -10,7 +10,7 @@
 #include <cstdio>
 // IWYU pragma: end_exports
 
-#define KYTY_QT_CLASS_NO_COPY(name)                                                                \
+#define KATY_QT_CLASS_NO_COPY(name)                                                                \
 public:                                                                                            \
 	name(const name&)                = delete; /* NOLINT(bugprone-macro-parentheses) */            \
 	name& operator=(const name&)     = delete; /* NOLINT(bugprone-macro-parentheses) */            \

@@ -52,7 +52,7 @@ namespace Libs {
 
 namespace Posix {
 
-KYTY_SYSV_ABI int* GetErrorAddr();
+KATY_SYSV_ABI int* GetErrorAddr();
 
 constexpr int POSIX_EPERM             = 1;
 constexpr int POSIX_ENOENT            = 2;

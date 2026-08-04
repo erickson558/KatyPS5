@@ -22,7 +22,7 @@ public:
 	void Update();
 	bool operator<(const QTreeWidgetItem& other) const override;
 
-	KYTY_QT_CLASS_NO_COPY(ConfigurationItem);
+	KATY_QT_CLASS_NO_COPY(ConfigurationItem);
 
 	Configuration&                     GetInfo() { return *m_info; }
 	[[nodiscard]] const Configuration& GetInfo() const { return *m_info; }

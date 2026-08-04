@@ -54,7 +54,7 @@ static uint32_t Graphics5UnknownDbApplyFinalMask(uint32_t flags, uint32_t src,
 	return flags;
 }
 
-static int KYTY_SYSV_ABI Graphics5UnknownDb(uint64_t arg0, uint64_t arg1, uint64_t arg2,
+static int KATY_SYSV_ABI Graphics5UnknownDb(uint64_t arg0, uint64_t arg1, uint64_t arg2,
                                             uint64_t arg3, uint64_t arg4, uint64_t arg5) {
 	PRINT_NAME();
 

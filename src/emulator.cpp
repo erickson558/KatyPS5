@@ -36,7 +36,7 @@ static void PrintSystemInfo() {
 	LOGF("ProcessorName = %s\n", info.ProcessorName.c_str());
 }
 
-static void KytyClose() {
+static void KatyClose() {
 	auto* rt = Common::Singleton<Loader::RuntimeLinker>::Instance();
 
 	rt->Clear();
@@ -196,7 +196,7 @@ void Run(const RunOptions& options) {
 
 	PrintSystemInfo();
 
-	int ok = atexit(KytyClose);
+	int ok = atexit(KatyClose);
 	EXIT_NOT_IMPLEMENTED(ok != 0);
 
 	Libs::LibKernel::FileSystem::Mount(options.app0_dir, "/app0");

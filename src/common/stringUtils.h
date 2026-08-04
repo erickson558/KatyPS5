@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_STRING_UTILS_H_
-#define KYTY_COMMON_STRING_UTILS_H_
+#ifndef KATY_COMMON_STRING_UTILS_H_
+#define KATY_COMMON_STRING_UTILS_H_
 
 #include "common/byteBuffer.h"
 #include "common/common.h"
@@ -341,4 +341,4 @@ inline std::string HexFromBin(const ByteBuffer& bin) {
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_STRING_UTILS_H_ */
+#endif /* KATY_COMMON_STRING_UTILS_H_ */

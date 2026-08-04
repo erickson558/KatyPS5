@@ -46,7 +46,7 @@ public:
 	explicit CommandProcessor(RenderContext& renderer): m_renderer(renderer) {}
 	~CommandProcessor() = default;
 
-	KYTY_CLASS_NO_COPY(CommandProcessor);
+	KATY_CLASS_NO_COPY(CommandProcessor);
 
 	void Reset();
 

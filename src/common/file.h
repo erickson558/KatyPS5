@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_FILE_H_
-#define KYTY_COMMON_FILE_H_
+#ifndef KATY_COMMON_FILE_H_
+#define KATY_COMMON_FILE_H_
 
 #include "common/byteBuffer.h"
 #include "common/common.h"
@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifdef CreateDirectory
 #undef CreateDirectory
 #endif
@@ -81,7 +81,7 @@ public:
 	void       Write(const void* data, uint32_t size, uint32_t* bytes_written = nullptr);
 	void       Write(const ByteBuffer& buf, uint32_t* bytes_written = nullptr);
 
-	void Printf(const char* format, ...) KYTY_FORMAT_PRINTF(2, 3);
+	void Printf(const char* format, ...) KATY_FORMAT_PRINTF(2, 3);
 
 	ByteBuffer ReadWholeBuffer();
 
@@ -110,7 +110,7 @@ public:
 	static bool MoveFile(const std::filesystem::path& src, const std::filesystem::path& dst);
 	static void RemoveReadonly(const std::filesystem::path& name);
 
-	KYTY_CLASS_NO_COPY(File);
+	KATY_CLASS_NO_COPY(File);
 
 private:
 	struct FilePrivate;
@@ -121,4 +121,4 @@ private:
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_FILE_H_ */
+#endif /* KATY_COMMON_FILE_H_ */

@@ -797,7 +797,7 @@ DescriptorCache::PreparedBindings RenderExecutor::PrepareBindings(CommandBuffer&
                                                                   const ShaderStageRuntime& runtime,
                                                                   vk::ShaderStageFlags shader_stage,
                                                                   DescriptorCache::Stage stage) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(!runtime);
 	const auto& program  = *runtime.program;
 	const auto& snapshot = *runtime.resources;
@@ -843,7 +843,7 @@ DescriptorCache::PreparedBindings RenderExecutor::PrepareBindings(CommandBuffer&
 
 void RenderExecutor::RebindBuffers(CommandBuffer&                     buffer,
                                    DescriptorCache::PreparedBindings& prepared) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(prepared.program == nullptr || prepared.snapshot == nullptr);
 	const auto& program   = *prepared.program;
 	const auto& snapshot  = *prepared.snapshot;
@@ -874,7 +874,7 @@ void RenderExecutor::RebindBuffers(CommandBuffer&                     buffer,
 
 void RenderExecutor::RebindImages(CommandBuffer&                     buffer,
                                   DescriptorCache::PreparedBindings& prepared) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(prepared.program == nullptr || prepared.snapshot == nullptr);
 	const auto& program  = *prepared.program;
 	const auto& snapshot = *prepared.snapshot;
@@ -943,7 +943,7 @@ void RenderExecutor::CommitBindings(CommandBuffer&                     buffer,
                                     vk::PipelineBindPoint              pipeline_bind_point,
                                     vk::PipelineLayout                 layout,
                                     DescriptorCache::PreparedBindings& prepared) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	EXIT_IF(prepared.program == nullptr || prepared.stage == DescriptorCache::Stage::Unknown ||
 	        prepared.committed);
 	const auto& program     = *prepared.program;

@@ -30,6 +30,14 @@ constexpr char SETTINGS_CFG_DIALOG[]               = "ConfigurationEditDialog";
 constexpr char SETTINGS_CFG_LAST_GEOMETRY[]        = "geometry";
 constexpr int  GLOBAL_SETTINGS_GAME_DIRS_MIN_WIDTH = 560;
 
+// Matches main.cpp's SelectedLanguage()/InstallTranslator() - the file/group/key names and the
+// "auto"/"en"/"es" values must stay identical on both sides, since this combo is what writes the
+// value main.cpp reads back on the next launch (a translator install has to happen before any
+// widget exists, so the effect only applies after restarting the launcher).
+constexpr char LANGUAGE_SETTINGS_FILE[]  = "Katy.ini";
+constexpr char LANGUAGE_SETTINGS_GROUP[] = "Launcher";
+constexpr char LANGUAGE_SETTINGS_KEY[]   = "language";
+
 const QStringList CONSOLE_LANGUAGE_NAMES = {
     "Japanese",
     "English (United States)",
@@ -96,6 +104,7 @@ ConfigurationEditDialog::ConfigurationEditDialog(Configuration& info, QWidget* p
       m_info(info) {
 	m_ui->setupUi(this);
 	InitGameDirectories();
+	InitLanguageSelector();
 
 	connect(m_ui->ok_button, &QPushButton::clicked, this, &ConfigurationEditDialog::save);
 	connect(m_ui->clear_button, &QPushButton::clicked, this, &ConfigurationEditDialog::clear);
@@ -222,6 +231,41 @@ void ConfigurationEditDialog::InitGameDirectories() {
 	update_game_directory_buttons();
 }
 
+void ConfigurationEditDialog::InitLanguageSelector() {
+	m_language_group = new QGroupBox(tr("Launcher language"), this);
+
+	auto* group_layout = new QVBoxLayout(m_language_group);
+	group_layout->setContentsMargins(8, 8, 8, 8);
+
+	m_language_combo = new QComboBox(m_language_group);
+	// Index order must match the "auto"/"en"/"es" values stored/read below.
+	m_language_combo->addItem(tr("Automatic (system language)"));
+	m_language_combo->addItem(QStringLiteral("English"));
+	m_language_combo->addItem(QStringLiteral("Español"));
+	m_language_combo->setToolTip(tr("Applies after restarting the launcher"));
+	group_layout->addWidget(m_language_combo);
+
+	QSettings settings(LANGUAGE_SETTINGS_FILE, QSettings::IniFormat);
+	settings.beginGroup(LANGUAGE_SETTINGS_GROUP);
+	const auto saved = settings.value(LANGUAGE_SETTINGS_KEY, QStringLiteral("auto")).toString();
+	settings.endGroup();
+	m_language_combo->setCurrentIndex(saved == QStringLiteral("en")   ? 1
+	                                   : saved == QStringLiteral("es") ? 2
+	                                                                    : 0);
+
+	connect(m_language_combo, &QComboBox::currentIndexChanged, this, [](int index) {
+		QSettings settings(LANGUAGE_SETTINGS_FILE, QSettings::IniFormat);
+		settings.beginGroup(LANGUAGE_SETTINGS_GROUP);
+		settings.setValue(LANGUAGE_SETTINGS_KEY, index == 1 ? QStringLiteral("en")
+		                                          : index == 2 ? QStringLiteral("es")
+		                                                        : QStringLiteral("auto"));
+		settings.endGroup();
+	});
+
+	m_ui->gridLayout->addWidget(m_language_group, 2, 0, 1, 1);
+	m_language_group->setVisible(false);
+}
+
 void ConfigurationEditDialog::SetTitle(const QString& str) {
 	setWindowTitle(str);
 }
@@ -236,6 +280,7 @@ void ConfigurationEditDialog::SetGameDirectories(const QStringList& dirs) {
 	}
 
 	m_game_dirs_group->setVisible(true);
+	m_language_group->setVisible(true);
 	update_game_directory_buttons();
 	adjustSize();
 }

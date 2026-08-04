@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_MAGICENUM_H_
-#define KYTY_COMMON_MAGICENUM_H_
+#ifndef KATY_COMMON_MAGICENUM_H_
+#define KATY_COMMON_MAGICENUM_H_
 
 #include "common/common.h"
 #include "common/stringUtils.h"
@@ -28,7 +28,7 @@ inline E EnumValue(const std::string& str, E default_value) {
 	return default_value;
 }
 
-#define KYTY_ENUM_RANGE(e, mx, mn)                                                                 \
+#define KATY_ENUM_RANGE(e, mx, mn)                                                                 \
 	namespace magic_enum::customize {                                                              \
 	template <>                                                                                    \
 	struct enum_range<e> {                                                                         \
@@ -39,4 +39,4 @@ inline E EnumValue(const std::string& str, E default_value) {
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_MAGICENUM_H_ */
+#endif /* KATY_COMMON_MAGICENUM_H_ */

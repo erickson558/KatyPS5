@@ -35,15 +35,15 @@ namespace Libs::Audio::AvPlayer {
 
 LIB_NAME("AvPlayer", "AvPlayer");
 
-using AvPlayerAllocate          = KYTY_SYSV_ABI void* (*)(void*, uint32_t, uint32_t);
-using AvPlayerDeallocate        = KYTY_SYSV_ABI void (*)(void*, void*);
-using AvPlayerAllocateTexture   = KYTY_SYSV_ABI void* (*)(void*, uint32_t, uint32_t);
-using AvPlayerDeallocateTexture = KYTY_SYSV_ABI void (*)(void*, void*);
-using AvPlayerOpenFile          = KYTY_SYSV_ABI int (*)(void*, const char*);
-using AvPlayerCloseFile         = KYTY_SYSV_ABI int (*)(void*);
-using AvPlayerReadOffsetFile    = KYTY_SYSV_ABI int (*)(void*, uint8_t*, uint64_t, uint32_t);
-using AvPlayerSizeFile          = KYTY_SYSV_ABI uint64_t (*)(void*);
-using AvPlayerEventCallback     = KYTY_SYSV_ABI void (*)(void*, int32_t, int32_t, void*);
+using AvPlayerAllocate          = KATY_SYSV_ABI void* (*)(void*, uint32_t, uint32_t);
+using AvPlayerDeallocate        = KATY_SYSV_ABI void (*)(void*, void*);
+using AvPlayerAllocateTexture   = KATY_SYSV_ABI void* (*)(void*, uint32_t, uint32_t);
+using AvPlayerDeallocateTexture = KATY_SYSV_ABI void (*)(void*, void*);
+using AvPlayerOpenFile          = KATY_SYSV_ABI int (*)(void*, const char*);
+using AvPlayerCloseFile         = KATY_SYSV_ABI int (*)(void*);
+using AvPlayerReadOffsetFile    = KATY_SYSV_ABI int (*)(void*, uint8_t*, uint64_t, uint32_t);
+using AvPlayerSizeFile          = KATY_SYSV_ABI uint64_t (*)(void*);
+using AvPlayerEventCallback     = KATY_SYSV_ABI void (*)(void*, int32_t, int32_t, void*);
 using Bool                      = uint8_t;
 
 constexpr int32_t AVPLAYER_EVENT_STATE_STOP       = 0x01;
@@ -1314,7 +1314,7 @@ static void log_init_common(const AvPlayerMemAllocator& mem, const AvPlayerFileR
 	     language == nullptr ? "(null)" : language);
 }
 
-AvPlayerInternal* KYTY_SYSV_ABI AvPlayerInit(AvPlayerInitData* init) {
+AvPlayerInternal* KATY_SYSV_ABI AvPlayerInit(AvPlayerInitData* init) {
 	PRINT_NAME();
 	if (init == nullptr) {
 		return nullptr;
@@ -1325,7 +1325,7 @@ AvPlayerInternal* KYTY_SYSV_ABI AvPlayerInit(AvPlayerInitData* init) {
 	return create_player(init->memory_replacement, init->file_replacement, init->event_replacement,
 	                     init->auto_start != 0, init->num_output_video_framebuffers);
 }
-int KYTY_SYSV_ABI AvPlayerInitEx(const void* init_ex, AvPlayerInternal** handle) {
+int KATY_SYSV_ABI AvPlayerInitEx(const void* init_ex, AvPlayerInternal** handle) {
 	PRINT_NAME();
 	if (init_ex == nullptr || handle == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1340,7 +1340,7 @@ int KYTY_SYSV_ABI AvPlayerInitEx(const void* init_ex, AvPlayerInternal** handle)
 	                  init->auto_start != 0, init->num_output_video_framebuffers);
 	return *handle == nullptr ? AVPLAYER_ERROR_INVALID_PARAMS : 0;
 }
-int KYTY_SYSV_ABI AvPlayerPostInit(AvPlayerInternal* h, const void* post_init) {
+int KATY_SYSV_ABI AvPlayerPostInit(AvPlayerInternal* h, const void* post_init) {
 	PRINT_NAME();
 	if (h == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1351,7 +1351,7 @@ int KYTY_SYSV_ABI AvPlayerPostInit(AvPlayerInternal* h, const void* post_init) {
 	}
 	return 0;
 }
-int KYTY_SYSV_ABI AvPlayerAddSource(AvPlayerInternal* h, const char* filename) {
+int KATY_SYSV_ABI AvPlayerAddSource(AvPlayerInternal* h, const char* filename) {
 	PRINT_NAME();
 	if (h == nullptr || filename == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1359,7 +1359,7 @@ int KYTY_SYSV_ABI AvPlayerAddSource(AvPlayerInternal* h, const char* filename) {
 	LOGF("\t filename = %s\n", filename);
 	return add_source(h, filename, AvPlayerSourceUnknown);
 }
-int KYTY_SYSV_ABI AvPlayerAddSourceEx(AvPlayerInternal* h, uint32_t uri_type,
+int KATY_SYSV_ABI AvPlayerAddSourceEx(AvPlayerInternal* h, uint32_t uri_type,
                                       const void* source_details) {
 	PRINT_NAME();
 	if (h == nullptr || uri_type != AvPlayerUriTypeSource || source_details == nullptr) {
@@ -1378,12 +1378,12 @@ int KYTY_SYSV_ABI AvPlayerAddSourceEx(AvPlayerInternal* h, uint32_t uri_type,
 	     static_cast<uint32_t>(d->source_type), filename.c_str());
 	return add_source(h, filename, d->source_type);
 }
-int KYTY_SYSV_ABI AvPlayerStreamCount(AvPlayerInternal* h) {
+int KATY_SYSV_ABI AvPlayerStreamCount(AvPlayerInternal* h) {
 	PRINT_NAME();
 	return h == nullptr ? AVPLAYER_ERROR_INVALID_PARAMS
 	                    : (h->source == nullptr ? 0 : h->source->StreamCount());
 }
-int KYTY_SYSV_ABI AvPlayerGetStreamInfo(AvPlayerInternal* h, uint32_t stream_id, void* info) {
+int KATY_SYSV_ABI AvPlayerGetStreamInfo(AvPlayerInternal* h, uint32_t stream_id, void* info) {
 	PRINT_NAME();
 	if (h == nullptr || info == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1392,7 +1392,7 @@ int KYTY_SYSV_ABI AvPlayerGetStreamInfo(AvPlayerInternal* h, uint32_t stream_id,
 	           ? AVPLAYER_ERROR_OPERATION_FAILED
 	           : h->source->Info(stream_id, static_cast<AvPlayerStreamInfo*>(info));
 }
-int KYTY_SYSV_ABI AvPlayerGetStreamInfoEx(AvPlayerInternal* h, uint32_t stream_id, void* info) {
+int KATY_SYSV_ABI AvPlayerGetStreamInfoEx(AvPlayerInternal* h, uint32_t stream_id, void* info) {
 	PRINT_NAME();
 	if (h == nullptr || info == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1401,23 +1401,23 @@ int KYTY_SYSV_ABI AvPlayerGetStreamInfoEx(AvPlayerInternal* h, uint32_t stream_i
 	           ? AVPLAYER_ERROR_OPERATION_FAILED
 	           : h->source->InfoEx(stream_id, static_cast<AvPlayerStreamInfoEx*>(info));
 }
-int KYTY_SYSV_ABI AvPlayerEnableStream(AvPlayerInternal* h, uint32_t stream_id) {
+int KATY_SYSV_ABI AvPlayerEnableStream(AvPlayerInternal* h, uint32_t stream_id) {
 	PRINT_NAME();
 	return h == nullptr || h->source == nullptr ? AVPLAYER_ERROR_INVALID_PARAMS
 	                                            : h->source->Enable(stream_id);
 }
-int KYTY_SYSV_ABI AvPlayerDisableStream(AvPlayerInternal* h, uint32_t stream_id) {
+int KATY_SYSV_ABI AvPlayerDisableStream(AvPlayerInternal* h, uint32_t stream_id) {
 	PRINT_NAME();
 	return h == nullptr || h->source == nullptr ? AVPLAYER_ERROR_INVALID_PARAMS
 	                                            : h->source->Disable(stream_id);
 }
-int KYTY_SYSV_ABI AvPlayerChangeStream(AvPlayerInternal* h, uint32_t old_stream_id,
+int KATY_SYSV_ABI AvPlayerChangeStream(AvPlayerInternal* h, uint32_t old_stream_id,
                                        uint32_t new_stream_id) {
 	PRINT_NAME();
 	return h == nullptr || h->source == nullptr ? AVPLAYER_ERROR_INVALID_PARAMS
 	                                            : h->source->Change(old_stream_id, new_stream_id);
 }
-int KYTY_SYSV_ABI AvPlayerStart(AvPlayerInternal* h) {
+int KATY_SYSV_ABI AvPlayerStart(AvPlayerInternal* h) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1428,7 +1428,7 @@ int KYTY_SYSV_ABI AvPlayerStart(AvPlayerInternal* h) {
 	}
 	return rc;
 }
-int KYTY_SYSV_ABI AvPlayerStartEx(AvPlayerInternal* h, const void* start_info_ex) {
+int KATY_SYSV_ABI AvPlayerStartEx(AvPlayerInternal* h, const void* start_info_ex) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1443,7 +1443,7 @@ int KYTY_SYSV_ABI AvPlayerStartEx(AvPlayerInternal* h, const void* start_info_ex
 	}
 	return rc;
 }
-int KYTY_SYSV_ABI AvPlayerStop(AvPlayerInternal* h) {
+int KATY_SYSV_ABI AvPlayerStop(AvPlayerInternal* h) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1452,7 +1452,7 @@ int KYTY_SYSV_ABI AvPlayerStop(AvPlayerInternal* h) {
 	emit_event(h, AVPLAYER_EVENT_STATE_STOP);
 	return rc;
 }
-int KYTY_SYSV_ABI AvPlayerPause(AvPlayerInternal* h) {
+int KATY_SYSV_ABI AvPlayerPause(AvPlayerInternal* h) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1461,7 +1461,7 @@ int KYTY_SYSV_ABI AvPlayerPause(AvPlayerInternal* h) {
 	emit_event(h, AVPLAYER_EVENT_STATE_PAUSE);
 	return 0;
 }
-int KYTY_SYSV_ABI AvPlayerResume(AvPlayerInternal* h) {
+int KATY_SYSV_ABI AvPlayerResume(AvPlayerInternal* h) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1470,7 +1470,7 @@ int KYTY_SYSV_ABI AvPlayerResume(AvPlayerInternal* h) {
 	emit_event(h, AVPLAYER_EVENT_STATE_PLAY);
 	return 0;
 }
-int KYTY_SYSV_ABI AvPlayerSetLooping(AvPlayerInternal* h, Bool loop) {
+int KATY_SYSV_ABI AvPlayerSetLooping(AvPlayerInternal* h, Bool loop) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1478,7 +1478,7 @@ int KYTY_SYSV_ABI AvPlayerSetLooping(AvPlayerInternal* h, Bool loop) {
 	h->source->SetLoop(loop != 0);
 	return 0;
 }
-int KYTY_SYSV_ABI AvPlayerSetTrickSpeed(AvPlayerInternal* h, int32_t trick_speed) {
+int KATY_SYSV_ABI AvPlayerSetTrickSpeed(AvPlayerInternal* h, int32_t trick_speed) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1491,7 +1491,7 @@ int KYTY_SYSV_ABI AvPlayerSetTrickSpeed(AvPlayerInternal* h, int32_t trick_speed
 	h->source->SetTrick(trick_speed);
 	return trick_speed == AVPLAYER_TRICK_SPEED_NORMAL ? 0 : AVPLAYER_ERROR_NOT_SUPPORTED;
 }
-int KYTY_SYSV_ABI AvPlayerSetAvSyncMode(AvPlayerInternal* h, uint32_t sync_mode) {
+int KATY_SYSV_ABI AvPlayerSetAvSyncMode(AvPlayerInternal* h, uint32_t sync_mode) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1502,7 +1502,7 @@ int KYTY_SYSV_ABI AvPlayerSetAvSyncMode(AvPlayerInternal* h, uint32_t sync_mode)
 	h->source->SetSync(sync_mode);
 	return 0;
 }
-int KYTY_SYSV_ABI AvPlayerSetAvailableBandwidth(AvPlayerInternal* h, uint32_t start_bandwidth,
+int KATY_SYSV_ABI AvPlayerSetAvailableBandwidth(AvPlayerInternal* h, uint32_t start_bandwidth,
                                                 uint32_t minimum_bandwidth,
                                                 uint32_t maximum_bandwidth) {
 	PRINT_NAME();
@@ -1515,7 +1515,7 @@ int KYTY_SYSV_ABI AvPlayerSetAvailableBandwidth(AvPlayerInternal* h, uint32_t st
 	h->maximum_bandwidth = maximum_bandwidth;
 	return h->source == nullptr ? 0 : AVPLAYER_ERROR_OPERATION_FAILED;
 }
-Bool KYTY_SYSV_ABI AvPlayerGetVideoData(AvPlayerInternal* h, AvPlayerFrameInfo* video_info) {
+Bool KATY_SYSV_ABI AvPlayerGetVideoData(AvPlayerInternal* h, AvPlayerFrameInfo* video_info) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr || video_info == nullptr) {
 		return 0;
@@ -1534,7 +1534,7 @@ Bool KYTY_SYSV_ABI AvPlayerGetVideoData(AvPlayerInternal* h, AvPlayerFrameInfo* 
 	std::memcpy(video_info->details.video.language_code, ex.details.video.language_code, 4);
 	return 1;
 }
-Bool KYTY_SYSV_ABI AvPlayerGetVideoDataEx(AvPlayerInternal* h, AvPlayerFrameInfoEx* video_info) {
+Bool KATY_SYSV_ABI AvPlayerGetVideoDataEx(AvPlayerInternal* h, AvPlayerFrameInfoEx* video_info) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr || video_info == nullptr) {
 		return 0;
@@ -1543,7 +1543,7 @@ Bool KYTY_SYSV_ABI AvPlayerGetVideoDataEx(AvPlayerInternal* h, AvPlayerFrameInfo
 	pump_warnings(h);
 	return ok;
 }
-Bool KYTY_SYSV_ABI AvPlayerGetAudioData(AvPlayerInternal* h, AvPlayerFrameInfo* audio_info) {
+Bool KATY_SYSV_ABI AvPlayerGetAudioData(AvPlayerInternal* h, AvPlayerFrameInfo* audio_info) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr || audio_info == nullptr) {
 		return 0;
@@ -1552,15 +1552,15 @@ Bool KYTY_SYSV_ABI AvPlayerGetAudioData(AvPlayerInternal* h, AvPlayerFrameInfo* 
 	pump_warnings(h);
 	return ok;
 }
-Bool KYTY_SYSV_ABI AvPlayerIsActive(AvPlayerInternal* h) {
+Bool KATY_SYSV_ABI AvPlayerIsActive(AvPlayerInternal* h) {
 	PRINT_NAME();
 	return h != nullptr && h->source != nullptr && h->source->Active() ? 1 : 0;
 }
-uint64_t KYTY_SYSV_ABI AvPlayerCurrentTime(AvPlayerInternal* h) {
+uint64_t KATY_SYSV_ABI AvPlayerCurrentTime(AvPlayerInternal* h) {
 	PRINT_NAME();
 	return h == nullptr || h->source == nullptr ? 0 : h->source->CurrentTime();
 }
-int KYTY_SYSV_ABI AvPlayerJumpToTime(AvPlayerInternal* h, uint64_t time_ms) {
+int KATY_SYSV_ABI AvPlayerJumpToTime(AvPlayerInternal* h, uint64_t time_ms) {
 	PRINT_NAME();
 	if (h == nullptr || h->source == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1572,7 +1572,7 @@ int KYTY_SYSV_ABI AvPlayerJumpToTime(AvPlayerInternal* h, uint64_t time_ms) {
 	}
 	return rc;
 }
-int KYTY_SYSV_ABI AvPlayerClose(AvPlayerInternal* h) {
+int KATY_SYSV_ABI AvPlayerClose(AvPlayerInternal* h) {
 	PRINT_NAME();
 	if (h == nullptr) {
 		return AVPLAYER_ERROR_INVALID_PARAMS;
@@ -1581,7 +1581,7 @@ int KYTY_SYSV_ABI AvPlayerClose(AvPlayerInternal* h) {
 	delete h;
 	return 0;
 }
-int KYTY_SYSV_ABI AvPlayerSetLogCallback(void* callback, void* user_data) {
+int KATY_SYSV_ABI AvPlayerSetLogCallback(void* callback, void* user_data) {
 	PRINT_NAME();
 	LOGF("\t callback  = 0x%016" PRIx64 "\n\t user_data = 0x%016" PRIx64 "\n",
 	     reinterpret_cast<uint64_t>(callback), reinterpret_cast<uint64_t>(user_data));

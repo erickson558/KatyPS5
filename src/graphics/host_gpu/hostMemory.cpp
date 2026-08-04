@@ -3,7 +3,7 @@
 #include <cinttypes>
 #include <cstdio>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -15,7 +15,7 @@
 namespace Libs::Graphics {
 namespace {
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 bool IsAccessible(DWORD protect, HostMemoryAccess access) {
 	constexpr DWORD blocked  = PAGE_NOACCESS | PAGE_GUARD;
 	constexpr DWORD readable = PAGE_READONLY | PAGE_READWRITE | PAGE_WRITECOPY | PAGE_EXECUTE_READ |
@@ -38,7 +38,7 @@ bool HostMemoryQueryRange(uint64_t addr, uint64_t requested_size, HostMemoryAcce
 
 	const auto end     = UINT64_MAX - addr < requested_size ? UINT64_MAX : addr + requested_size;
 	uint64_t   current = addr;
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	while (current < end) {
 		MEMORY_BASIC_INFORMATION region {};
 		if (::VirtualQuery(reinterpret_cast<const void*>(static_cast<uintptr_t>(current)), &region,
@@ -56,7 +56,7 @@ bool HostMemoryQueryRange(uint64_t addr, uint64_t requested_size, HostMemoryAcce
 		}
 		current = finish < end ? finish : end;
 	}
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 	auto* maps = std::fopen("/proc/self/maps", "r");
 	if (maps == nullptr) {
 		return false;

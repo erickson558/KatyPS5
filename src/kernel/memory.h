@@ -13,7 +13,7 @@ enum class PageFaultAccess;
 
 namespace Libs::LibKernel::Memory {
 
-KYTY_SUBSYSTEM_DEFINE(Memory);
+KATY_SUBSYSTEM_DEFINE(Memory);
 
 using callback_func_t = void (*)(uintptr_t addr, size_t size);
 
@@ -109,58 +109,58 @@ void                   InvalidateMemory(uint64_t vaddr, uint64_t size);
 void                   InstallGpuResources(Graphics::GpuResourceManager* resources) noexcept;
 [[nodiscard]] bool HandleGpuFault(Graphics::PageFaultAccess access, uint64_t fault_vaddr) noexcept;
 
-int KYTY_SYSV_ABI KernelMapNamedFlexibleMemory(void** addr_in_out, size_t len, int prot, int flags,
+int KATY_SYSV_ABI KernelMapNamedFlexibleMemory(void** addr_in_out, size_t len, int prot, int flags,
                                                const char* name);
-int KYTY_SYSV_ABI KernelMapFlexibleMemory(void** addr_in_out, size_t len, int prot, int flags);
-int KYTY_SYSV_ABI KernelSetVirtualRangeName(const void* addr, uint64_t len, const char* name);
-int KYTY_SYSV_ABI KernelMunmap(uint64_t vaddr, size_t len);
-size_t KYTY_SYSV_ABI KernelGetDirectMemorySize();
-int KYTY_SYSV_ABI    KernelAvailableDirectMemorySize(int64_t search_start, int64_t search_end,
+int KATY_SYSV_ABI KernelMapFlexibleMemory(void** addr_in_out, size_t len, int prot, int flags);
+int KATY_SYSV_ABI KernelSetVirtualRangeName(const void* addr, uint64_t len, const char* name);
+int KATY_SYSV_ABI KernelMunmap(uint64_t vaddr, size_t len);
+size_t KATY_SYSV_ABI KernelGetDirectMemorySize();
+int KATY_SYSV_ABI    KernelAvailableDirectMemorySize(int64_t search_start, int64_t search_end,
                                                      size_t alignment, int64_t* phys_addr_out,
                                                      size_t* size_out);
-int KYTY_SYSV_ABI    KernelGetPageTableStats(int* cpu_total, int* cpu_available, int* gpu_total,
+int KATY_SYSV_ABI    KernelGetPageTableStats(int* cpu_total, int* cpu_available, int* gpu_total,
                                              int* gpu_available);
-int KYTY_SYSV_ABI KernelAllocateDirectMemory(int64_t search_start, int64_t search_end, size_t len,
+int KATY_SYSV_ABI KernelAllocateDirectMemory(int64_t search_start, int64_t search_end, size_t len,
                                              size_t alignment, int memory_type,
                                              int64_t* phys_addr_out);
-int KYTY_SYSV_ABI KernelAllocateMainDirectMemory(size_t len, size_t alignment, int memory_type,
+int KATY_SYSV_ABI KernelAllocateMainDirectMemory(size_t len, size_t alignment, int memory_type,
                                                  int64_t* phys_addr_out);
-int KYTY_SYSV_ABI KernelCheckedReleaseDirectMemory(int64_t start, size_t len);
-int KYTY_SYSV_ABI KernelReleaseDirectMemory(int64_t start, size_t len);
-int KYTY_SYSV_ABI KernelMapDirectMemory(void** addr, size_t len, int prot, int flags,
+int KATY_SYSV_ABI KernelCheckedReleaseDirectMemory(int64_t start, size_t len);
+int KATY_SYSV_ABI KernelReleaseDirectMemory(int64_t start, size_t len);
+int KATY_SYSV_ABI KernelMapDirectMemory(void** addr, size_t len, int prot, int flags,
                                         int64_t direct_memory_start, size_t alignment);
-int KYTY_SYSV_ABI KernelMapDirectMemory2(void** addr, size_t len, int type, int prot, int flags,
+int KATY_SYSV_ABI KernelMapDirectMemory2(void** addr, size_t len, int type, int prot, int flags,
                                          int64_t direct_memory_start, size_t alignment);
-int KYTY_SYSV_ABI KernelMapNamedDirectMemory(void** addr, size_t len, int prot, int flags,
+int KATY_SYSV_ABI KernelMapNamedDirectMemory(void** addr, size_t len, int prot, int flags,
                                              int64_t direct_memory_start, size_t alignment,
                                              const char* name);
-int KYTY_SYSV_ABI KernelSetPrtAperture(int index, void* addr, size_t len);
-int KYTY_SYSV_ABI KernelGetPrtAperture(int index, void** addr, size_t* len);
-int KYTY_SYSV_ABI KernelIsAddressSanitizerEnabled();
-int KYTY_SYSV_ABI KernelQueryMemoryProtection(void* addr, void** start, void** end, int* prot);
-int KYTY_SYSV_ABI KernelDirectMemoryQuery(int64_t offset, int flags, void* info, size_t info_size);
-int KYTY_SYSV_ABI KernelVirtualQuery(const void* addr, int flags, VirtualQueryInfo* info,
+int KATY_SYSV_ABI KernelSetPrtAperture(int index, void* addr, size_t len);
+int KATY_SYSV_ABI KernelGetPrtAperture(int index, void** addr, size_t* len);
+int KATY_SYSV_ABI KernelIsAddressSanitizerEnabled();
+int KATY_SYSV_ABI KernelQueryMemoryProtection(void* addr, void** start, void** end, int* prot);
+int KATY_SYSV_ABI KernelDirectMemoryQuery(int64_t offset, int flags, void* info, size_t info_size);
+int KATY_SYSV_ABI KernelVirtualQuery(const void* addr, int flags, VirtualQueryInfo* info,
                                      uint64_t info_size);
-int KYTY_SYSV_ABI KernelIsStack(void* addr, void** start, void** end);
-int KYTY_SYSV_ABI KernelReserveVirtualRange(void** addr, size_t len, int flags, size_t alignment);
+int KATY_SYSV_ABI KernelIsStack(void* addr, void** start, void** end);
+int KATY_SYSV_ABI KernelReserveVirtualRange(void** addr, size_t len, int flags, size_t alignment);
 bool              KernelHandleReservedRangeAccessViolation(uint64_t vaddr);
-int KYTY_SYSV_ABI KernelAvailableFlexibleMemorySize(size_t* size);
-int KYTY_SYSV_ABI KernelConfiguredFlexibleMemorySize(size_t* size);
-int KYTY_SYSV_ABI KernelMprotect(const void* addr, size_t len, int prot);
-int KYTY_SYSV_ABI KernelMtypeprotect(const void* addr, size_t len, int type, int prot);
-int KYTY_SYSV_ABI KernelBatchMap(KernelBatchMapEntry* entries, int num_entries,
+int KATY_SYSV_ABI KernelAvailableFlexibleMemorySize(size_t* size);
+int KATY_SYSV_ABI KernelConfiguredFlexibleMemorySize(size_t* size);
+int KATY_SYSV_ABI KernelMprotect(const void* addr, size_t len, int prot);
+int KATY_SYSV_ABI KernelMtypeprotect(const void* addr, size_t len, int type, int prot);
+int KATY_SYSV_ABI KernelBatchMap(KernelBatchMapEntry* entries, int num_entries,
                                  int* num_entries_out);
-int KYTY_SYSV_ABI KernelBatchMap2(KernelBatchMapEntry* entries, int num_entries,
+int KATY_SYSV_ABI KernelBatchMap2(KernelBatchMapEntry* entries, int num_entries,
                                   int* num_entries_out, int flags);
-int KYTY_SYSV_ABI KernelMemoryPoolExpand(int64_t search_start, int64_t search_end, size_t len,
+int KATY_SYSV_ABI KernelMemoryPoolExpand(int64_t search_start, int64_t search_end, size_t len,
                                          size_t alignment, int64_t* phys_addr_out);
-int KYTY_SYSV_ABI KernelMemoryPoolReserve(void* addr_in, size_t len, size_t alignment, int flags,
+int KATY_SYSV_ABI KernelMemoryPoolReserve(void* addr_in, size_t len, size_t alignment, int flags,
                                           void** addr_out);
-int KYTY_SYSV_ABI KernelMemoryPoolCommit(void* addr, size_t len, int type, int prot, int flags);
-int KYTY_SYSV_ABI KernelMemoryPoolDecommit(void* addr, size_t len, int flags);
-int KYTY_SYSV_ABI KernelMemoryPoolBatch(const KernelMemoryPoolBatchEntry* entries, int num_entries,
+int KATY_SYSV_ABI KernelMemoryPoolCommit(void* addr, size_t len, int type, int prot, int flags);
+int KATY_SYSV_ABI KernelMemoryPoolDecommit(void* addr, size_t len, int flags);
+int KATY_SYSV_ABI KernelMemoryPoolBatch(const KernelMemoryPoolBatchEntry* entries, int num_entries,
                                         int* num_entries_out, int flags);
-int KYTY_SYSV_ABI KernelMemoryPoolGetBlockStats(KernelMemoryPoolBlockStats* output,
+int KATY_SYSV_ABI KernelMemoryPoolGetBlockStats(KernelMemoryPoolBlockStats* output,
                                                 size_t                      output_size);
 
 uint64_t AllocateProgramMemory(uint64_t search_addr, uint64_t size,
@@ -177,7 +177,7 @@ bool     ProtectGuestMemory(uint64_t vaddr, uint64_t size, Common::VirtualMemory
 bool ProtectGuestHostMemory(uint64_t vaddr, uint64_t size, Common::VirtualMemory::Mode mode);
 bool FreeGuestMemory(uint64_t vaddr, uint64_t size);
 
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 void     TestFailNextPhysicalMemoryUnmap();
 void     TestFailPhysicalMemoryUnmapAfter(uint32_t successful_unmaps);
 void     TestFailGuestBackingStoreUnmapAfter(uint32_t successful_unmaps);

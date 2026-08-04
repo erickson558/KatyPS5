@@ -78,7 +78,7 @@ public:
 		EXIT_NOT_IMPLEMENTED(!Common::Thread::IsMainThread());
 	}
 	~DescriptorCache();
-	KYTY_CLASS_NO_COPY(DescriptorCache);
+	KATY_CLASS_NO_COPY(DescriptorCache);
 
 	vk::DescriptorSetLayout GetDescriptorSetLayout(Stage                                stage,
 	                                               const ShaderRecompiler::IR::Program& program);

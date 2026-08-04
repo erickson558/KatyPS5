@@ -4,11 +4,11 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.0)
 	set(CMAKE_POLICY_VERSION_MINIMUM 3.5 CACHE STRING "Minimum policy version for bundled dependencies")
 endif()
 
-project(Kyty)
+project(Katy)
 
-set(KYTY_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(KYTY_TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
-set(KYTY_THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty")
+set(KATY_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(KATY_TESTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+set(KATY_THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty")
 
 if(CMAKE_SYSTEM_NAME MATCHES ".*Linux")
 	set(LINUX TRUE)
@@ -23,32 +23,32 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
-include("${KYTY_SOURCE_DIR}/utils.cmake")
+include("${KATY_SOURCE_DIR}/utils.cmake")
 include(CTest)
 
-option(KYTY_ENABLE_CLANG_TIDY "Run clang-tidy checks during builds" OFF)
+option(KATY_ENABLE_CLANG_TIDY "Run clang-tidy checks during builds" OFF)
 
-set(KYTY_BUILD_ORIGIN "Source" CACHE STRING "Build provenance shown in diagnostics")
-set_property(CACHE KYTY_BUILD_ORIGIN PROPERTY STRINGS Source Official Fork)
-if(NOT KYTY_BUILD_ORIGIN STREQUAL "Source" AND NOT KYTY_BUILD_ORIGIN STREQUAL "Official" AND
-   NOT KYTY_BUILD_ORIGIN STREQUAL "Fork")
-	message(FATAL_ERROR "KYTY_BUILD_ORIGIN must be Source, Official, or Fork")
+set(KATY_BUILD_ORIGIN "Source" CACHE STRING "Build provenance shown in diagnostics")
+set_property(CACHE KATY_BUILD_ORIGIN PROPERTY STRINGS Source Official Fork)
+if(NOT KATY_BUILD_ORIGIN STREQUAL "Source" AND NOT KATY_BUILD_ORIGIN STREQUAL "Official" AND
+   NOT KATY_BUILD_ORIGIN STREQUAL "Fork")
+	message(FATAL_ERROR "KATY_BUILD_ORIGIN must be Source, Official, or Fork")
 endif()
 
-set(KYTY_RELEASE_TAG "" CACHE STRING "Release tag embedded in official builds")
-set(KYTY_BUILD_REPOSITORY "" CACHE STRING "GitHub repository embedded in fork builds")
-set(KYTY_OFFICIAL_BUILD OFF)
-set(KYTY_FORK_BUILD OFF)
-if(KYTY_BUILD_ORIGIN STREQUAL "Official")
-	if(KYTY_RELEASE_TAG STREQUAL "")
-		message(FATAL_ERROR "Official builds require KYTY_RELEASE_TAG")
+set(KATY_RELEASE_TAG "" CACHE STRING "Release tag embedded in official builds")
+set(KATY_BUILD_REPOSITORY "" CACHE STRING "GitHub repository embedded in fork builds")
+set(KATY_OFFICIAL_BUILD OFF)
+set(KATY_FORK_BUILD OFF)
+if(KATY_BUILD_ORIGIN STREQUAL "Official")
+	if(KATY_RELEASE_TAG STREQUAL "")
+		message(FATAL_ERROR "Official builds require KATY_RELEASE_TAG")
 	endif()
-	set(KYTY_OFFICIAL_BUILD ON)
-elseif(KYTY_BUILD_ORIGIN STREQUAL "Fork")
-	if(KYTY_BUILD_REPOSITORY STREQUAL "")
-		message(FATAL_ERROR "Fork builds require KYTY_BUILD_REPOSITORY")
+	set(KATY_OFFICIAL_BUILD ON)
+elseif(KATY_BUILD_ORIGIN STREQUAL "Fork")
+	if(KATY_BUILD_REPOSITORY STREQUAL "")
+		message(FATAL_ERROR "Fork builds require KATY_BUILD_REPOSITORY")
 	endif()
-	set(KYTY_FORK_BUILD ON)
+	set(KATY_FORK_BUILD ON)
 endif()
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -61,162 +61,162 @@ endif()
 
 test_big_endian(BIG_ENDIAN)
 if(BIG_ENDIAN)
-	set(KYTY_ENDIAN KYTY_ENDIAN_BIG)
+	set(KATY_ENDIAN KATY_ENDIAN_BIG)
 else()
-	set(KYTY_ENDIAN KYTY_ENDIAN_LITTLE)
+	set(KATY_ENDIAN KATY_ENDIAN_LITTLE)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
-	set(KYTY_BUILD KYTY_BUILD_DEBUG)
+	set(KATY_BUILD KATY_BUILD_DEBUG)
 else()
-	set(KYTY_BUILD KYTY_BUILD_RELEASE)
+	set(KATY_BUILD KATY_BUILD_RELEASE)
 endif()
 
 if(LINUX OR APPLE)
 	# macOS rides the POSIX/Linux code paths until it gets a dedicated platform
-	set(KYTY_PLATFORM KYTY_PLATFORM_LINUX)
+	set(KATY_PLATFORM KATY_PLATFORM_LINUX)
 else()
-	set(KYTY_PLATFORM KYTY_PLATFORM_WINDOWS)
+	set(KATY_PLATFORM KATY_PLATFORM_WINDOWS)
 endif()
 
 set(CLANG FALSE)
 set(GCC FALSE)
-set(KYTY_CLANG_CL FALSE)
-get_filename_component(KYTY_CXX_COMPILER_NAME "${CMAKE_CXX_COMPILER}" NAME_WE)
-string(TOLOWER "${KYTY_CXX_COMPILER_NAME}" KYTY_CXX_COMPILER_NAME)
+set(KATY_CLANG_CL FALSE)
+get_filename_component(KATY_CXX_COMPILER_NAME "${CMAKE_CXX_COMPILER}" NAME_WE)
+string(TOLOWER "${KATY_CXX_COMPILER_NAME}" KATY_CXX_COMPILER_NAME)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "^(Apple)?Clang$")
 	set(CLANG TRUE)
-	set(KYTY_COMPILER CLANG)
-	if(WIN32 AND KYTY_CXX_COMPILER_NAME STREQUAL "clang-cl")
-		set(KYTY_CLANG_CL TRUE)
-		set(KYTY_LINKER LLD_LINK)
+	set(KATY_COMPILER CLANG)
+	if(WIN32 AND KATY_CXX_COMPILER_NAME STREQUAL "clang-cl")
+		set(KATY_CLANG_CL TRUE)
+		set(KATY_LINKER LLD_LINK)
 	elseif(APPLE)
-		set(KYTY_LINKER LD64) # Apple's default linker; lld flags don't apply
+		set(KATY_LINKER LD64) # Apple's default linker; lld flags don't apply
 	else()
-		set(KYTY_LINKER LLD)
+		set(KATY_LINKER LLD)
 	endif()
 	if ((CMAKE_AR MATCHES "llvm") AND (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 12.0.0) AND (CMAKE_CXX_COMPILER MATCHES "winlibs"))
 		string(REPLACE "llvm-ar.exe" "ar.exe" CMAKE_AR ${CMAKE_AR}) # llvm-ar.exe 11.0.0 from winlibs is broken
 	endif()
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	set(GCC TRUE)
-	set(KYTY_COMPILER GCC)
-	set(KYTY_LINKER LD)
+	set(KATY_COMPILER GCC)
+	set(KATY_LINKER LD)
 else()
 	message(FATAL_ERROR "only Clang and GCC are supported; found ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
-set(KYTY_PROJECT_NAME "Emulator" CACHE STRING "Project name suffix")
+set(KATY_PROJECT_NAME "Emulator" CACHE STRING "Project name suffix")
 
-string(TOLOWER ${KYTY_COMPILER} KYTY_COMPILER_ID)
-string(TOLOWER ${KYTY_LINKER} KYTY_LINKER_ID)
+string(TOLOWER ${KATY_COMPILER} KATY_COMPILER_ID)
+string(TOLOWER ${KATY_LINKER} KATY_LINKER_ID)
 
-if (CLANG AND (KYTY_LINKER STREQUAL LLD))
-	set(KYTY_LD_OPTIONS "-fuse-ld=lld")
+if (CLANG AND (KATY_LINKER STREQUAL LLD))
+	set(KATY_LD_OPTIONS "-fuse-ld=lld")
 endif()
 
-if (KYTY_LINKER STREQUAL LD AND NOT LINUX)
-	set(KYTY_LD_OPTIONS "-Wl,--image-base=0x100000000000")
+if (KATY_LINKER STREQUAL LD AND NOT LINUX)
+	set(KATY_LD_OPTIONS "-Wl,--image-base=0x100000000000")
 endif()
 
-project(Kyty${KYTY_PROJECT_NAME}${CMAKE_BUILD_TYPE}${KYTY_COMPILER} VERSION 0.2.2)
+project(Katy${KATY_PROJECT_NAME}${CMAKE_BUILD_TYPE}${KATY_COMPILER} VERSION 0.3.0)
 
 include_directories(
-	${KYTY_THIRD_PARTY_DIR}/gtest/include
-	${KYTY_THIRD_PARTY_DIR}/gtest
-	${KYTY_THIRD_PARTY_DIR}/fmt/include
-	${KYTY_THIRD_PARTY_DIR}/magic_enum/include/magic_enum
+	${KATY_THIRD_PARTY_DIR}/gtest/include
+	${KATY_THIRD_PARTY_DIR}/gtest
+	${KATY_THIRD_PARTY_DIR}/fmt/include
+	${KATY_THIRD_PARTY_DIR}/magic_enum/include/magic_enum
 	${PROJECT_BINARY_DIR}
-	${KYTY_SOURCE_DIR}
+	${KATY_SOURCE_DIR}
 )
 
-set(KYTY_VERSION "${PROJECT_VERSION}")
+set(KATY_VERSION "${PROJECT_VERSION}")
 
 configure_file(
-  ${KYTY_SOURCE_DIR}/cmake_config.h.in
+  ${KATY_SOURCE_DIR}/cmake_config.h.in
   ${PROJECT_BINARY_DIR}/cmake_config.h
   )
 
 find_package(Git)
 
-add_custom_target(KytyGitVersion
+add_custom_target(KatyGitVersion
 	COMMAND ${CMAKE_COMMAND}
-		-D INPUT_FILE=${KYTY_SOURCE_DIR}/kytyGitVersion.h.in
-		-D OUTPUT_FILE=${PROJECT_BINARY_DIR}/kytyGitVersion.h
+		-D INPUT_FILE=${KATY_SOURCE_DIR}/katyGitVersion.h.in
+		-D OUTPUT_FILE=${PROJECT_BINARY_DIR}/katyGitVersion.h
 		-D GIT_EXECUTABLE=${GIT_EXECUTABLE}
 		-D GIT_WORKING_DIRECTORY=${CMAKE_CURRENT_SOURCE_DIR}
-		-P ${KYTY_SOURCE_DIR}/generate_version.cmake
-	BYPRODUCTS ${PROJECT_BINARY_DIR}/kytyGitVersion.h
-	COMMENT "Generate kytyGitVersion.h"
+		-P ${KATY_SOURCE_DIR}/generate_version.cmake
+	BYPRODUCTS ${PROJECT_BINARY_DIR}/katyGitVersion.h
+	COMMENT "Generate katyGitVersion.h"
 )
 
-add_library(kyty_git_version INTERFACE)
-add_dependencies(kyty_git_version KytyGitVersion)
+add_library(katy_git_version INTERFACE)
+add_dependencies(katy_git_version KatyGitVersion)
 
 if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 12.0.0)
-	list(APPEND KYTY_IWYU
-		kyty_emulator
+	list(APPEND KATY_IWYU
+		katy_emulator
 		common
 		#launcher
 	)
-	list(APPEND KYTY_CLANG_TIDY
-		kyty_emulator
+	list(APPEND KATY_CLANG_TIDY
+		katy_emulator
 		#common
 		launcher
 	)
 endif()
 
-option(KYTY_BUILD_LAUNCHER "Build Qt launcher" ON)
+option(KATY_BUILD_LAUNCHER "Build Qt launcher" ON)
 
 config_compiler_and_linker()
 
-add_subdirectory("${KYTY_THIRD_PARTY_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/3rdparty")
-add_subdirectory("${KYTY_SOURCE_DIR}/common" "${CMAKE_CURRENT_BINARY_DIR}/common")
+add_subdirectory("${KATY_THIRD_PARTY_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/3rdparty")
+add_subdirectory("${KATY_SOURCE_DIR}/common" "${CMAKE_CURRENT_BINARY_DIR}/common")
 
-file(GLOB kyty_emulator_src CONFIGURE_DEPENDS
-	"${KYTY_SOURCE_DIR}/libs/*.cpp"
-	"${KYTY_SOURCE_DIR}/libs/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/guest_gpu/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/guest_gpu/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/guest_gpu/command_processor/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/guest_gpu/command_processor/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/cache/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/cache/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/image/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/image/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/pipeline/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/pipeline/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/shader/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/cfg/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/cfg/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/decompiler/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/decompiler/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/emitter/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/emitter/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/presentation/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/presentation/*.h"
-	"${KYTY_SOURCE_DIR}/graphics/presentation/window/*.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/presentation/window/*.h"
-	"${KYTY_SOURCE_DIR}/kernel/*.cpp"
-	"${KYTY_SOURCE_DIR}/kernel/*.h"
-	"${KYTY_SOURCE_DIR}/loader/*.cpp"
-	"${KYTY_SOURCE_DIR}/loader/*.h"
+file(GLOB katy_emulator_src CONFIGURE_DEPENDS
+	"${KATY_SOURCE_DIR}/libs/*.cpp"
+	"${KATY_SOURCE_DIR}/libs/*.h"
+	"${KATY_SOURCE_DIR}/graphics/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/*.h"
+	"${KATY_SOURCE_DIR}/graphics/guest_gpu/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/guest_gpu/*.h"
+	"${KATY_SOURCE_DIR}/graphics/guest_gpu/command_processor/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/guest_gpu/command_processor/*.h"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/*.h"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/*.h"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/cache/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/cache/*.h"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/image/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/image/*.h"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/pipeline/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/pipeline/*.h"
+	"${KATY_SOURCE_DIR}/graphics/shader/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/*.h"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/*.h"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/cfg/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/cfg/*.h"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/decompiler/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/decompiler/*.h"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/emitter/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/emitter/*.h"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/*.h"
+	"${KATY_SOURCE_DIR}/graphics/presentation/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/presentation/*.h"
+	"${KATY_SOURCE_DIR}/graphics/presentation/window/*.cpp"
+	"${KATY_SOURCE_DIR}/graphics/presentation/window/*.h"
+	"${KATY_SOURCE_DIR}/kernel/*.cpp"
+	"${KATY_SOURCE_DIR}/kernel/*.h"
+	"${KATY_SOURCE_DIR}/loader/*.cpp"
+	"${KATY_SOURCE_DIR}/loader/*.h"
 )
 
-find_program(KYTY_GLSLANG_VALIDATOR glslangValidator REQUIRED)
-set(gpu_tiler_shader_dir "${KYTY_SOURCE_DIR}/graphics/host_gpu/shaders")
+find_program(KATY_GLSLANG_VALIDATOR glslangValidator REQUIRED)
+set(gpu_tiler_shader_dir "${KATY_SOURCE_DIR}/graphics/host_gpu/shaders")
 set(gpu_tiler_generated_dir "${PROJECT_BINARY_DIR}/gpu_tiler_shaders")
 set(gpu_tiler_shader_names
 	standard256
@@ -241,16 +241,16 @@ foreach(shader_name IN LISTS gpu_tiler_shader_names)
 	add_custom_command(
 		OUTPUT "${shader_header}"
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${gpu_tiler_generated_dir}"
-		COMMAND "${KYTY_GLSLANG_VALIDATOR}" -V --target-env vulkan1.0 -Os
+		COMMAND "${KATY_GLSLANG_VALIDATOR}" -V --target-env vulkan1.0 -Os
 		        "-I${gpu_tiler_shader_dir}" -o "${shader_spv}" "${shader_source}"
 		COMMAND ${CMAKE_COMMAND} -DINPUT=${shader_spv} -DOUTPUT=${shader_header}
-		        -DSYMBOL=${shader_symbol} -P "${KYTY_SOURCE_DIR}/embed_spirv.cmake"
+		        -DSYMBOL=${shader_symbol} -P "${KATY_SOURCE_DIR}/embed_spirv.cmake"
 		DEPENDS "${shader_source}" ${gpu_tiler_shader_includes}
 		VERBATIM
 	)
 	list(APPEND gpu_tiler_shader_headers "${shader_header}")
 endforeach()
-list(APPEND kyty_emulator_src ${gpu_tiler_shader_headers})
+list(APPEND katy_emulator_src ${gpu_tiler_shader_headers})
 
 set(gpu_blit_generated_dir "${PROJECT_BINARY_DIR}/gpu_blit_shaders")
 set(gpu_blit_shader_sources
@@ -265,81 +265,81 @@ foreach(shader_source IN LISTS gpu_blit_shader_sources)
 	add_custom_command(
 		OUTPUT "${shader_header}"
 		COMMAND ${CMAKE_COMMAND} -E make_directory "${gpu_blit_generated_dir}"
-		COMMAND "${KYTY_GLSLANG_VALIDATOR}" -V --target-env vulkan1.0 -Os
+		COMMAND "${KATY_GLSLANG_VALIDATOR}" -V --target-env vulkan1.0 -Os
 		        "-I${gpu_tiler_shader_dir}" -o "${shader_spv}" "${shader_source}"
 		COMMAND ${CMAKE_COMMAND} -DINPUT=${shader_spv} -DOUTPUT=${shader_header}
-		        -DSYMBOL=${shader_symbol} -P "${KYTY_SOURCE_DIR}/embed_spirv.cmake"
+		        -DSYMBOL=${shader_symbol} -P "${KATY_SOURCE_DIR}/embed_spirv.cmake"
 		DEPENDS "${shader_source}"
 		VERBATIM
 	)
 	list(APPEND gpu_blit_shader_headers "${shader_header}")
 endforeach()
-list(APPEND kyty_emulator_src ${gpu_blit_shader_headers})
+list(APPEND katy_emulator_src ${gpu_blit_shader_headers})
 
-list(APPEND kyty_emulator_src
-	"${KYTY_SOURCE_DIR}/emulator.h"
-	"${KYTY_SOURCE_DIR}/emulator.cpp"
+list(APPEND katy_emulator_src
+	"${KATY_SOURCE_DIR}/emulator.h"
+	"${KATY_SOURCE_DIR}/emulator.cpp"
 )
-list(REMOVE_DUPLICATES kyty_emulator_src)
+list(REMOVE_DUPLICATES katy_emulator_src)
 
-if (KYTY_CLANG_CL)
-	set_source_files_properties(${kyty_emulator_src} PROPERTIES COMPILE_FLAGS "-Wno-pragma-pack -Wno-deprecated-declarations -D_TIMESPEC_DEFINED")
+if (KATY_CLANG_CL)
+	set_source_files_properties(${katy_emulator_src} PROPERTIES COMPILE_FLAGS "-Wno-pragma-pack -Wno-deprecated-declarations -D_TIMESPEC_DEFINED")
 endif()
 
-set(kyty_emulator_link_libraries common Vulkan::Headers spirv-tools-opt spirv-tools SDL2-static xxhash FFmpeg::ffmpeg fmt::fmt nlohmann_json::nlohmann_json LibAtrac9 kyty_git_version)
+set(katy_emulator_link_libraries common Vulkan::Headers spirv-tools-opt spirv-tools SDL2-static xxhash FFmpeg::ffmpeg fmt::fmt nlohmann_json::nlohmann_json LibAtrac9 katy_git_version)
 
 # Linux system libraries required by the static FFmpeg archive.
 if(LINUX)
 	find_package(Threads REQUIRED)
-	list(APPEND kyty_emulator_link_libraries m ${CMAKE_DL_LIBS} Threads::Threads)
+	list(APPEND katy_emulator_link_libraries m ${CMAKE_DL_LIBS} Threads::Threads)
 
 	# Optional FFmpeg dependencies.
 	find_package(ZLIB)
 	if(ZLIB_FOUND)
-		list(APPEND kyty_emulator_link_libraries ZLIB::ZLIB)
+		list(APPEND katy_emulator_link_libraries ZLIB::ZLIB)
 	endif()
-	find_library(KYTY_BZ2_LIBRARY bz2)
-	if(KYTY_BZ2_LIBRARY)
-		list(APPEND kyty_emulator_link_libraries ${KYTY_BZ2_LIBRARY})
+	find_library(KATY_BZ2_LIBRARY bz2)
+	if(KATY_BZ2_LIBRARY)
+		list(APPEND katy_emulator_link_libraries ${KATY_BZ2_LIBRARY})
 	endif()
-	find_library(KYTY_LZMA_LIBRARY lzma)
-	if(KYTY_LZMA_LIBRARY)
-		list(APPEND kyty_emulator_link_libraries ${KYTY_LZMA_LIBRARY})
+	find_library(KATY_LZMA_LIBRARY lzma)
+	if(KATY_LZMA_LIBRARY)
+		list(APPEND katy_emulator_link_libraries ${KATY_LZMA_LIBRARY})
 	endif()
 endif()
 
 set(inc_headers
-	${KYTY_SOURCE_DIR}
-	${KYTY_THIRD_PARTY_DIR}/SDL2/include
-	${KYTY_THIRD_PARTY_DIR}/VulkanMemoryAllocator/include
-	${KYTY_THIRD_PARTY_DIR}/SPIRV-Tools/include
-	${KYTY_THIRD_PARTY_DIR}/fmt/include
-	${KYTY_THIRD_PARTY_DIR}/xxhash
-	${KYTY_THIRD_PARTY_DIR}/cpuinfo/include
-	${KYTY_THIRD_PARTY_DIR}/stb
+	${KATY_SOURCE_DIR}
+	${KATY_THIRD_PARTY_DIR}/SDL2/include
+	${KATY_THIRD_PARTY_DIR}/VulkanMemoryAllocator/include
+	${KATY_THIRD_PARTY_DIR}/SPIRV-Tools/include
+	${KATY_THIRD_PARTY_DIR}/fmt/include
+	${KATY_THIRD_PARTY_DIR}/xxhash
+	${KATY_THIRD_PARTY_DIR}/cpuinfo/include
+	${KATY_THIRD_PARTY_DIR}/stb
 )
 
-if (KYTY_CLANG_CL)
-	list(APPEND kyty_emulator_link_libraries winpthread)
+if (KATY_CLANG_CL)
+	list(APPEND katy_emulator_link_libraries winpthread)
 	list(APPEND inc_headers
-		${KYTY_THIRD_PARTY_DIR}/winpthread/include
+		${KATY_THIRD_PARTY_DIR}/winpthread/include
 	)
 endif()
 
 list(APPEND check_headers
-	${KYTY_SOURCE_DIR}
+	${KATY_SOURCE_DIR}
 )
 
-function(add_kyty_full_emulator_test target source)
-	add_executable(${target} EXCLUDE_FROM_ALL ${source} ${kyty_emulator_src})
-	target_link_libraries(${target} ${kyty_emulator_link_libraries})
+function(add_katy_full_emulator_test target source)
+	add_executable(${target} EXCLUDE_FROM_ALL ${source} ${katy_emulator_src})
+	target_link_libraries(${target} ${katy_emulator_link_libraries})
 	target_include_directories(${target} PRIVATE ${inc_headers})
 	if (WIN32)
 		target_link_libraries(${target} iphlpapi)
 	endif()
-	if (KYTY_CLANG_CL)
+	if (KATY_CLANG_CL)
 		target_link_libraries(${target} onecore)
-		add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${KYTY_THIRD_PARTY_DIR}/winpthread/bin/libwinpthread-1.dll" $<TARGET_FILE_DIR:${target}>/libwinpthread-1.dll)
+		add_custom_command(TARGET ${target} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${KATY_THIRD_PARTY_DIR}/winpthread/bin/libwinpthread-1.dll" $<TARGET_FILE_DIR:${target}>/libwinpthread-1.dll)
 	endif()
 	# The macOS x86_64 guest address space needs its .zerofill segments anchored
 	# by linker flags, or the kernel kills the binary on load (posix_spawn EIO).
@@ -349,108 +349,108 @@ endfunction()
 function(configure_macos_guest_address_space target)
 	if(APPLE AND (CMAKE_OSX_ARCHITECTURES STREQUAL "x86_64" OR
 			(NOT CMAKE_OSX_ARCHITECTURES AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|AMD64)$")))
-		target_sources(${target} PRIVATE "${KYTY_SOURCE_DIR}/kernel/macosGuestAddressSpace.cpp")
-		target_compile_definitions(${target} PRIVATE KYTY_LINKED_GUEST_ADDRESS_SPACE=1)
+		target_sources(${target} PRIVATE "${KATY_SOURCE_DIR}/kernel/macosGuestAddressSpace.cpp")
+		target_compile_definitions(${target} PRIVATE KATY_LINKED_GUEST_ADDRESS_SPACE=1)
 		target_link_options(${target} PRIVATE
 			-Wl,-ld_classic,-no_pie,-no_fixup_chains,-no_huge,-pagezero_size,0x40000,-segaddr,SYSTEM_MANAGED,0x40000,-segaddr,SYSTEM_RESERVED,0x7ffffc000,-segaddr,USER_AREA,0x7000000000,-image_base,0x700000000000)
 	endif()
 endfunction()
 
-add_kyty_full_emulator_test(shader_cfg_tests "${KYTY_TESTS_DIR}/shaderCfgTests.cpp")
+add_katy_full_emulator_test(shader_cfg_tests "${KATY_TESTS_DIR}/shaderCfgTests.cpp")
 
 add_executable(scalar_provenance_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/ScalarProvenanceTests.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/hostMemory.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/ReadLaneElimination.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/ScalarProvenance.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/SrtWalker.cpp"
+	"${KATY_TESTS_DIR}/ScalarProvenanceTests.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/hostMemory.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/ReadLaneElimination.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/ScalarProvenance.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/SrtWalker.cpp"
 )
 target_link_libraries(scalar_provenance_tests fmt::fmt)
 target_include_directories(scalar_provenance_tests PRIVATE ${inc_headers})
 
 add_executable(page_manager_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/PageManagerTests.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/pageManager.cpp"
+	"${KATY_TESTS_DIR}/PageManagerTests.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/pageManager.cpp"
 )
 target_include_directories(page_manager_tests PRIVATE ${inc_headers})
 
 add_executable(bit_array_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/BitArrayTests.cpp"
+	"${KATY_TESTS_DIR}/BitArrayTests.cpp"
 )
 target_include_directories(bit_array_tests PRIVATE ${inc_headers})
 
 add_executable(memory_tracker_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/MemoryTrackerTests.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/pageManager.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/memoryTracker.cpp"
+	"${KATY_TESTS_DIR}/MemoryTrackerTests.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/pageManager.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/memoryTracker.cpp"
 )
 target_link_libraries(memory_tracker_tests fmt::fmt common)
 target_include_directories(memory_tracker_tests PRIVATE ${inc_headers})
 
 add_executable(shader_vertex_metadata_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/ShaderVertexMetadataTests.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/hostMemory.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/shaderVertexMetadata.cpp"
+	"${KATY_TESTS_DIR}/ShaderVertexMetadataTests.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/hostMemory.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/shaderVertexMetadata.cpp"
 )
 target_include_directories(shader_vertex_metadata_tests PRIVATE ${inc_headers})
 
 add_executable(shader_stage_runtime_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/ShaderStageRuntimeTests.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/guest_gpu/gpu_format.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/hostMemory.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/shaderStageRuntime.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/ResourceMaterialization.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/ScalarProvenance.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/SrtWalker.cpp"
+	"${KATY_TESTS_DIR}/ShaderStageRuntimeTests.cpp"
+	"${KATY_SOURCE_DIR}/graphics/guest_gpu/gpu_format.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/hostMemory.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/shaderStageRuntime.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/ResourceMaterialization.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/ScalarProvenance.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/SrtWalker.cpp"
 )
 target_link_libraries(shader_stage_runtime_tests fmt::fmt)
 target_include_directories(shader_stage_runtime_tests PRIVATE ${inc_headers})
 
 add_executable(resource_tracking_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/ResourceTrackingTests.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/guest_gpu/gpu_format.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/hostMemory.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/ScalarProvenance.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/SrtWalker.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/SrtPatcher.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/ResourceTracking.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/ResourceMaterialization.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/ShaderInfoCollection.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/shader/recompiler/ir/BindingLayout.cpp"
+	"${KATY_TESTS_DIR}/ResourceTrackingTests.cpp"
+	"${KATY_SOURCE_DIR}/graphics/guest_gpu/gpu_format.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/hostMemory.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/ScalarProvenance.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/SrtWalker.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/SrtPatcher.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/ResourceTracking.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/ResourceMaterialization.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/ShaderInfoCollection.cpp"
+	"${KATY_SOURCE_DIR}/graphics/shader/recompiler/ir/BindingLayout.cpp"
 )
 target_link_libraries(resource_tracking_tests fmt::fmt)
 target_include_directories(resource_tracking_tests PRIVATE ${inc_headers})
 
 add_executable(resource_mutex_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/ResourceMutexTests.cpp"
-	"${KYTY_SOURCE_DIR}/graphics/host_gpu/renderer/cache/resourceMutex.cpp"
+	"${KATY_TESTS_DIR}/ResourceMutexTests.cpp"
+	"${KATY_SOURCE_DIR}/graphics/host_gpu/renderer/cache/resourceMutex.cpp"
 )
 target_link_libraries(resource_mutex_tests common)
 target_include_directories(resource_mutex_tests PRIVATE ${inc_headers})
 
 add_executable(audio_out2_port_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/AudioOut2PortTests.cpp"
-	"${KYTY_SOURCE_DIR}/libs/libAudio2.cpp"
-	"${KYTY_SOURCE_DIR}/loader/timer.cpp"
+	"${KATY_TESTS_DIR}/AudioOut2PortTests.cpp"
+	"${KATY_SOURCE_DIR}/libs/libAudio2.cpp"
+	"${KATY_SOURCE_DIR}/loader/timer.cpp"
 )
 target_link_libraries(audio_out2_port_tests common fmt::fmt)
 target_include_directories(audio_out2_port_tests PRIVATE ${inc_headers})
 
 add_executable(event_queue_lifetime_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/EventQueueLifetimeTests.cpp"
-	"${KYTY_SOURCE_DIR}/kernel/eventQueue.cpp"
-	"${KYTY_SOURCE_DIR}/loader/timer.cpp"
+	"${KATY_TESTS_DIR}/EventQueueLifetimeTests.cpp"
+	"${KATY_SOURCE_DIR}/kernel/eventQueue.cpp"
+	"${KATY_SOURCE_DIR}/loader/timer.cpp"
 )
 target_link_libraries(event_queue_lifetime_tests common fmt::fmt)
 target_include_directories(event_queue_lifetime_tests PRIVATE ${inc_headers})
 
 add_executable(image_page_table_tests EXCLUDE_FROM_ALL
-	"${KYTY_TESTS_DIR}/ImagePageTableTests.cpp"
+	"${KATY_TESTS_DIR}/ImagePageTableTests.cpp"
 )
 target_link_libraries(image_page_table_tests common fmt::fmt)
 target_include_directories(image_page_table_tests PRIVATE ${inc_headers})
 
-add_kyty_full_emulator_test(shader_recompiler_compute_tests "${KYTY_TESTS_DIR}/ShaderRecompilerComputeTests.cpp")
+add_katy_full_emulator_test(shader_recompiler_compute_tests "${KATY_TESTS_DIR}/ShaderRecompilerComputeTests.cpp")
 
 set(gpu_test_generated_dir "${PROJECT_BINARY_DIR}/gpu_test_shaders")
 set(gpu_test_ms_depth_source
@@ -462,26 +462,26 @@ set(gpu_test_ms_depth_header
 add_custom_command(
 	OUTPUT "${gpu_test_ms_depth_header}"
 	COMMAND ${CMAKE_COMMAND} -E make_directory "${gpu_test_generated_dir}"
-	COMMAND "${KYTY_GLSLANG_VALIDATOR}" -V --target-env vulkan1.0 -Os
+	COMMAND "${KATY_GLSLANG_VALIDATOR}" -V --target-env vulkan1.0 -Os
 	        -o "${gpu_test_ms_depth_spv}" "${gpu_test_ms_depth_source}"
 	COMMAND ${CMAKE_COMMAND} -DINPUT=${gpu_test_ms_depth_spv}
 	        -DOUTPUT=${gpu_test_ms_depth_header} -DSYMBOL=GPU_TEST_MS_DEPTH_SPV
-	        -P "${KYTY_SOURCE_DIR}/embed_spirv.cmake"
+	        -P "${KATY_SOURCE_DIR}/embed_spirv.cmake"
 	DEPENDS "${gpu_test_ms_depth_source}"
 	VERBATIM
 )
 target_sources(shader_recompiler_compute_tests PRIVATE
 	"${gpu_test_ms_depth_header}")
 
-add_kyty_full_emulator_test(virtual_memory_allocation_tests "${KYTY_TESTS_DIR}/VirtualMemoryAllocationTests.cpp")
+add_katy_full_emulator_test(virtual_memory_allocation_tests "${KATY_TESTS_DIR}/VirtualMemoryAllocationTests.cpp")
 target_compile_definitions(virtual_memory_allocation_tests PRIVATE
-	KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS=1)
+	KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS=1)
 
 # These tests use exceptions.
-if(NOT KYTY_CLANG_CL)
-	foreach(kyty_exception_test scalar_provenance_tests resource_tracking_tests
+if(NOT KATY_CLANG_CL)
+	foreach(katy_exception_test scalar_provenance_tests resource_tracking_tests
 			virtual_memory_allocation_tests)
-		target_compile_options(${kyty_exception_test} PRIVATE -fexceptions)
+		target_compile_options(${katy_exception_test} PRIVATE -fexceptions)
 	endforeach()
 endif()
 
@@ -531,7 +531,7 @@ if(BUILD_TESTING)
 			COMMAND $<TARGET_FILE:shader_recompiler_compute_tests> --buffer-cache-range-only)
 	endif()
 
-	add_custom_target(kyty_tests DEPENDS
+	add_custom_target(katy_tests DEPENDS
 		shader_cfg_tests
 		scalar_provenance_tests
 		image_page_table_tests
@@ -549,45 +549,45 @@ if(BUILD_TESTING)
 endif()
 
 
-add_executable(kyty_emulator "${KYTY_SOURCE_DIR}/main.cpp" ${kyty_emulator_src})
-configure_macos_guest_address_space(kyty_emulator)
+add_executable(katy_emulator "${KATY_SOURCE_DIR}/main.cpp" ${katy_emulator_src})
+configure_macos_guest_address_space(katy_emulator)
 
-target_link_libraries(kyty_emulator ${kyty_emulator_link_libraries})
+target_link_libraries(katy_emulator ${katy_emulator_link_libraries})
 if (WIN32)
-	target_link_libraries(kyty_emulator opengl32)
-	target_link_libraries(kyty_emulator iphlpapi)
-	target_link_libraries(kyty_emulator setupapi)
-	target_link_libraries(kyty_emulator ws2_32)
+	target_link_libraries(katy_emulator opengl32)
+	target_link_libraries(katy_emulator iphlpapi)
+	target_link_libraries(katy_emulator setupapi)
+	target_link_libraries(katy_emulator ws2_32)
 endif()
-if (KYTY_CLANG_CL)
-	target_link_libraries(kyty_emulator onecore)
+if (KATY_CLANG_CL)
+	target_link_libraries(katy_emulator onecore)
 endif()
-if (CLANG AND NOT KYTY_CLANG_CL)
-	target_link_libraries(kyty_emulator pthread)
+if (CLANG AND NOT KATY_CLANG_CL)
+	target_link_libraries(katy_emulator pthread)
 endif()
 # dlopen/dlsym/dladdr for RenderDoc.
-target_link_libraries(kyty_emulator ${CMAKE_DL_LIBS})
-target_include_directories(kyty_emulator PRIVATE ${inc_headers})
+target_link_libraries(katy_emulator ${CMAKE_DL_LIBS})
+target_include_directories(katy_emulator PRIVATE ${inc_headers})
 
-clang_tidy_check(kyty_emulator "" "${check_headers}" "${inc_headers}")
+clang_tidy_check(katy_emulator "" "${check_headers}" "${inc_headers}")
 
-include_what_you_use(kyty_emulator "${inc_headers}")
+include_what_you_use(katy_emulator "${inc_headers}")
 
-set(KYTY_EMULATOR_MAP_NAME "kyty_emulator_${KYTY_COMPILER_ID}_${KYTY_LINKER_ID}.map")
+set(KATY_EMULATOR_MAP_NAME "katy_emulator_${KATY_COMPILER_ID}_${KATY_LINKER_ID}.map")
 
-set(KYTY_EMULATOR_MAP_LINK_PATH "${CMAKE_CURRENT_BINARY_DIR}/${KYTY_EMULATOR_MAP_NAME}")
-set(KYTY_EMULATOR_PDB_LINK_PATH "${CMAKE_CURRENT_BINARY_DIR}/kyty_emulator.pdb")
+set(KATY_EMULATOR_MAP_LINK_PATH "${CMAKE_CURRENT_BINARY_DIR}/${KATY_EMULATOR_MAP_NAME}")
+set(KATY_EMULATOR_PDB_LINK_PATH "${CMAKE_CURRENT_BINARY_DIR}/katy_emulator.pdb")
 
-if(KYTY_CLANG_CL)
-	target_link_options(kyty_emulator PRIVATE
+if(KATY_CLANG_CL)
+	target_link_options(katy_emulator PRIVATE
 		"/DYNAMICBASE:NO"
 		"/DEBUG:FULL"
-		"/PDB:${KYTY_EMULATOR_PDB_LINK_PATH}"
-		"/lldmap:${KYTY_EMULATOR_MAP_LINK_PATH}"
+		"/PDB:${KATY_EMULATOR_PDB_LINK_PATH}"
+		"/lldmap:${KATY_EMULATOR_MAP_LINK_PATH}"
 	)
-	add_custom_command(TARGET kyty_emulator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${KYTY_THIRD_PARTY_DIR}/winpthread/bin/libwinpthread-1.dll" $<TARGET_FILE_DIR:kyty_emulator>/libwinpthread-1.dll)
+	add_custom_command(TARGET katy_emulator POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${KATY_THIRD_PARTY_DIR}/winpthread/bin/libwinpthread-1.dll" $<TARGET_FILE_DIR:katy_emulator>/libwinpthread-1.dll)
 elseif(WIN32 OR LINUX)
-	set_target_properties(kyty_emulator PROPERTIES LINK_FLAGS "${KYTY_LD_OPTIONS} -Wl,-Map=${KYTY_EMULATOR_MAP_LINK_PATH}")
+	set_target_properties(katy_emulator PROPERTIES LINK_FLAGS "${KATY_LD_OPTIONS} -Wl,-Map=${KATY_EMULATOR_MAP_LINK_PATH}")
 endif()
 
 if(APPLE)
@@ -595,17 +595,17 @@ if(APPLE)
 	# runs guest code under Rosetta. That requires the JIT / unsigned-executable-memory
 	# entitlements, so re-sign the binary after every link (an unsigned/relinked binary
 	# reverts to the hardened defaults and aborts when it first executes written code).
-	add_custom_command(TARGET kyty_emulator POST_BUILD
+	add_custom_command(TARGET katy_emulator POST_BUILD
 		COMMAND codesign -s - --force --options runtime
-			--entitlements "${KYTY_SOURCE_DIR}/macos_jit.entitlements"
-			$<TARGET_FILE:kyty_emulator>
-		COMMENT "Codesign kyty_emulator with JIT entitlements (macOS)")
+			--entitlements "${KATY_SOURCE_DIR}/macos_jit.entitlements"
+			$<TARGET_FILE:katy_emulator>
+		COMMENT "Codesign katy_emulator with JIT entitlements (macOS)")
 endif()
 
-install(TARGETS kyty_emulator DESTINATION .)
-if(KYTY_BUILD_LAUNCHER)
-	add_subdirectory("${KYTY_SOURCE_DIR}/launcher" "${CMAKE_CURRENT_BINARY_DIR}/launcher")
+install(TARGETS katy_emulator DESTINATION .)
+if(KATY_BUILD_LAUNCHER)
+	add_subdirectory("${KATY_SOURCE_DIR}/launcher" "${CMAKE_CURRENT_BINARY_DIR}/launcher")
 endif()
-if(KYTY_CLANG_CL)
-	install(FILES "${KYTY_THIRD_PARTY_DIR}/winpthread/bin/libwinpthread-1.dll" DESTINATION .)
+if(KATY_CLANG_CL)
+	install(FILES "${KATY_THIRD_PARTY_DIR}/winpthread/bin/libwinpthread-1.dll" DESTINATION .)
 endif()

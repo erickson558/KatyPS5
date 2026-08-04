@@ -12,7 +12,7 @@ namespace Libs {
 
 LIB_VERSION("Pad", 1, "Pad", 1, 1);
 
-static int KYTY_SYSV_ABI PadSetVibrationMode(int handle, int mode) {
+static int KATY_SYSV_ABI PadSetVibrationMode(int handle, int mode) {
 	PRINT_NAME();
 
 	LOGF("\t handle      = %d\n"
@@ -26,7 +26,7 @@ struct PadTriggerEffectStateInformation {
 	int32_t state[2];
 };
 
-static int KYTY_SYSV_ABI PadGetTriggerEffectState(int                               handle,
+static int KATY_SYSV_ABI PadGetTriggerEffectState(int                               handle,
                                                   PadTriggerEffectStateInformation* info) {
 	PRINT_NAME();
 
@@ -42,7 +42,7 @@ static int KYTY_SYSV_ABI PadGetTriggerEffectState(int                           
 	return 0;
 }
 
-static int KYTY_SYSV_ABI PadSetTriggerEffect(int handle, const void* param) {
+static int KATY_SYSV_ABI PadSetTriggerEffect(int handle, const void* param) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n"
@@ -59,7 +59,7 @@ static int KYTY_SYSV_ABI PadSetTriggerEffect(int handle, const void* param) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PadSetVibrationTriggerEffectWeakWhileEmbeddedMicInUse(bool enabled) {
+static int KATY_SYSV_ABI PadSetVibrationTriggerEffectWeakWhileEmbeddedMicInUse(bool enabled) {
 	PRINT_NAME();
 
 	LOGF("\t enabled = %d\n", enabled ? 1 : 0);
@@ -99,7 +99,7 @@ struct PadDeviceClassData {
 
 static_assert(sizeof(PadDeviceClassData) == 24);
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 PadDeviceClassGetExtendedInformation(int handle, PadDeviceClassExtendedInformation* info) {
 	PRINT_NAME();
 
@@ -118,7 +118,7 @@ PadDeviceClassGetExtendedInformation(int handle, PadDeviceClassExtendedInformati
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PadDeviceClassParseData(int handle, const Controller::PadData* data,
+static int KATY_SYSV_ABI PadDeviceClassParseData(int handle, const Controller::PadData* data,
                                                  PadDeviceClassData* class_data) {
 	PRINT_NAME();
 
@@ -152,7 +152,7 @@ static int KYTY_SYSV_ABI PadDeviceClassParseData(int handle, const Controller::P
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PadSetTiltCorrectionState(int handle, bool enabled) {
+static int KATY_SYSV_ABI PadSetTiltCorrectionState(int handle, bool enabled) {
 	PRINT_NAME();
 
 	LOGF("\t handle  = %d\n"
@@ -162,7 +162,7 @@ static int KYTY_SYSV_ABI PadSetTiltCorrectionState(int handle, bool enabled) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI PadClose(int handle) {
+static int KATY_SYSV_ABI PadClose(int handle) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n", handle);
@@ -170,7 +170,7 @@ static int KYTY_SYSV_ABI PadClose(int handle) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI PadUnknownN3kSX62fgNo(uint64_t arg0, uint64_t arg1, uint64_t arg2,
+static int KATY_SYSV_ABI PadUnknownN3kSX62fgNo(uint64_t arg0, uint64_t arg1, uint64_t arg2,
                                                uint64_t arg3, uint64_t arg4, uint64_t arg5) {
 	PRINT_NAME();
 
@@ -232,13 +232,13 @@ struct MouseData {
 	uint8_t  reserved[8];
 };
 
-static int KYTY_SYSV_ABI MouseInit() {
+static int KATY_SYSV_ABI MouseInit() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI MouseOpen(int user_id, int32_t type, int32_t index, const void* param) {
+static int KATY_SYSV_ABI MouseOpen(int user_id, int32_t type, int32_t index, const void* param) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n"
@@ -254,7 +254,7 @@ static int KYTY_SYSV_ABI MouseOpen(int user_id, int32_t type, int32_t index, con
 	return 1;
 }
 
-static int KYTY_SYSV_ABI MouseClose(int32_t handle) {
+static int KATY_SYSV_ABI MouseClose(int32_t handle) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %" PRId32 "\n", handle);
@@ -266,7 +266,7 @@ static int KYTY_SYSV_ABI MouseClose(int32_t handle) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI MouseRead(int32_t handle, MouseData* data, int32_t num) {
+static int KATY_SYSV_ABI MouseRead(int32_t handle, MouseData* data, int32_t num) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %" PRId32 "\n"
@@ -329,13 +329,13 @@ struct KeyboardCharData {
 	uint8_t  reserve[8];
 };
 
-static int KYTY_SYSV_ABI KeyboardInit() {
+static int KATY_SYSV_ABI KeyboardInit() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static int KYTY_SYSV_ABI KeyboardOpen(int user_id, int32_t type, int32_t index, const void* param) {
+static int KATY_SYSV_ABI KeyboardOpen(int user_id, int32_t type, int32_t index, const void* param) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n"
@@ -351,7 +351,7 @@ static int KYTY_SYSV_ABI KeyboardOpen(int user_id, int32_t type, int32_t index, 
 	return 1;
 }
 
-static int KYTY_SYSV_ABI KeyboardClose(int32_t handle) {
+static int KATY_SYSV_ABI KeyboardClose(int32_t handle) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %" PRId32 "\n", handle);
@@ -363,7 +363,7 @@ static int KYTY_SYSV_ABI KeyboardClose(int32_t handle) {
 	return OK;
 }
 
-static int KYTY_SYSV_ABI KeyboardRead(int32_t handle, KeyboardData* data, int32_t num) {
+static int KATY_SYSV_ABI KeyboardRead(int32_t handle, KeyboardData* data, int32_t num) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %" PRId32 "\n"
@@ -383,7 +383,7 @@ static int KYTY_SYSV_ABI KeyboardRead(int32_t handle, KeyboardData* data, int32_
 	return 0;
 }
 
-static int KYTY_SYSV_ABI KeyboardReadState(int32_t handle, KeyboardData* data) {
+static int KATY_SYSV_ABI KeyboardReadState(int32_t handle, KeyboardData* data) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %" PRId32 "\n"
@@ -402,7 +402,7 @@ static int KYTY_SYSV_ABI KeyboardReadState(int32_t handle, KeyboardData* data) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI KeyboardGetKey2Char(int32_t handle, int32_t arrange, uint32_t led,
+static int KATY_SYSV_ABI KeyboardGetKey2Char(int32_t handle, int32_t arrange, uint32_t led,
                                              uint32_t modifier_key, uint16_t key_code,
                                              KeyboardCharData* char_data) {
 	PRINT_NAME();

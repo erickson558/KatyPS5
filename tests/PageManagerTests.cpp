@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -37,7 +37,7 @@ void Check(bool value, const char *text) {
   }
 }
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM != KATY_PLATFORM_WINDOWS
 using DWORD = uint32_t;
 constexpr uint32_t PAGE_NOACCESS = 1;
 constexpr uint32_t PAGE_READONLY = 2;
@@ -138,7 +138,7 @@ bool ProtectAddressSpace(uint64_t vaddr, uint64_t size,
 
 uint8_t *Allocate(uint64_t size, uint32_t protection = PAGE_READWRITE) {
   constexpr uintptr_t test_address = 0x0000000200010000ull;
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
   auto *memory = static_cast<uint8_t *>(
       VirtualAlloc(reinterpret_cast<void *>(test_address), size,
                    MEM_RESERVE | MEM_COMMIT, protection));
@@ -535,7 +535,7 @@ void TestReadWriteWatcherInteractions() {
 }
 
 void CheckDeathCase(const char *name) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
   char path[MAX_PATH]{};
   Check(GetModuleFileNameA(nullptr, path, MAX_PATH) != 0,
         "GetModuleFileName failed");
