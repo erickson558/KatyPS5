@@ -4,6 +4,19 @@ All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning is `vX.Y.Z`
 (see `specs/CONSTITUTION.md` §3 for what bumps what).
 
+## [0.3.1] - 2026-08-04
+
+### Changed
+- `runtimeLinker.cpp`: `RelocateRecord()` called `RegisterStubbedImport()` a second time purely
+  to get the thunk address for a log line, after already calling it once to compute the patched
+  value. Both calls always returned the same address (`RegisterStubbedImport` dedups by
+  `patch_vaddr`), so the second call was a pure-waste linear scan of `g_stubbed_imports`. Cached
+  the thunk address from the first call instead. Investigated while looking into
+  [KytyPS5#155](https://github.com/KytyPS5/KytyPS5/issues/155) (an access-violation regression
+  after unresolved-import stubbing); this change is a real but unproven-unrelated cleanup found
+  along the way, not a confirmed fix for that crash - root-causing it further needs a complete
+  log (with the register dump) or live debugging, neither available in this environment.
+
 ## [0.3.0] - 2026-08-04
 
 ### Added

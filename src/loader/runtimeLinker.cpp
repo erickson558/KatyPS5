@@ -1213,6 +1213,12 @@ static void RelocateRecord(uint32_t index, Elf64_Rela* r, Program* program, bool
 	[[maybe_unused]] bool patched        = false;
 	bool                  stubbed_import = false;
 	bool                  stubbed_func   = false;
+	// Set alongside `value` at every RegisterStubbedImport() call site below, so the logging
+	// at the bottom of this function can reuse the already-registered thunk address instead of
+	// looking it up again - RegisterStubbedImport() does a linear scan of g_stubbed_imports, so
+	// a second call per relocation was pure waste (it always found the same record and returned
+	// the same address; see StubbedImportRecord's dedup-by-patch_vaddr in RegisterStubbedImport).
+	uint64_t thunk_vaddr = 0;
 
 	// KATY_PROFILER_BLOCK("patch");
 
@@ -1224,11 +1230,11 @@ static void RelocateRecord(uint32_t index, Elf64_Rela* r, Program* program, bool
 		if (ri.type == SymbolType::Object && weak) {
 			value = g_invalid_memory;
 		} else if (ri.type == SymbolType::Func && jmprela_table && weak) {
-			value          = RegisterStubbedImport(index, program, ri);
+			value          = thunk_vaddr = RegisterStubbedImport(index, program, ri);
 			stubbed_import = true;
 			stubbed_func   = true;
 		} else if (ri.type == SymbolType::Func && !jmprela_table && weak) {
-			value        = RegisterStubbedImport(index, program, ri);
+			value        = thunk_vaddr = RegisterStubbedImport(index, program, ri);
 			stubbed_func = true;
 		} else if (ri.type == SymbolType::NoType && weak) {
 			value = RuntimeLinker::ReadFromElf(program, ri.vaddr) + ri.base_vaddr;
@@ -1250,7 +1256,7 @@ static void RelocateRecord(uint32_t index, Elf64_Rela* r, Program* program, bool
 			if (ri.type == SymbolType::Object) {
 				value = g_invalid_memory;
 			} else if (ri.type == SymbolType::Func || ri.type == SymbolType::NoType) {
-				value        = RegisterStubbedImport(index, program, ri);
+				value        = thunk_vaddr = RegisterStubbedImport(index, program, ri);
 				stubbed_func = true;
 				if (jmprela_table) {
 					stubbed_import = true;
@@ -1266,16 +1272,14 @@ static void RelocateRecord(uint32_t index, Elf64_Rela* r, Program* program, bool
 	// KATY_PROFILER_END_BLOCK;
 
 	if (patched && stubbed_import) {
-		const auto thunk = RegisterStubbedImport(index, program, ri);
 		LOGF("Relocate: unresolved PLT import patched to stub [%u] [%016" PRIx64 "] <- %016" PRIx64
 		     ", %s, %s, %s, %s\n",
-		     index, ri.vaddr, thunk, ri.name.c_str(), Common::EnumName(ri.type).c_str(),
+		     index, ri.vaddr, thunk_vaddr, ri.name.c_str(), Common::EnumName(ri.type).c_str(),
 		     Common::EnumName(ri.bind).c_str(), Common::PathToString(program->file_name).c_str());
 	} else if (patched && stubbed_func) {
-		const auto thunk = RegisterStubbedImport(index, program, ri);
 		LOGF("Relocate: unresolved non-PLT function patched to stub [%u] [%016" PRIx64
 		     "] <- %016" PRIx64 ", %s, %s, %s, %s\n",
-		     index, ri.vaddr, thunk, ri.name.c_str(), Common::EnumName(ri.type).c_str(),
+		     index, ri.vaddr, thunk_vaddr, ri.name.c_str(), Common::EnumName(ri.type).c_str(),
 		     Common::EnumName(ri.bind).c_str(), Common::PathToString(program->file_name).c_str());
 	}
 
