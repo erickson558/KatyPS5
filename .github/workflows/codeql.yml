@@ -1,0 +1,69 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly, independent of any push, so drift in third-party query packs is still caught.
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze (C/C++)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: c-cpp
+          queries: security-extended
+
+      # CodeQL's C/C++ analysis needs an actual build to observe compiled translation units.
+      # This mirrors the Linux job in build.yml closely enough to compile the launcher and its
+      # direct dependencies, without needing the full Windows/macOS matrix just for static
+      # analysis coverage.
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            clang lld ninja-build cmake git glslang-tools \
+            libgl1-mesa-dev libx11-dev libxcursor-dev libxext-dev libxfixes-dev \
+            libxi-dev libxrandr-dev libxss-dev libxkbcommon-dev \
+            libasound2-dev libpulse-dev libudev-dev libdbus-1-dev libwayland-dev wayland-protocols
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.10.3"
+          arch: linux_gcc_64
+
+      - name: Configure
+        run: |
+          cmake -S . -B _Build/codeql -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+            -DCMAKE_PREFIX_PATH="$Qt6_DIR"
+
+      # Building the `launcher` target transitively builds the emulator core too (see
+      # add_dependencies(launcher katy_emulator) in src/launcher/CMakeLists.txt), which is
+      # exactly the surface we want CodeQL to see - this is not a lighter build than build.yml's
+      # Linux job, just a single-target invocation of the same one.
+      - name: Build
+        run: cmake --build _Build/codeql --target launcher --parallel
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:c-cpp"

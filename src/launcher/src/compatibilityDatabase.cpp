@@ -21,11 +21,14 @@
 
 namespace {
 
-constexpr char FILE_NAME[] = "compatibility_db.json";
-constexpr char URL[] =
+constexpr char  FILE_NAME[] = "compatibility_db.json";
+constexpr char  URL[] =
     "https://github.com/Nmzik/KytyPS5/releases/download/compat-db/compatibility_db.json";
-constexpr int RETRY_COUNT    = 3;
-constexpr int RETRY_DELAY_MS = 750;
+constexpr int   RETRY_COUNT    = 3;
+constexpr int   RETRY_DELAY_MS = 750;
+// The compatibility DB is a small JSON document; a third-party-hosted response this large
+// is either broken or compromised, so abort rather than buffering it all into memory.
+constexpr qint64 MAX_RESPONSE_BYTES = 5 * 1024 * 1024;
 
 struct LoadResult {
 	QMap<QString, CompatibilityEntry> entries;
@@ -92,7 +95,7 @@ LoadResult DownloadOnce() {
 	QNetworkRequest       request(QUrl(QString::fromLatin1(URL)));
 	request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
 	                     QNetworkRequest::NoLessSafeRedirectPolicy);
-	request.setRawHeader("User-Agent", "Kyty-Launcher");
+	request.setRawHeader("User-Agent", "Katy-Launcher");
 
 	auto*      reply = manager.get(request);
 	QEventLoop loop;
@@ -100,6 +103,12 @@ LoadResult DownloadOnce() {
 	timeout.setSingleShot(true);
 	QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 	QObject::connect(&timeout, &QTimer::timeout, reply, &QNetworkReply::abort);
+	QObject::connect(reply, &QNetworkReply::downloadProgress, reply,
+	                  [reply](qint64 bytes_received, qint64 /*bytes_total*/) {
+		                  if (bytes_received > MAX_RESPONSE_BYTES) {
+			                  reply->abort();
+		                  }
+	                  });
 	timeout.start(15000);
 	loop.exec();
 
