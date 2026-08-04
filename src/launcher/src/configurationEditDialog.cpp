@@ -245,23 +245,20 @@ void ConfigurationEditDialog::InitLanguageSelector() {
 	m_language_combo->setToolTip(tr("Applies after restarting the launcher"));
 	group_layout->addWidget(m_language_combo);
 
-	QSettings settings(QStringLiteral(LANGUAGE_SETTINGS_FILE), QSettings::IniFormat);
-	settings.beginGroup(QStringLiteral(LANGUAGE_SETTINGS_GROUP));
-	const auto saved = settings.value(QStringLiteral(LANGUAGE_SETTINGS_KEY),
-	                                   QStringLiteral("auto"))
-	                       .toString();
+	QSettings settings(LANGUAGE_SETTINGS_FILE, QSettings::IniFormat);
+	settings.beginGroup(LANGUAGE_SETTINGS_GROUP);
+	const auto saved = settings.value(LANGUAGE_SETTINGS_KEY, QStringLiteral("auto")).toString();
 	settings.endGroup();
 	m_language_combo->setCurrentIndex(saved == QStringLiteral("en")   ? 1
 	                                   : saved == QStringLiteral("es") ? 2
 	                                                                    : 0);
 
 	connect(m_language_combo, &QComboBox::currentIndexChanged, this, [](int index) {
-		QSettings settings(QStringLiteral(LANGUAGE_SETTINGS_FILE), QSettings::IniFormat);
-		settings.beginGroup(QStringLiteral(LANGUAGE_SETTINGS_GROUP));
-		settings.setValue(QStringLiteral(LANGUAGE_SETTINGS_KEY),
-		                   index == 1 ? QStringLiteral("en")
-		                   : index == 2 ? QStringLiteral("es")
-		                                 : QStringLiteral("auto"));
+		QSettings settings(LANGUAGE_SETTINGS_FILE, QSettings::IniFormat);
+		settings.beginGroup(LANGUAGE_SETTINGS_GROUP);
+		settings.setValue(LANGUAGE_SETTINGS_KEY, index == 1 ? QStringLiteral("en")
+		                                          : index == 2 ? QStringLiteral("es")
+		                                                        : QStringLiteral("auto"));
 		settings.endGroup();
 	});
 
