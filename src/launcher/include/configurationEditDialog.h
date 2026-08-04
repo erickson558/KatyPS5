@@ -7,6 +7,7 @@
 #include <QString>
 #include <QStringList>
 class QByteArray;
+class QComboBox;
 class QGroupBox;
 class QListWidget;
 class QMoveEvent;
@@ -21,7 +22,7 @@ class ConfigurationEditDialog;
 
 class ConfigurationEditDialog: public QDialog {
 	Q_OBJECT
-	KYTY_QT_CLASS_NO_COPY(ConfigurationEditDialog);
+	KATY_QT_CLASS_NO_COPY(ConfigurationEditDialog);
 
 public:
 	explicit ConfigurationEditDialog(Configuration& info, QWidget* parent = nullptr);
@@ -41,10 +42,13 @@ private:
 	QListWidget*                 m_game_dirs_list         = nullptr;
 	QToolButton*                 m_remove_game_dir_button = nullptr;
 	bool                         m_show_game_dirs         = false;
+	QGroupBox*                   m_language_group         = nullptr;
+	QComboBox*                   m_language_combo         = nullptr;
 
 protected:
 	void Init(const Configuration& info);
 	void InitGameDirectories();
+	void InitLanguageSelector();
 	void AddGameDirectoryItem(const QString& dir);
 
 	void moveEvent(QMoveEvent* event) override;
