@@ -1,4 +1,4 @@
-name: Build and Release KytyPS5
+name: Build and Release KatyPS5
 
 on:
   workflow_dispatch:
@@ -7,8 +7,11 @@ on:
   pull_request:
 
 env:
-  KYTY_BUILD_ORIGIN: ${{ github.repository != 'KytyPS5/KytyPS5' && 'Fork' || github.event_name == 'push' && 'Official' || 'Source' }}
-  KYTY_BUILD_REPOSITORY: ${{ github.repository }}
+  # KatyPS5's own canonical repo is now erickson558/KatyPS5 (this fork's rebranded identity),
+  # not the upstream KytyPS5/KytyPS5 slug - a push there is "Official" for this project, and
+  # anything else (someone else's fork of this fork, a PR, etc.) is "Fork"/"Source" as before.
+  KATY_BUILD_ORIGIN: ${{ github.repository != 'erickson558/KatyPS5' && 'Fork' || github.event_name == 'push' && 'Official' || 'Source' }}
+  KATY_BUILD_REPOSITORY: ${{ github.repository }}
 
 jobs:
   metadata:
@@ -22,10 +25,10 @@ jobs:
         id: release_tag
         shell: bash
         run: |
-          echo "value=KytyPS5-$(date -u +'%Y-%m-%d')-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          echo "value=KatyPS5-$(date -u +'%Y-%m-%d')-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
   windows:
-    name: Build KytyPS5 (Windows)
+    name: Build KatyPS5 (Windows)
     needs: metadata
     runs-on: windows-2022
 
@@ -94,9 +97,9 @@ jobs:
           cmake -S . -B _Build/windows ^
             -G Ninja ^
             -DCMAKE_BUILD_TYPE=Release ^
-            -DKYTY_BUILD_ORIGIN=%KYTY_BUILD_ORIGIN% ^
-            -DKYTY_BUILD_REPOSITORY=%KYTY_BUILD_REPOSITORY% ^
-            -DKYTY_RELEASE_TAG=${{ needs.metadata.outputs.release_tag }} ^
+            -DKATY_BUILD_ORIGIN=%KATY_BUILD_ORIGIN% ^
+            -DKATY_BUILD_REPOSITORY=%KATY_BUILD_REPOSITORY% ^
+            -DKATY_RELEASE_TAG=${{ needs.metadata.outputs.release_tag }} ^
             -DCMAKE_C_COMPILER=clang-cl ^
             -DCMAKE_CXX_COMPILER=clang-cl ^
             -DCMAKE_PREFIX_PATH="%Qt6_DIR%"
@@ -119,12 +122,12 @@ jobs:
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: KytyPS5-Windows-x64
+          name: KatyPS5-Windows-x64
           path: _Build/windows/install/**
           if-no-files-found: error
 
   macos:
-    name: Build KytyPS5 (macOS)
+    name: Build KatyPS5 (macOS)
     needs: metadata
     runs-on: macos-15
 
@@ -172,9 +175,9 @@ jobs:
           cmake -S . -B _Build/macos \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DKYTY_BUILD_ORIGIN="$KYTY_BUILD_ORIGIN" \
-            -DKYTY_BUILD_REPOSITORY="$KYTY_BUILD_REPOSITORY" \
-            -DKYTY_RELEASE_TAG="${{ needs.metadata.outputs.release_tag }}" \
+            -DKATY_BUILD_ORIGIN="$KATY_BUILD_ORIGIN" \
+            -DKATY_BUILD_REPOSITORY="$KATY_BUILD_REPOSITORY" \
+            -DKATY_RELEASE_TAG="${{ needs.metadata.outputs.release_tag }}" \
             -DCMAKE_OSX_ARCHITECTURES=x86_64 \
             -DCMAKE_C_COMPILER=clang \
             -DCMAKE_CXX_COMPILER=clang++ \
@@ -221,23 +224,23 @@ jobs:
         shell: bash
         run: |
           file _Build/macos/install/launcher
-          file _Build/macos/install/kyty_emulator
+          file _Build/macos/install/katy_emulator
           file _Build/macos/install/libMoltenVK.dylib
           lipo _Build/macos/install/launcher -verify_arch x86_64
-          lipo _Build/macos/install/kyty_emulator -verify_arch x86_64
+          lipo _Build/macos/install/katy_emulator -verify_arch x86_64
           lipo _Build/macos/install/libMoltenVK.dylib -verify_arch x86_64
-          codesign --verify --strict _Build/macos/install/kyty_emulator
+          codesign --verify --strict _Build/macos/install/katy_emulator
           codesign --verify --strict _Build/macos/install/libMoltenVK.dylib
 
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: KytyPS5-macOS-x86_64
+          name: KatyPS5-macOS-x86_64
           path: _Build/macos/install/**
           if-no-files-found: error
 
   linux:
-    name: Build KytyPS5 (Linux)
+    name: Build KatyPS5 (Linux)
     needs: metadata
     runs-on: ubuntu-24.04
 
@@ -299,9 +302,9 @@ jobs:
           cmake -S . -B _Build/linux \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DKYTY_BUILD_ORIGIN="$KYTY_BUILD_ORIGIN" \
-            -DKYTY_BUILD_REPOSITORY="$KYTY_BUILD_REPOSITORY" \
-            -DKYTY_RELEASE_TAG="${{ needs.metadata.outputs.release_tag }}" \
+            -DKATY_BUILD_ORIGIN="$KATY_BUILD_ORIGIN" \
+            -DKATY_BUILD_REPOSITORY="$KATY_BUILD_REPOSITORY" \
+            -DKATY_RELEASE_TAG="${{ needs.metadata.outputs.release_tag }}" \
             -DCMAKE_C_COMPILER=clang \
             -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_PREFIX_PATH="$Qt6_DIR" 2>&1 | tee _Build/configure.log
@@ -344,9 +347,9 @@ jobs:
         shell: bash
         run: |
           file _Build/linux/install/launcher
-          file _Build/linux/install/kyty_emulator
-          file _Build/linux/install/kyty_emulator | grep -q "ELF 64-bit LSB .*x86-64"
-          ldd _Build/linux/install/kyty_emulator > /dev/null
+          file _Build/linux/install/katy_emulator
+          file _Build/linux/install/katy_emulator | grep -q "ELF 64-bit LSB .*x86-64"
+          ldd _Build/linux/install/katy_emulator > /dev/null
           readelf -d _Build/linux/install/launcher | grep -q 'RPATH.*\$ORIGIN/lib'
           while IFS= read -r -d '' binary; do
             while read -r dependency; do
@@ -359,18 +362,18 @@ jobs:
             find _Build/linux/install/launcher _Build/linux/install/plugins \
               -type f \( -name launcher -o -name '*.so' \) -print0
           )
-          _Build/linux/install/kyty_emulator --help > /dev/null
+          _Build/linux/install/katy_emulator --help > /dev/null
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: KytyPS5-Linux-x86_64
+          name: KatyPS5-Linux-x86_64
           path: _Build/linux/install/**
           if-no-files-found: error
 
   release:
-    name: Release KytyPS5
-    if: github.event_name == 'push' && github.repository == 'KytyPS5/KytyPS5'
+    name: Release KatyPS5
+    if: github.event_name == 'push' && github.repository == 'erickson558/KatyPS5'
     needs: [metadata, windows, macos, linux]
     runs-on: ubuntu-latest
     permissions:
@@ -387,18 +390,18 @@ jobs:
       - name: Package builds
         shell: bash
         run: |
-          windows_dir="artifacts/KytyPS5-Windows-x64"
-          macos_dir="artifacts/KytyPS5-macOS-x86_64"
-          linux_dir="artifacts/KytyPS5-Linux-x86_64"
+          windows_dir="artifacts/KatyPS5-Windows-x64"
+          macos_dir="artifacts/KatyPS5-macOS-x86_64"
+          linux_dir="artifacts/KatyPS5-Linux-x86_64"
           test -d "$windows_dir"
           test -d "$macos_dir"
           test -d "$linux_dir"
           chmod a+x \
             "$macos_dir/launcher" \
-            "$macos_dir/kyty_emulator" \
+            "$macos_dir/katy_emulator" \
             "$macos_dir/libMoltenVK.dylib" \
             "$linux_dir/launcher" \
-            "$linux_dir/kyty_emulator"
+            "$linux_dir/katy_emulator"
           (
             cd "$windows_dir"
             zip -r "$GITHUB_WORKSPACE/$RELEASE_NAME-Windows-x64.zip" .

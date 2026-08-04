@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_HASH_H_
-#define KYTY_COMMON_HASH_H_
+#ifndef KATY_COMMON_HASH_H_
+#define KATY_COMMON_HASH_H_
 
 #include "common/common.h"
 
@@ -153,4 +153,4 @@ inline uint32_t hash64(uint64_t key) {
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_HASH_H_ */
+#endif /* KATY_COMMON_HASH_H_ */

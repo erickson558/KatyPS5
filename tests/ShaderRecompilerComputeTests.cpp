@@ -79,7 +79,7 @@
 #include <string>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -1584,7 +1584,7 @@ public:
 		alignas(uint32_t) uint32_t packet_marker_b = 0;
 		const auto write_packet = [](uint32_t* packet, uint32_t* destination, uint32_t value) {
 			const auto destination_address = reinterpret_cast<uint64_t>(destination);
-			packet[0] = KYTY_PM4(5, Pm4::IT_WRITE_DATA, 0);
+			packet[0] = KATY_PM4(5, Pm4::IT_WRITE_DATA, 0);
 			packet[1] = 0;
 			packet[2] = static_cast<uint32_t>(destination_address);
 			packet[3] = static_cast<uint32_t>(destination_address >> 32u);
@@ -1592,18 +1592,18 @@ public:
 		};
 		std::array<uint32_t, 1024> polling_loop {};
 		for (size_t i = 0; i < polling_loop.size() - 4; i += 2) {
-			polling_loop[i]     = KYTY_PM4(2, Pm4::IT_NOP, Pm4::R_ZERO);
+			polling_loop[i]     = KATY_PM4(2, Pm4::IT_NOP, Pm4::R_ZERO);
 			polling_loop[i + 1] = 0;
 		}
 		const auto loop_address = reinterpret_cast<uint64_t>(polling_loop.data());
-		polling_loop[1020] = KYTY_PM4(4, Pm4::IT_INDIRECT_BUFFER, 0);
+		polling_loop[1020] = KATY_PM4(4, Pm4::IT_INDIRECT_BUFFER, 0);
 		polling_loop[1021] = static_cast<uint32_t>(loop_address);
 		polling_loop[1022] = static_cast<uint32_t>(loop_address >> 32u);
 		polling_loop[1023] = 0x0f200000u | static_cast<uint32_t>(polling_loop.size());
 
 		std::array<uint32_t, 14> polling_commands {};
 		write_packet(polling_commands.data(), &packet_marker_a, 11);
-		polling_commands[5] = KYTY_PM4(4, Pm4::IT_INDIRECT_BUFFER, 0);
+		polling_commands[5] = KATY_PM4(4, Pm4::IT_INDIRECT_BUFFER, 0);
 		polling_commands[6] = static_cast<uint32_t>(loop_address);
 		polling_commands[7] = static_cast<uint32_t>(loop_address >> 32u);
 		polling_commands[8] = 0x0f200000u | static_cast<uint32_t>(polling_loop.size());
@@ -1624,9 +1624,9 @@ public:
 				if (packet_marker_a == 11 && packet_marker_b == 0) {
 					packet_marker_a_at_callback = packet_marker_a;
 					packet_marker_b_at_callback = packet_marker_b;
-					polling_loop[1020] = KYTY_PM4(2, Pm4::IT_NOP, Pm4::R_ZERO);
+					polling_loop[1020] = KATY_PM4(2, Pm4::IT_NOP, Pm4::R_ZERO);
 					polling_loop[1021] = 0;
-					polling_loop[1022] = KYTY_PM4(2, Pm4::IT_NOP, Pm4::R_ZERO);
+					polling_loop[1022] = KATY_PM4(2, Pm4::IT_NOP, Pm4::R_ZERO);
 					polling_loop[1023] = 0;
 				}
 			});
@@ -1643,18 +1643,18 @@ public:
 		uint32_t   suffix  = 0;
 		const auto address = [](const void* value) { return reinterpret_cast<uint64_t>(value); };
 		std::array<uint32_t, 17> commands {};
-		commands[0]  = KYTY_PM4(5, Pm4::IT_WRITE_DATA, 0);
+		commands[0]  = KATY_PM4(5, Pm4::IT_WRITE_DATA, 0);
 		commands[1]  = 0;
 		commands[2]  = static_cast<uint32_t>(address(&prefix));
 		commands[3]  = static_cast<uint32_t>(address(&prefix) >> 32u);
 		commands[4]  = 11;
-		commands[5]  = KYTY_PM4(7, Pm4::IT_NOP, Pm4::R_WAIT_MEM_32);
+		commands[5]  = KATY_PM4(7, Pm4::IT_NOP, Pm4::R_WAIT_MEM_32);
 		commands[6]  = static_cast<uint32_t>(address(&label));
 		commands[7]  = static_cast<uint32_t>(address(&label) >> 32u);
 		commands[8]  = UINT32_MAX;
 		commands[9]  = 1;
 		commands[10] = 0x10u | 3u;
-		commands[12] = KYTY_PM4(5, Pm4::IT_WRITE_DATA, 0);
+		commands[12] = KATY_PM4(5, Pm4::IT_WRITE_DATA, 0);
 		commands[13] = 0;
 		commands[14] = static_cast<uint32_t>(address(&suffix));
 		commands[15] = static_cast<uint32_t>(address(&suffix) >> 32u);
@@ -1792,7 +1792,7 @@ public:
 		                            uint32_t bytes) {
 			auto* packet = dma_commands.data() + dma_cursor;
 			dma_cursor += 7;
-			packet[0] = KYTY_PM4(7, Pm4::IT_DMA_DATA, 0);
+			packet[0] = KATY_PM4(7, Pm4::IT_DMA_DATA, 0);
 			packet[1] =
 			    (static_cast<uint32_t>(dst_sel) << 20u) | (static_cast<uint32_t>(src_sel) << 29u);
 			packet[2] = static_cast<uint32_t>(src);
@@ -15386,7 +15386,7 @@ void CheckEmbeddedFetchVertexOffset() {
 	std::_Exit(0x7f);
 }
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 void CheckRenderTargetFormatContract() {
 	const auto rgb565 = TextureGetRenderTargetFormat(16u, 0u, 0u);
 	Require("RenderTargetFormat", "RGB565 UNorm",
@@ -15514,7 +15514,7 @@ void CheckRenderTargetFormatContract() {
 	std::_Exit(0x7f);
 }
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 void CheckSampledColorViews() {
 	Require("SampledColorViews", "identity",
 	        SelectSampledColorView(vk::Format::eR8G8B8A8Unorm, vk::Format::eR8G8B8A8Unorm,
@@ -16452,7 +16452,7 @@ ShaderTextureResource AtomicStorageTextureDescriptor() {
 	std::_Exit(0x7f);
 }
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 void CheckBasicStorageTextureDescriptor() {
 	const auto descriptor = BasicStorageTextureDescriptor();
 	Require("BasicStorageTexture", "descriptor",
@@ -17022,7 +17022,7 @@ void CheckStandard64RenderTargetTileRoundTrip() {
 	std::printf("[host]    %-32s ok\n", "Standard64RenderTarget");
 }
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 void CheckStorageTextureGpuOwnedRebindState() {
 	constexpr uintptr_t base         = 0x0000000200200000ull;
 	constexpr uint64_t  size         = 0x10000;
@@ -17664,12 +17664,12 @@ void CheckPm4WaitResume(RenderContext& renderer) {
 	const auto address = [](const void* value) { return reinterpret_cast<uint64_t>(value); };
 
 	std::array<uint32_t, 12> child {};
-	child[0]  = KYTY_PM4(5, Pm4::IT_WRITE_DATA, 0);
+	child[0]  = KATY_PM4(5, Pm4::IT_WRITE_DATA, 0);
 	child[1]  = 0;
 	child[2]  = static_cast<uint32_t>(address(&child_observation));
 	child[3]  = static_cast<uint32_t>(address(&child_observation) >> 32u);
 	child[4]  = 0;
-	child[5]  = KYTY_PM4(7, Pm4::IT_NOP, Pm4::R_WAIT_MEM_32);
+	child[5]  = KATY_PM4(7, Pm4::IT_NOP, Pm4::R_WAIT_MEM_32);
 	child[6]  = static_cast<uint32_t>(address(&label));
 	child[7]  = static_cast<uint32_t>(address(&label) >> 32u);
 	child[8]  = UINT32_MAX;
@@ -17677,22 +17677,22 @@ void CheckPm4WaitResume(RenderContext& renderer) {
 	child[10] = 0x10u | 3u;
 
 	std::array<uint32_t, 4> nested {};
-	nested[0] = KYTY_PM4(4, Pm4::IT_INDIRECT_BUFFER, 0);
+	nested[0] = KATY_PM4(4, Pm4::IT_INDIRECT_BUFFER, 0);
 	nested[1] = static_cast<uint32_t>(address(child.data()));
 	nested[2] = static_cast<uint32_t>(address(child.data()) >> 32u);
 	nested[3] = 0x0f200000u | static_cast<uint32_t>(child.size());
 
 	std::array<uint32_t, 14> commands {};
-	commands[0]  = KYTY_PM4(5, Pm4::IT_WRITE_DATA, 0);
+	commands[0]  = KATY_PM4(5, Pm4::IT_WRITE_DATA, 0);
 	commands[1]  = 0;
 	commands[2]  = static_cast<uint32_t>(address(&prefix));
 	commands[3]  = static_cast<uint32_t>(address(&prefix) >> 32u);
 	commands[4]  = 11;
-	commands[5]  = KYTY_PM4(4, Pm4::IT_INDIRECT_BUFFER, 0);
+	commands[5]  = KATY_PM4(4, Pm4::IT_INDIRECT_BUFFER, 0);
 	commands[6]  = static_cast<uint32_t>(address(nested.data()));
 	commands[7]  = static_cast<uint32_t>(address(nested.data()) >> 32u);
 	commands[8]  = 0x0f200000u | static_cast<uint32_t>(nested.size());
-	commands[9]  = KYTY_PM4(5, Pm4::IT_WRITE_DATA, 0);
+	commands[9]  = KATY_PM4(5, Pm4::IT_WRITE_DATA, 0);
 	commands[10] = 0;
 	commands[11] = static_cast<uint32_t>(address(&suffix));
 	commands[12] = static_cast<uint32_t>(address(&suffix) >> 32u);
@@ -17724,7 +17724,7 @@ void CheckPm4CeCompletion(RenderContext& renderer) {
 	std::array<uint32_t, 7> commands {};
 	commands[0] = 0xc0008600u;
 	commands[1] = 1;
-	commands[2] = KYTY_PM4(5, Pm4::IT_WRITE_DATA, 0);
+	commands[2] = KATY_PM4(5, Pm4::IT_WRITE_DATA, 0);
 	commands[3] = 0;
 	commands[4] = static_cast<uint32_t>(address);
 	commands[5] = static_cast<uint32_t>(address >> 32u);
@@ -17833,7 +17833,7 @@ int main(int argc, char** argv) {
 		vulkan.CheckBufferCacheDirtyGarbageCollection();
 		return 0;
 	}
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	if (argc == 2 && std::strcmp(argv[1], "--reverse-rt-death") == 0) {
 		RunReverseRenderTargetDeathCase();
 	}
@@ -17934,7 +17934,7 @@ int main(int argc, char** argv) {
 	vulkan.CheckStreamBufferRing();
 	vulkan.CheckCommandPoolGrowth();
 	vulkan.CheckGpuTilerCpuParity();
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	vulkan.CheckRenderExecutorColorVolumeDiscovery();
 	vulkan.CheckRenderExecutorStencilBindingDiscovery();
 	vulkan.CheckUnifiedTextureCacheFlow();

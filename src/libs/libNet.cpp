@@ -39,11 +39,11 @@ static constexpr uint32_t g_in6addr_any[4] {};
 
 namespace Net = Network::Net;
 
-KYTY_SYSV_ABI int* GetNetErrorAddr() {
+KATY_SYSV_ABI int* GetNetErrorAddr() {
 	return &g_net_errno;
 }
 
-static int KYTY_SYSV_ABI NetInit() {
+static int KATY_SYSV_ABI NetInit() {
 	return NET_CALL(Net::NetInit());
 }
 
@@ -75,54 +75,54 @@ static int FinishSocketCall(int result) {
 	return net_error;
 }
 
-int KYTY_SYSV_ABI NetSocket(const char* name, int family, int type, int protocol) {
+int KATY_SYSV_ABI NetSocket(const char* name, int family, int type, int protocol) {
 	LOGF("\t name = %s\n", name != nullptr ? name : "<null>");
 
 	return FinishSocketCall(Net::Socket(family, type, protocol));
 }
 
-int KYTY_SYSV_ABI NetAccept(int s, void* addr, uint32_t* addrlen) {
+int KATY_SYSV_ABI NetAccept(int s, void* addr, uint32_t* addrlen) {
 	return FinishSocketCall(Net::Accept(s, addr, addrlen));
 }
 
-int KYTY_SYSV_ABI NetBind(int s, const void* addr, uint32_t addrlen) {
+int KATY_SYSV_ABI NetBind(int s, const void* addr, uint32_t addrlen) {
 	return FinishSocketCall(Net::Bind(s, addr, addrlen));
 }
 
-int KYTY_SYSV_ABI NetListen(int s, int backlog) {
+int KATY_SYSV_ABI NetListen(int s, int backlog) {
 	return FinishSocketCall(Net::Listen(s, backlog));
 }
 
-int KYTY_SYSV_ABI NetShutdown(int s, int how) {
+int KATY_SYSV_ABI NetShutdown(int s, int how) {
 	return FinishSocketCall(Net::Shutdown(s, how));
 }
 
-int KYTY_SYSV_ABI NetGetsockname(int s, void* addr, uint32_t* addrlen) {
+int KATY_SYSV_ABI NetGetsockname(int s, void* addr, uint32_t* addrlen) {
 	return FinishSocketCall(Net::Getsockname(s, addr, addrlen));
 }
 
-int KYTY_SYSV_ABI NetPoolCreate(const char* name, int size, int flags) {
+int KATY_SYSV_ABI NetPoolCreate(const char* name, int size, int flags) {
 	return NET_CALL(Net::NetPoolCreate(name, size, flags));
 }
 
-int KYTY_SYSV_ABI NetPoolDestroy(int memid) {
+int KATY_SYSV_ABI NetPoolDestroy(int memid) {
 	return NET_CALL(Net::NetPoolDestroy(memid));
 }
 
-int KYTY_SYSV_ABI NetResolverCreate(const char* name, int memid, int flags) {
+int KATY_SYSV_ABI NetResolverCreate(const char* name, int memid, int flags) {
 	return NET_CALL(Net::NetResolverCreate(name, memid, flags));
 }
 
-int KYTY_SYSV_ABI NetResolverStartNtoa(int rid, const char* hostname, void* addr, int timeout,
+int KATY_SYSV_ABI NetResolverStartNtoa(int rid, const char* hostname, void* addr, int timeout,
                                        int retry, int flags) {
 	return NET_CALL(Net::NetResolverStartNtoa(rid, hostname, addr, timeout, retry, flags));
 }
 
-int KYTY_SYSV_ABI NetInetPton(int af, const char* src, void* dst) {
+int KATY_SYSV_ABI NetInetPton(int af, const char* src, void* dst) {
 	return NET_CALL(Net::NetInetPton(af, src, dst));
 }
 
-const char* KYTY_SYSV_ABI NetInetNtop(int af, const void* src, char* dst, uint32_t size) {
+const char* KATY_SYSV_ABI NetInetNtop(int af, const void* src, char* dst, uint32_t size) {
 	const char* result = Net::NetInetNtop(af, src, dst, size);
 	if (result == nullptr) {
 		*GetNetErrorAddr() = PosixToNetError(*Posix::GetErrorAddr());
@@ -130,57 +130,57 @@ const char* KYTY_SYSV_ABI NetInetNtop(int af, const void* src, char* dst, uint32
 	return result;
 }
 
-int KYTY_SYSV_ABI NetEtherNtostr(const Net::NetEtherAddr* n, char* str, size_t len) {
+int KATY_SYSV_ABI NetEtherNtostr(const Net::NetEtherAddr* n, char* str, size_t len) {
 	return NET_CALL(Net::NetEtherNtostr(n, str, len));
 }
 
-int KYTY_SYSV_ABI NetGetMacAddress(Net::NetEtherAddr* addr, int flags) {
+int KATY_SYSV_ABI NetGetMacAddress(Net::NetEtherAddr* addr, int flags) {
 	return NET_CALL(Net::NetGetMacAddress(addr, flags));
 }
 
-int KYTY_SYSV_ABI NetGetSockInfo(int s, void* info, int n, int flags) {
+int KATY_SYSV_ABI NetGetSockInfo(int s, void* info, int n, int flags) {
 	return NET_CALL(Net::NetGetSockInfo(s, info, n, flags));
 }
 
-int KYTY_SYSV_ABI NetEpollCreate(const char* name, int flags) {
+int KATY_SYSV_ABI NetEpollCreate(const char* name, int flags) {
 	return FinishSocketCall(Net::EpollCreate(name, flags));
 }
 
-int KYTY_SYSV_ABI NetEpollControl(int eid, int op, int id, const Net::NetEpollEvent* event) {
+int KATY_SYSV_ABI NetEpollControl(int eid, int op, int id, const Net::NetEpollEvent* event) {
 	return FinishSocketCall(Net::EpollControl(eid, op, id, event));
 }
 
-int KYTY_SYSV_ABI NetEpollWait(int eid, Net::NetEpollEvent* events, int maxevents, int timeout) {
+int KATY_SYSV_ABI NetEpollWait(int eid, Net::NetEpollEvent* events, int maxevents, int timeout) {
 	return FinishSocketCall(Net::EpollWait(eid, events, maxevents, timeout));
 }
 
-int KYTY_SYSV_ABI NetEpollDestroy(int eid) {
+int KATY_SYSV_ABI NetEpollDestroy(int eid) {
 	return FinishSocketCall(Net::EpollDestroy(eid));
 }
 
-int KYTY_SYSV_ABI NetSocketClose(int s) {
+int KATY_SYSV_ABI NetSocketClose(int s) {
 	return NET_CALL(Net::SocketClose(s));
 }
 
-int KYTY_SYSV_ABI NetSetsockopt(int s, int level, int optname, const void* optval,
+int KATY_SYSV_ABI NetSetsockopt(int s, int level, int optname, const void* optval,
                                 uint32_t optlen) {
 	return NET_CALL(Net::Setsockopt(s, level, optname, optval, optlen));
 }
 
-uint32_t KYTY_SYSV_ABI NetHtonl(uint32_t host32) {
+uint32_t KATY_SYSV_ABI NetHtonl(uint32_t host32) {
 	return ((host32 & 0x000000ffu) << 24u) | ((host32 & 0x0000ff00u) << 8u) |
 	       ((host32 & 0x00ff0000u) >> 8u) | ((host32 & 0xff000000u) >> 24u);
 }
 
-uint16_t KYTY_SYSV_ABI NetHtons(uint16_t host16) {
+uint16_t KATY_SYSV_ABI NetHtons(uint16_t host16) {
 	return static_cast<uint16_t>(((host16 & 0x00ffu) << 8u) | ((host16 & 0xff00u) >> 8u));
 }
 
-uint32_t KYTY_SYSV_ABI NetNtohl(uint32_t net32) {
+uint32_t KATY_SYSV_ABI NetNtohl(uint32_t net32) {
 	return NetHtonl(net32);
 }
 
-uint16_t KYTY_SYSV_ABI NetNtohs(uint16_t net16) {
+uint16_t KATY_SYSV_ABI NetNtohs(uint16_t net16) {
 	return NetHtons(net16);
 }
 
@@ -308,7 +308,7 @@ static int ParseEmptyUri(SceHttpUriElement* out, void* pool, size_t* require, si
 	return 0;
 }
 
-static int KYTY_SYSV_ABI HttpUriParse(SceHttpUriElement* out, const char* src_url, void* pool,
+static int KATY_SYSV_ABI HttpUriParse(SceHttpUriElement* out, const char* src_url, void* pool,
                                       size_t* require, size_t prepare) {
 	PRINT_NAME();
 
@@ -492,7 +492,7 @@ static int KYTY_SYSV_ABI HttpUriParse(SceHttpUriElement* out, const char* src_ur
 	return 0;
 }
 
-static int KYTY_SYSV_ABI HttpUriEscape(char* out, size_t* require, size_t prepare, const char* in) {
+static int KATY_SYSV_ABI HttpUriEscape(char* out, size_t* require, size_t prepare, const char* in) {
 	PRINT_NAME();
 
 	LOGF("\t out     = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(out));
@@ -549,7 +549,7 @@ static void AppendUriPart(std::string* dst, const char* part) {
 	}
 }
 
-static int KYTY_SYSV_ABI HttpUriBuild(char* out, size_t* require, size_t prepare,
+static int KATY_SYSV_ABI HttpUriBuild(char* out, size_t* require, size_t prepare,
                                       const SceHttpUriElement* src_element, uint32_t option) {
 	PRINT_NAME();
 
@@ -741,7 +741,7 @@ static Http2Options* GetHttp2Options(int id) {
 	return nullptr;
 }
 
-static int KYTY_SYSV_ABI Http2Init(int libnet_mem_id, int libssl_ctx_id, size_t pool_size,
+static int KATY_SYSV_ABI Http2Init(int libnet_mem_id, int libssl_ctx_id, size_t pool_size,
                                    int max_concurrent_request) {
 	PRINT_NAME();
 
@@ -757,7 +757,7 @@ static int KYTY_SYSV_ABI Http2Init(int libnet_mem_id, int libssl_ctx_id, size_t 
 	return id;
 }
 
-static int KYTY_SYSV_ABI Http2CreateTemplate(int lib_http2_ctx_id, const char* user_agent,
+static int KATY_SYSV_ABI Http2CreateTemplate(int lib_http2_ctx_id, const char* user_agent,
                                              int http_ver, int is_auto_proxy_conf) {
 	PRINT_NAME();
 
@@ -777,7 +777,7 @@ static int KYTY_SYSV_ABI Http2CreateTemplate(int lib_http2_ctx_id, const char* u
 	return tmpl_id;
 }
 
-static int KYTY_SYSV_ABI Http2DeleteTemplate(int tmpl_id) {
+static int KATY_SYSV_ABI Http2DeleteTemplate(int tmpl_id) {
 	PRINT_NAME();
 
 	LOGF("\t tmpl_id = %d\n", tmpl_id);
@@ -800,7 +800,7 @@ static int KYTY_SYSV_ABI Http2DeleteTemplate(int tmpl_id) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2Term(int lib_http2_ctx_id) {
+static int KATY_SYSV_ABI Http2Term(int lib_http2_ctx_id) {
 	PRINT_NAME();
 
 	LOGF("\t lib_http2_ctx_id = %d\n", lib_http2_ctx_id);
@@ -831,7 +831,7 @@ static int KYTY_SYSV_ABI Http2Term(int lib_http2_ctx_id) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2CreateRequestWithURL(int tmpl_id, const char* method, const char* url,
+static int KATY_SYSV_ABI Http2CreateRequestWithURL(int tmpl_id, const char* method, const char* url,
                                                    uint64_t content_length) {
 	PRINT_NAME();
 
@@ -854,7 +854,7 @@ static int KYTY_SYSV_ABI Http2CreateRequestWithURL(int tmpl_id, const char* meth
 	return req_id;
 }
 
-static int KYTY_SYSV_ABI Http2AddRequestHeader(int id, const char* name, const char* value,
+static int KATY_SYSV_ABI Http2AddRequestHeader(int id, const char* name, const char* value,
                                                uint32_t mode) {
 	PRINT_NAME();
 
@@ -877,7 +877,7 @@ static int KYTY_SYSV_ABI Http2AddRequestHeader(int id, const char* name, const c
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetRequestContentLength(int id, uint64_t content_length) {
+static int KATY_SYSV_ABI Http2SetRequestContentLength(int id, uint64_t content_length) {
 	PRINT_NAME();
 
 	LOGF("\t id             = %d\n", id);
@@ -893,7 +893,7 @@ static int KYTY_SYSV_ABI Http2SetRequestContentLength(int id, uint64_t content_l
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetAuthEnabled(int id, int is_enable) {
+static int KATY_SYSV_ABI Http2SetAuthEnabled(int id, int is_enable) {
 	PRINT_NAME();
 
 	LOGF("\t id        = %d\n", id);
@@ -909,7 +909,7 @@ static int KYTY_SYSV_ABI Http2SetAuthEnabled(int id, int is_enable) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetAutoRedirect(int id, int enable) {
+static int KATY_SYSV_ABI Http2SetAutoRedirect(int id, int enable) {
 	PRINT_NAME();
 
 	LOGF("\t id     = %d\n", id);
@@ -925,7 +925,7 @@ static int KYTY_SYSV_ABI Http2SetAutoRedirect(int id, int enable) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetInflateGZIPEnabled(int id, int enable) {
+static int KATY_SYSV_ABI Http2SetInflateGZIPEnabled(int id, int enable) {
 	PRINT_NAME();
 
 	LOGF("\t id     = %d\n", id);
@@ -941,7 +941,7 @@ static int KYTY_SYSV_ABI Http2SetInflateGZIPEnabled(int id, int enable) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SslEnableOption(int id, uint32_t ssl_flags) {
+static int KATY_SYSV_ABI Http2SslEnableOption(int id, uint32_t ssl_flags) {
 	PRINT_NAME();
 
 	LOGF("\t id        = %d\n", id);
@@ -957,7 +957,7 @@ static int KYTY_SYSV_ABI Http2SslEnableOption(int id, uint32_t ssl_flags) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SslDisableOption(int id, uint32_t ssl_flags) {
+static int KATY_SYSV_ABI Http2SslDisableOption(int id, uint32_t ssl_flags) {
 	PRINT_NAME();
 
 	LOGF("\t id        = %d\n", id);
@@ -973,7 +973,7 @@ static int KYTY_SYSV_ABI Http2SslDisableOption(int id, uint32_t ssl_flags) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetSslCallback(int id, void* cb_func, void* user_arg) {
+static int KATY_SYSV_ABI Http2SetSslCallback(int id, void* cb_func, void* user_arg) {
 	PRINT_NAME();
 
 	LOGF("\t id       = %d\n", id);
@@ -991,7 +991,7 @@ static int KYTY_SYSV_ABI Http2SetSslCallback(int id, void* cb_func, void* user_a
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetRedirectCallback(int id, void* cb_func, void* user_arg) {
+static int KATY_SYSV_ABI Http2SetRedirectCallback(int id, void* cb_func, void* user_arg) {
 	PRINT_NAME();
 
 	LOGF("\t id       = %d\n", id);
@@ -1009,7 +1009,7 @@ static int KYTY_SYSV_ABI Http2SetRedirectCallback(int id, void* cb_func, void* u
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetConnectTimeOut(int id, uint32_t usec) {
+static int KATY_SYSV_ABI Http2SetConnectTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n", id);
@@ -1025,7 +1025,7 @@ static int KYTY_SYSV_ABI Http2SetConnectTimeOut(int id, uint32_t usec) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetConnectionWaitTimeOut(int id, uint32_t usec) {
+static int KATY_SYSV_ABI Http2SetConnectionWaitTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n", id);
@@ -1041,7 +1041,7 @@ static int KYTY_SYSV_ABI Http2SetConnectionWaitTimeOut(int id, uint32_t usec) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetResolveTimeOut(int id, uint32_t usec) {
+static int KATY_SYSV_ABI Http2SetResolveTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n", id);
@@ -1057,7 +1057,7 @@ static int KYTY_SYSV_ABI Http2SetResolveTimeOut(int id, uint32_t usec) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetTimeOut(int id, uint32_t usec) {
+static int KATY_SYSV_ABI Http2SetTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n", id);
@@ -1073,7 +1073,7 @@ static int KYTY_SYSV_ABI Http2SetTimeOut(int id, uint32_t usec) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetSendTimeOut(int id, uint32_t usec) {
+static int KATY_SYSV_ABI Http2SetSendTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n", id);
@@ -1089,7 +1089,7 @@ static int KYTY_SYSV_ABI Http2SetSendTimeOut(int id, uint32_t usec) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SetRecvTimeOut(int id, uint32_t usec) {
+static int KATY_SYSV_ABI Http2SetRecvTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n", id);
@@ -1105,7 +1105,7 @@ static int KYTY_SYSV_ABI Http2SetRecvTimeOut(int id, uint32_t usec) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2SendRequest(int req_id, const void* post_data, size_t size) {
+static int KATY_SYSV_ABI Http2SendRequest(int req_id, const void* post_data, size_t size) {
 	PRINT_NAME();
 
 	LOGF("\t req_id    = %d\n", req_id);
@@ -1126,7 +1126,7 @@ static int KYTY_SYSV_ABI Http2SendRequest(int req_id, const void* post_data, siz
 	return request->second.send_result;
 }
 
-static int KYTY_SYSV_ABI Http2SendRequestAsync(int req_id, const void* post_data, size_t size,
+static int KATY_SYSV_ABI Http2SendRequestAsync(int req_id, const void* post_data, size_t size,
                                                void* /*kqueue_option*/, void* /*option*/) {
 	PRINT_NAME();
 
@@ -1150,7 +1150,7 @@ static int KYTY_SYSV_ABI Http2SendRequestAsync(int req_id, const void* post_data
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2WaitAsync(int req_id, Http2AsyncResult* result, uint32_t* /*timeout*/,
+static int KATY_SYSV_ABI Http2WaitAsync(int req_id, Http2AsyncResult* result, uint32_t* /*timeout*/,
                                         void* /*option*/) {
 	PRINT_NAME();
 
@@ -1174,7 +1174,7 @@ static int KYTY_SYSV_ABI Http2WaitAsync(int req_id, Http2AsyncResult* result, ui
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2GetStatusCode(int req_id, int* status_code) {
+static int KATY_SYSV_ABI Http2GetStatusCode(int req_id, int* status_code) {
 	PRINT_NAME();
 
 	LOGF("\t req_id      = %d\n", req_id);
@@ -1200,7 +1200,7 @@ static int KYTY_SYSV_ABI Http2GetStatusCode(int req_id, int* status_code) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2GetResponseContentLength(int req_id, int* result,
+static int KATY_SYSV_ABI Http2GetResponseContentLength(int req_id, int* result,
                                                        uint64_t* content_length) {
 	PRINT_NAME();
 
@@ -1230,7 +1230,7 @@ static int KYTY_SYSV_ABI Http2GetResponseContentLength(int req_id, int* result,
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2GetAllResponseHeaders(int req_id, char** header,
+static int KATY_SYSV_ABI Http2GetAllResponseHeaders(int req_id, char** header,
                                                     size_t* header_size) {
 	PRINT_NAME();
 
@@ -1260,7 +1260,7 @@ static int KYTY_SYSV_ABI Http2GetAllResponseHeaders(int req_id, char** header,
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2ReadData(int req_id, void* data, size_t size) {
+static int KATY_SYSV_ABI Http2ReadData(int req_id, void* data, size_t size) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -1294,7 +1294,7 @@ static int KYTY_SYSV_ABI Http2ReadData(int req_id, void* data, size_t size) {
 	return static_cast<int>(to_copy);
 }
 
-static int KYTY_SYSV_ABI Http2ReadDataAsync(int req_id, void* data, size_t size,
+static int KATY_SYSV_ABI Http2ReadDataAsync(int req_id, void* data, size_t size,
                                             void* /*kqueue_option*/, void* /*option*/) {
 	PRINT_NAME();
 
@@ -1334,7 +1334,7 @@ static int KYTY_SYSV_ABI Http2ReadDataAsync(int req_id, void* data, size_t size,
 	return 0;
 }
 
-static int KYTY_SYSV_ABI Http2DeleteRequest(int req_id) {
+static int KATY_SYSV_ABI Http2DeleteRequest(int req_id) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -1445,7 +1445,7 @@ namespace LibNpSessionSignaling {
 
 LIB_VERSION("NpSessionSignaling", 1, "NpSessionSignaling", 1, 1);
 
-static int KYTY_SYSV_ABI NpSessionSignalingInitialize(void* param) {
+static int KATY_SYSV_ABI NpSessionSignalingInitialize(void* param) {
 	PRINT_NAME();
 
 	LOGF("\t param = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(param));
@@ -1492,7 +1492,7 @@ static constexpr NpEntitlementAccessAddcontEntitlementInfo NP_ENTITLEMENT_ACCESS
     {{{"_mtqu6"}, {}}, 3, 4}, // GTA V hash 0x9cd1bcad
 };
 
-static int KYTY_SYSV_ABI NpEntitlementAccessInitialize(
+static int KATY_SYSV_ABI NpEntitlementAccessInitialize(
     const NpEntitlementAccessInitParam* init_param, NpEntitlementAccessBootParam* boot_param) {
 	PRINT_NAME();
 
@@ -1505,7 +1505,7 @@ static int KYTY_SYSV_ABI NpEntitlementAccessInitialize(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpEntitlementAccessGetSkuFlag(uint32_t* sku_flag) {
+static int KATY_SYSV_ABI NpEntitlementAccessGetSkuFlag(uint32_t* sku_flag) {
 	PRINT_NAME();
 
 	if (sku_flag == nullptr) {
@@ -1516,7 +1516,7 @@ static int KYTY_SYSV_ABI NpEntitlementAccessGetSkuFlag(uint32_t* sku_flag) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpEntitlementAccessGetAddcontEntitlementInfoList(
+static int KATY_SYSV_ABI NpEntitlementAccessGetAddcontEntitlementInfoList(
     uint32_t service_label, NpEntitlementAccessAddcontEntitlementInfo* list, uint32_t list_num,
     uint32_t* hit_num) {
 	PRINT_NAME();
@@ -1545,7 +1545,7 @@ static int KYTY_SYSV_ABI NpEntitlementAccessGetAddcontEntitlementInfoList(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpEntitlementAccessGetAddcontEntitlementInfo(
+static int KATY_SYSV_ABI NpEntitlementAccessGetAddcontEntitlementInfo(
     uint32_t service_label, const NpUnifiedEntitlementLabel* entitlement_label,
     NpEntitlementAccessAddcontEntitlementInfo* info) {
 	PRINT_NAME();
@@ -1655,11 +1655,11 @@ static int np_auth_create_request(bool async) {
 	return static_cast<int>(index) + NP_AUTH_REQUEST_ID_OFFSET + 1;
 }
 
-static int KYTY_SYSV_ABI NpAuthCreateRequest() {
+static int KATY_SYSV_ABI NpAuthCreateRequest() {
 	return np_auth_create_request(false);
 }
 
-static int KYTY_SYSV_ABI NpAuthCreateAsyncRequest(const void* param) {
+static int KATY_SYSV_ABI NpAuthCreateAsyncRequest(const void* param) {
 	PRINT_NAME();
 
 	LOGF("\t param = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(param));
@@ -1667,7 +1667,7 @@ static int KYTY_SYSV_ABI NpAuthCreateAsyncRequest(const void* param) {
 	return np_auth_create_request(true);
 }
 
-static int KYTY_SYSV_ABI NpAuthDeleteRequest(int req_id) {
+static int KATY_SYSV_ABI NpAuthDeleteRequest(int req_id) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -1687,7 +1687,7 @@ static int KYTY_SYSV_ABI NpAuthDeleteRequest(int req_id) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpAuthAbortRequest(int req_id) {
+static int KATY_SYSV_ABI NpAuthAbortRequest(int req_id) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -1742,7 +1742,7 @@ static int np_auth_complete_signed_out(NpAuthRequest* request) {
 	return request->async ? 0 : NP_ERROR_SIGNED_OUT;
 }
 
-static int KYTY_SYSV_ABI NpAuthWaitAsync(int req_id, int* result) {
+static int KATY_SYSV_ABI NpAuthWaitAsync(int req_id, int* result) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -1751,7 +1751,7 @@ static int KYTY_SYSV_ABI NpAuthWaitAsync(int req_id, int* result) {
 	return np_auth_wait_or_poll_async(req_id, result);
 }
 
-static int KYTY_SYSV_ABI NpAuthPollAsync(int req_id, int* result) {
+static int KATY_SYSV_ABI NpAuthPollAsync(int req_id, int* result) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -1760,7 +1760,7 @@ static int KYTY_SYSV_ABI NpAuthPollAsync(int req_id, int* result) {
 	return np_auth_wait_or_poll_async(req_id, result);
 }
 
-static int KYTY_SYSV_ABI NpAuthGetAuthorizationCodeV3(int req_id, const void* param,
+static int KATY_SYSV_ABI NpAuthGetAuthorizationCodeV3(int req_id, const void* param,
                                                       void* auth_code, int* issuer_id) {
 	PRINT_NAME();
 
@@ -1794,7 +1794,7 @@ static int KYTY_SYSV_ABI NpAuthGetAuthorizationCodeV3(int req_id, const void* pa
 	return np_auth_complete_signed_out(request);
 }
 
-static int KYTY_SYSV_ABI NpAuthGetIdTokenV3(int req_id, const void* param, void* id_token) {
+static int KATY_SYSV_ABI NpAuthGetIdTokenV3(int req_id, const void* param, void* id_token) {
 	PRINT_NAME();
 
 	LOGF("\t req_id   = %d\n", req_id);
@@ -1925,7 +1925,7 @@ static void NpTrophy2FillTitle(char* dst, size_t dst_size, const char* src) {
 	dst[dst_size - 1] = '\0';
 }
 
-static int KYTY_SYSV_ABI NpTrophy2CreateHandle(int* handle) {
+static int KATY_SYSV_ABI NpTrophy2CreateHandle(int* handle) {
 	PRINT_NAME();
 
 	if (handle != nullptr) {
@@ -1935,7 +1935,7 @@ static int KYTY_SYSV_ABI NpTrophy2CreateHandle(int* handle) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2CreateContext(int* context, int user_id, uint32_t service_label,
+static int KATY_SYSV_ABI NpTrophy2CreateContext(int* context, int user_id, uint32_t service_label,
                                                 uint64_t options) {
 	PRINT_NAME();
 
@@ -1951,7 +1951,7 @@ static int KYTY_SYSV_ABI NpTrophy2CreateContext(int* context, int user_id, uint3
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2RegisterContext(int context, int handle, uint64_t options) {
+static int KATY_SYSV_ABI NpTrophy2RegisterContext(int context, int handle, uint64_t options) {
 	PRINT_NAME();
 
 	LOGF("\t context = %d\n"
@@ -1962,7 +1962,7 @@ static int KYTY_SYSV_ABI NpTrophy2RegisterContext(int context, int handle, uint6
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2GetGameInfo(int context, int handle,
+static int KATY_SYSV_ABI NpTrophy2GetGameInfo(int context, int handle,
                                               NpTrophy2GameDetails* details,
                                               NpTrophy2GameData*    data) {
 	PRINT_NAME();
@@ -1977,7 +1977,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetGameInfo(int context, int handle,
 		std::memset(details, 0, sizeof(*details));
 		details->num_trophies = 1;
 		details->num_bronze   = 1;
-		NpTrophy2FillTitle(details->title, sizeof(details->title), "Kyty");
+		NpTrophy2FillTitle(details->title, sizeof(details->title), "Katy");
 	}
 	if (data != nullptr) {
 		std::memset(data, 0, sizeof(*data));
@@ -1986,7 +1986,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetGameInfo(int context, int handle,
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2GetGroupInfo(int context, int handle, int group_id,
+static int KATY_SYSV_ABI NpTrophy2GetGroupInfo(int context, int handle, int group_id,
                                                NpTrophy2GroupDetails* details,
                                                NpTrophy2GroupData*    data) {
 	PRINT_NAME();
@@ -2016,7 +2016,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetGroupInfo(int context, int handle, int grou
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2GetGroupInfoArray(int context, int handle, uint32_t offset,
+static int KATY_SYSV_ABI NpTrophy2GetGroupInfoArray(int context, int handle, uint32_t offset,
                                                     uint32_t               limit,
                                                     NpTrophy2GroupDetails* details_array,
                                                     NpTrophy2GroupData*    data_array,
@@ -2053,7 +2053,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetGroupInfoArray(int context, int handle, uin
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2GetTrophyInfo(int context, int handle, int trophy_id,
+static int KATY_SYSV_ABI NpTrophy2GetTrophyInfo(int context, int handle, int trophy_id,
                                                 NpTrophy2Details* details, NpTrophy2Data* data) {
 	PRINT_NAME();
 
@@ -2083,7 +2083,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetTrophyInfo(int context, int handle, int tro
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2GetTrophyInfoArray(int context, int handle, uint32_t offset,
+static int KATY_SYSV_ABI NpTrophy2GetTrophyInfoArray(int context, int handle, uint32_t offset,
                                                      uint32_t          limit,
                                                      NpTrophy2Details* details_array,
                                                      NpTrophy2Data* data_array, uint32_t* count) {
@@ -2121,7 +2121,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetTrophyInfoArray(int context, int handle, ui
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2GetGameIcon(int context, int handle, void* buffer, size_t* size) {
+static int KATY_SYSV_ABI NpTrophy2GetGameIcon(int context, int handle, void* buffer, size_t* size) {
 	PRINT_NAME();
 
 	LOGF("\t context = %d\n"
@@ -2137,7 +2137,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetGameIcon(int context, int handle, void* buf
 	return NP_TROPHY2_ERROR_ICON_FILE_NOT_FOUND;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2GetGroupIcon(int context, int handle, int group_id, void* buffer,
+static int KATY_SYSV_ABI NpTrophy2GetGroupIcon(int context, int handle, int group_id, void* buffer,
                                                size_t* size) {
 	PRINT_NAME();
 
@@ -2156,7 +2156,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetGroupIcon(int context, int handle, int grou
 	return NP_TROPHY2_ERROR_ICON_FILE_NOT_FOUND;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2GetTrophyIcon(int context, int handle, int trophy_id,
+static int KATY_SYSV_ABI NpTrophy2GetTrophyIcon(int context, int handle, int trophy_id,
                                                 void* buffer, size_t* size) {
 	PRINT_NAME();
 
@@ -2175,7 +2175,7 @@ static int KYTY_SYSV_ABI NpTrophy2GetTrophyIcon(int context, int handle, int tro
 	return NP_TROPHY2_ERROR_ICON_FILE_NOT_FOUND;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2RegisterUnlockCallback(void* callback, void* userdata) {
+static int KATY_SYSV_ABI NpTrophy2RegisterUnlockCallback(void* callback, void* userdata) {
 	PRINT_NAME();
 
 	LOGF("\t callback = 0x%016" PRIx64 "\n"
@@ -2185,7 +2185,7 @@ static int KYTY_SYSV_ABI NpTrophy2RegisterUnlockCallback(void* callback, void* u
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2AbortHandle(int handle) {
+static int KATY_SYSV_ABI NpTrophy2AbortHandle(int handle) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n", handle);
@@ -2193,7 +2193,7 @@ static int KYTY_SYSV_ABI NpTrophy2AbortHandle(int handle) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2DestroyHandle(int handle) {
+static int KATY_SYSV_ABI NpTrophy2DestroyHandle(int handle) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n", handle);
@@ -2201,7 +2201,7 @@ static int KYTY_SYSV_ABI NpTrophy2DestroyHandle(int handle) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpTrophy2DestroyContext(int context) {
+static int KATY_SYSV_ABI NpTrophy2DestroyContext(int context) {
 	PRINT_NAME();
 
 	LOGF("\t context = %d\n", context);
@@ -2262,7 +2262,7 @@ struct NpUniversalDataSystemStorageStat {
 	size_t current_free_size;
 };
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 NpUniversalDataSystemInitialize(const NpUniversalDataSystemInitParam* param) {
 	PRINT_NAME();
 
@@ -2277,7 +2277,7 @@ NpUniversalDataSystemInitialize(const NpUniversalDataSystemInitParam* param) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemCreateContext(int* context, int user_id,
+static int KATY_SYSV_ABI NpUniversalDataSystemCreateContext(int* context, int user_id,
                                                             uint32_t service_label,
                                                             uint64_t options) {
 	PRINT_NAME();
@@ -2294,7 +2294,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemCreateContext(int* context, int us
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemCreateHandle(int* handle) {
+static int KATY_SYSV_ABI NpUniversalDataSystemCreateHandle(int* handle) {
 	PRINT_NAME();
 
 	if (handle == nullptr) {
@@ -2308,7 +2308,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemCreateHandle(int* handle) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemDestroyHandle(int handle) {
+static int KATY_SYSV_ABI NpUniversalDataSystemDestroyHandle(int handle) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n", handle);
@@ -2316,7 +2316,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemDestroyHandle(int handle) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemAbortHandle(int handle) {
+static int KATY_SYSV_ABI NpUniversalDataSystemAbortHandle(int handle) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n", handle);
@@ -2324,7 +2324,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemAbortHandle(int handle) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemCreateEvent(
+static int KATY_SYSV_ABI NpUniversalDataSystemCreateEvent(
     const char* event_name, const NpUniversalDataSystemEventPropertyObject* prop,
     NpUniversalDataSystemEvent** new_event, NpUniversalDataSystemEventPropertyObject** prop_ptr) {
 	PRINT_NAME();
@@ -2350,7 +2350,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemCreateEvent(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemPostEvent(int context, int handle, const void* event,
+static int KATY_SYSV_ABI NpUniversalDataSystemPostEvent(int context, int handle, const void* event,
                                                         uint64_t options) {
 	PRINT_NAME();
 
@@ -2363,7 +2363,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemPostEvent(int context, int handle,
 	return 0;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 NpUniversalDataSystemEventEstimateSize(const NpUniversalDataSystemEvent* event, size_t* size) {
 	PRINT_NAME();
 
@@ -2380,7 +2380,7 @@ NpUniversalDataSystemEventEstimateSize(const NpUniversalDataSystemEvent* event, 
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventToString(const NpUniversalDataSystemEvent* event,
+static int KATY_SYSV_ABI NpUniversalDataSystemEventToString(const NpUniversalDataSystemEvent* event,
                                                             char* buf, size_t buf_size,
                                                             size_t* string_size) {
 	PRINT_NAME();
@@ -2407,7 +2407,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventToString(const NpUniversalDat
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemDestroyEvent(NpUniversalDataSystemEvent* event) {
+static int KATY_SYSV_ABI NpUniversalDataSystemDestroyEvent(NpUniversalDataSystemEvent* event) {
 	PRINT_NAME();
 
 	LOGF("\t event = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(event));
@@ -2417,7 +2417,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemDestroyEvent(NpUniversalDataSystem
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemRegisterContext(int context, int handle,
+static int KATY_SYSV_ABI NpUniversalDataSystemRegisterContext(int context, int handle,
                                                               uint64_t options) {
 	PRINT_NAME();
 
@@ -2429,7 +2429,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemRegisterContext(int context, int h
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemDestroyContext(int context) {
+static int KATY_SYSV_ABI NpUniversalDataSystemDestroyContext(int context) {
 	PRINT_NAME();
 
 	LOGF("\t context = %d\n", context);
@@ -2437,7 +2437,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemDestroyContext(int context) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemGetMemoryStat(NpUniversalDataSystemMemoryStat* stat) {
+static int KATY_SYSV_ABI NpUniversalDataSystemGetMemoryStat(NpUniversalDataSystemMemoryStat* stat) {
 	PRINT_NAME();
 
 	if (stat == nullptr) {
@@ -2449,7 +2449,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemGetMemoryStat(NpUniversalDataSyste
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemCreateEventPropertyObject(
+static int KATY_SYSV_ABI NpUniversalDataSystemCreateEventPropertyObject(
     NpUniversalDataSystemEventPropertyObject** new_object) {
 	PRINT_NAME();
 
@@ -2464,7 +2464,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemCreateEventPropertyObject(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 NpUniversalDataSystemDestroyEventPropertyObject(NpUniversalDataSystemEventPropertyObject* object) {
 	PRINT_NAME();
 
@@ -2475,7 +2475,7 @@ NpUniversalDataSystemDestroyEventPropertyObject(NpUniversalDataSystemEventProper
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetString(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetString(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, const char* value) {
 	PRINT_NAME();
 
@@ -2492,7 +2492,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetString(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetInt32(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetInt32(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, int32_t value) {
 	PRINT_NAME();
 
@@ -2508,7 +2508,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetInt32(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetUInt32(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetUInt32(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, uint32_t value) {
 	PRINT_NAME();
 
@@ -2524,7 +2524,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetUInt32(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetInt64(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetInt64(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, int64_t value) {
 	PRINT_NAME();
 
@@ -2540,7 +2540,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetInt64(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetUInt64(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetUInt64(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, uint64_t value) {
 	PRINT_NAME();
 
@@ -2556,7 +2556,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetUInt64(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetFloat32(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetFloat32(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, float value) {
 	PRINT_NAME();
 
@@ -2572,7 +2572,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetFloat32(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetFloat64(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetFloat64(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, double value) {
 	PRINT_NAME();
 
@@ -2588,7 +2588,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetFloat64(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetBool(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetBool(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, bool value) {
 	PRINT_NAME();
 
@@ -2604,7 +2604,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetBool(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetBinary(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetBinary(
     NpUniversalDataSystemEventPropertyObject* object, const char* key, const void* value,
     size_t value_size) {
 	PRINT_NAME();
@@ -2623,7 +2623,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetBinary(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetObject(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetObject(
     NpUniversalDataSystemEventPropertyObject* object, const char* key,
     const NpUniversalDataSystemEventPropertyObject* value,
     NpUniversalDataSystemEventPropertyObject**      value_ptr) {
@@ -2649,7 +2649,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetObject(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetArray(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetArray(
     NpUniversalDataSystemEventPropertyObject* object, const char* key,
     const NpUniversalDataSystemEventPropertyArray* value,
     NpUniversalDataSystemEventPropertyArray**      value_ptr) {
@@ -2674,7 +2674,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyObjectSetArray(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 NpUniversalDataSystemCreateEventPropertyArray(NpUniversalDataSystemEventPropertyArray** new_array) {
 	PRINT_NAME();
 
@@ -2689,7 +2689,7 @@ NpUniversalDataSystemCreateEventPropertyArray(NpUniversalDataSystemEventProperty
 	return 0;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 NpUniversalDataSystemDestroyEventPropertyArray(NpUniversalDataSystemEventPropertyArray* array) {
 	PRINT_NAME();
 
@@ -2700,7 +2700,7 @@ NpUniversalDataSystemDestroyEventPropertyArray(NpUniversalDataSystemEventPropert
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetString(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetString(
     NpUniversalDataSystemEventPropertyArray* array, const char* value) {
 	PRINT_NAME();
 
@@ -2715,7 +2715,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetString(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetInt32(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetInt32(
     NpUniversalDataSystemEventPropertyArray* array, int32_t value) {
 	PRINT_NAME();
 
@@ -2726,7 +2726,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetInt32(
 	return (array != nullptr ? 0 : NP_UNIVERSAL_DATA_SYSTEM_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetUInt32(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetUInt32(
     NpUniversalDataSystemEventPropertyArray* array, uint32_t value) {
 	PRINT_NAME();
 
@@ -2737,7 +2737,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetUInt32(
 	return (array != nullptr ? 0 : NP_UNIVERSAL_DATA_SYSTEM_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetInt64(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetInt64(
     NpUniversalDataSystemEventPropertyArray* array, int64_t value) {
 	PRINT_NAME();
 
@@ -2748,7 +2748,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetInt64(
 	return (array != nullptr ? 0 : NP_UNIVERSAL_DATA_SYSTEM_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetUInt64(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetUInt64(
     NpUniversalDataSystemEventPropertyArray* array, uint64_t value) {
 	PRINT_NAME();
 
@@ -2759,7 +2759,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetUInt64(
 	return (array != nullptr ? 0 : NP_UNIVERSAL_DATA_SYSTEM_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetFloat32(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetFloat32(
     NpUniversalDataSystemEventPropertyArray* array, float value) {
 	PRINT_NAME();
 
@@ -2770,7 +2770,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetFloat32(
 	return (array != nullptr ? 0 : NP_UNIVERSAL_DATA_SYSTEM_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetFloat64(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetFloat64(
     NpUniversalDataSystemEventPropertyArray* array, double value) {
 	PRINT_NAME();
 
@@ -2781,7 +2781,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetFloat64(
 	return (array != nullptr ? 0 : NP_UNIVERSAL_DATA_SYSTEM_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetBool(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetBool(
     NpUniversalDataSystemEventPropertyArray* array, bool value) {
 	PRINT_NAME();
 
@@ -2792,7 +2792,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetBool(
 	return (array != nullptr ? 0 : NP_UNIVERSAL_DATA_SYSTEM_ERROR_INVALID_ARGUMENT);
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetBinary(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetBinary(
     NpUniversalDataSystemEventPropertyArray* array, const void* value, size_t value_size) {
 	PRINT_NAME();
 
@@ -2809,7 +2809,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetBinary(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetObject(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetObject(
     NpUniversalDataSystemEventPropertyArray*        array,
     const NpUniversalDataSystemEventPropertyObject* value,
     NpUniversalDataSystemEventPropertyObject**      value_ptr) {
@@ -2834,7 +2834,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetObject(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetArray(
+static int KATY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetArray(
     NpUniversalDataSystemEventPropertyArray*       array,
     const NpUniversalDataSystemEventPropertyArray* value,
     NpUniversalDataSystemEventPropertyArray**      value_ptr) {
@@ -2858,7 +2858,7 @@ static int KYTY_SYSV_ABI NpUniversalDataSystemEventPropertyArraySetArray(
 	return 0;
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 NpUniversalDataSystemGetStorageStat(int context, NpUniversalDataSystemStorageStat* stat) {
 	PRINT_NAME();
 
@@ -2875,7 +2875,7 @@ NpUniversalDataSystemGetStorageStat(int context, NpUniversalDataSystemStorageSta
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpUniversalDataSystemTerminate() {
+static int KATY_SYSV_ABI NpUniversalDataSystemTerminate() {
 	PRINT_NAME();
 
 	return 0;
@@ -2957,7 +2957,7 @@ namespace LibCes {
 
 LIB_VERSION("Ces", 1, "Ces", 1, 1);
 
-static const uint8_t* KYTY_SYSV_ABI CesRefersUcsProfileCp1252() {
+static const uint8_t* KATY_SYSV_ABI CesRefersUcsProfileCp1252() {
 	PRINT_NAME();
 
 	static const uint8_t profile = 0;
@@ -3077,7 +3077,7 @@ static uint32_t CesEncodeUtf8(uint32_t code, uint8_t* utf8, uint32_t utf8max) {
 	return len;
 }
 
-static int KYTY_SYSV_ABI CesUtf8ToSbc(const uint8_t* utf8, uint32_t utf8max, uint32_t* utf8_len,
+static int KATY_SYSV_ABI CesUtf8ToSbc(const uint8_t* utf8, uint32_t utf8max, uint32_t* utf8_len,
                                       const uint8_t* profile, uint8_t* sbc) {
 	PRINT_NAME();
 
@@ -3095,7 +3095,7 @@ static int KYTY_SYSV_ABI CesUtf8ToSbc(const uint8_t* utf8, uint32_t utf8max, uin
 	return 0;
 }
 
-static int KYTY_SYSV_ABI CesSbcToUtf8(const uint8_t* profile, uint8_t sbc, uint8_t* utf8,
+static int KATY_SYSV_ABI CesSbcToUtf8(const uint8_t* profile, uint8_t sbc, uint8_t* utf8,
                                       uint32_t utf8max, uint32_t* utf8_len) {
 	PRINT_NAME();
 
@@ -3112,7 +3112,7 @@ static int KYTY_SYSV_ABI CesSbcToUtf8(const uint8_t* profile, uint8_t sbc, uint8
 	return utf8max >= len ? 0 : -1;
 }
 
-static int KYTY_SYSV_ABI CesStub(uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3) {
+static int KATY_SYSV_ABI CesStub(uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3) {
 	PRINT_NAME();
 
 	(void)arg0;
@@ -3161,7 +3161,7 @@ struct NpGameIntentInfo {
 static_assert(sizeof(NpGameIntentData) == 16392);
 static_assert(sizeof(NpGameIntentInfo) == 16704);
 
-static int KYTY_SYSV_ABI NpGameIntentInitialize(const void* init_param) {
+static int KATY_SYSV_ABI NpGameIntentInitialize(const void* init_param) {
 	PRINT_NAME();
 
 	LOGF("\t init_param = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(init_param));
@@ -3169,13 +3169,13 @@ static int KYTY_SYSV_ABI NpGameIntentInitialize(const void* init_param) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpGameIntentTerminate() {
+static int KATY_SYSV_ABI NpGameIntentTerminate() {
 	PRINT_NAME();
 
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpGameIntentReceiveIntent(NpGameIntentInfo* intent_info) {
+static int KATY_SYSV_ABI NpGameIntentReceiveIntent(NpGameIntentInfo* intent_info) {
 	PRINT_NAME();
 
 	LOGF("\t intent_info = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(intent_info));
@@ -3191,7 +3191,7 @@ static int KYTY_SYSV_ABI NpGameIntentReceiveIntent(NpGameIntentInfo* intent_info
 	return NP_GAME_INTENT_ERROR_INTENT_NOT_FOUND;
 }
 
-static int KYTY_SYSV_ABI NpGameIntentGetPropertyValueString(const NpGameIntentData* intent_data,
+static int KATY_SYSV_ABI NpGameIntentGetPropertyValueString(const NpGameIntentData* intent_data,
                                                             const char* key, char* value_buf,
                                                             size_t buf_size) {
 	PRINT_NAME();
@@ -3258,7 +3258,7 @@ static std::map<int64_t, NpWebApi2Request>& NpWebApi2Requests() {
 	return "{}";
 }
 
-static int KYTY_SYSV_ABI NpWebApi2Initialize(int lib_http_ctx_id, size_t pool_size) {
+static int KATY_SYSV_ABI NpWebApi2Initialize(int lib_http_ctx_id, size_t pool_size) {
 	PRINT_NAME();
 
 	LOGF("\t lib_http_ctx_id = %d\n"
@@ -3270,7 +3270,7 @@ static int KYTY_SYSV_ABI NpWebApi2Initialize(int lib_http_ctx_id, size_t pool_si
 	return ++id;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2PushEventCreateHandle(int lib_ctx_id) {
+static int KATY_SYSV_ABI NpWebApi2PushEventCreateHandle(int lib_ctx_id) {
 	PRINT_NAME();
 
 	LOGF("\t lib_ctx_id = %d\n", lib_ctx_id);
@@ -3280,7 +3280,7 @@ static int KYTY_SYSV_ABI NpWebApi2PushEventCreateHandle(int lib_ctx_id) {
 	return ++handle;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2CreateUserContext(int lib_ctx_id, int user_id) {
+static int KATY_SYSV_ABI NpWebApi2CreateUserContext(int lib_ctx_id, int user_id) {
 	PRINT_NAME();
 
 	LOGF("\t lib_ctx_id = %d\n"
@@ -3292,7 +3292,7 @@ static int KYTY_SYSV_ABI NpWebApi2CreateUserContext(int lib_ctx_id, int user_id)
 	return ++user_context;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2DeleteUserContext(int user_context_id) {
+static int KATY_SYSV_ABI NpWebApi2DeleteUserContext(int user_context_id) {
 	PRINT_NAME();
 
 	LOGF("\t user_context_id = %d\n", user_context_id);
@@ -3300,7 +3300,7 @@ static int KYTY_SYSV_ABI NpWebApi2DeleteUserContext(int user_context_id) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2CreateRequest(int user_context_id, const char* api_group,
+static int KATY_SYSV_ABI NpWebApi2CreateRequest(int user_context_id, const char* api_group,
                                                 const char* path, const char* method,
                                                 const void* content_parameter,
                                                 int64_t*    request_id) {
@@ -3328,7 +3328,7 @@ static int KYTY_SYSV_ABI NpWebApi2CreateRequest(int user_context_id, const char*
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2AbortRequest(int64_t request_id) {
+static int KATY_SYSV_ABI NpWebApi2AbortRequest(int64_t request_id) {
 	PRINT_NAME();
 
 	LOGF("\t request_id = %" PRIi64 "\n", request_id);
@@ -3338,7 +3338,7 @@ static int KYTY_SYSV_ABI NpWebApi2AbortRequest(int64_t request_id) {
 	            : 0);
 }
 
-static int KYTY_SYSV_ABI
+static int KATY_SYSV_ABI
 NpWebApi2SendRequest(int64_t request_id, const void* data, size_t data_size,
                      NpWebApi2ResponseInformationOption* response_info_option) {
 	PRINT_NAME();
@@ -3372,7 +3372,7 @@ NpWebApi2SendRequest(int64_t request_id, const void* data, size_t data_size,
 	return NP_WEBAPI2_ERROR_NOT_SIGNED_IN;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2ReadData(int64_t request_id, void* data, size_t size) {
+static int KATY_SYSV_ABI NpWebApi2ReadData(int64_t request_id, void* data, size_t size) {
 	PRINT_NAME();
 
 	LOGF("\t request_id = %" PRIi64 "\n", request_id);
@@ -3398,7 +3398,7 @@ static int KYTY_SYSV_ABI NpWebApi2ReadData(int64_t request_id, void* data, size_
 	return static_cast<int>(to_copy);
 }
 
-static int KYTY_SYSV_ABI NpWebApi2DeleteRequest(int64_t request_id) {
+static int KATY_SYSV_ABI NpWebApi2DeleteRequest(int64_t request_id) {
 	PRINT_NAME();
 
 	LOGF("\t request_id = %" PRIi64 "\n", request_id);
@@ -3408,7 +3408,7 @@ static int KYTY_SYSV_ABI NpWebApi2DeleteRequest(int64_t request_id) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2AddHttpRequestHeader(int64_t request_id, const char* field_name,
+static int KATY_SYSV_ABI NpWebApi2AddHttpRequestHeader(int64_t request_id, const char* field_name,
                                                        const char* value) {
 	PRINT_NAME();
 
@@ -3419,7 +3419,7 @@ static int KYTY_SYSV_ABI NpWebApi2AddHttpRequestHeader(int64_t request_id, const
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2GetHttpResponseHeaderValueLength(int64_t     request_id,
+static int KATY_SYSV_ABI NpWebApi2GetHttpResponseHeaderValueLength(int64_t     request_id,
                                                                    const char* field_name,
                                                                    size_t*     value_length) {
 	PRINT_NAME();
@@ -3443,7 +3443,7 @@ static int KYTY_SYSV_ABI NpWebApi2GetHttpResponseHeaderValueLength(int64_t     r
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2GetHttpResponseHeaderValue(int64_t     request_id,
+static int KATY_SYSV_ABI NpWebApi2GetHttpResponseHeaderValue(int64_t     request_id,
                                                              const char* field_name, char* value,
                                                              size_t value_size) {
 	PRINT_NAME();
@@ -3474,7 +3474,7 @@ static int KYTY_SYSV_ABI NpWebApi2GetHttpResponseHeaderValue(int64_t     request
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2PushEventDeleteHandle(int lib_ctx_id, int handle_id) {
+static int KATY_SYSV_ABI NpWebApi2PushEventDeleteHandle(int lib_ctx_id, int handle_id) {
 	PRINT_NAME();
 
 	LOGF("\t lib_ctx_id = %d\n", lib_ctx_id);
@@ -3483,7 +3483,7 @@ static int KYTY_SYSV_ABI NpWebApi2PushEventDeleteHandle(int lib_ctx_id, int hand
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2PushEventDeletePushContext(int         user_context_id,
+static int KATY_SYSV_ABI NpWebApi2PushEventDeletePushContext(int         user_context_id,
                                                              const void* push_context_id) {
 	PRINT_NAME();
 
@@ -3493,7 +3493,7 @@ static int KYTY_SYSV_ABI NpWebApi2PushEventDeletePushContext(int         user_co
 	return 0;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2PushEventCreateFilter(int lib_ctx_id, int handle_id,
+static int KATY_SYSV_ABI NpWebApi2PushEventCreateFilter(int lib_ctx_id, int handle_id,
                                                         const char* np_service_name,
                                                         uint32_t    np_service_label,
                                                         const void* filter_param,
@@ -3512,7 +3512,7 @@ static int KYTY_SYSV_ABI NpWebApi2PushEventCreateFilter(int lib_ctx_id, int hand
 	return filter_id++;
 }
 
-static int KYTY_SYSV_ABI NpWebApi2PushEventRegisterCallback(int user_context_id, int filter_id,
+static int KATY_SYSV_ABI NpWebApi2PushEventRegisterCallback(int user_context_id, int filter_id,
                                                             void* callback, void* user_arg) {
 	PRINT_NAME();
 
@@ -3526,13 +3526,13 @@ static int KYTY_SYSV_ABI NpWebApi2PushEventRegisterCallback(int user_context_id,
 	return callback_id++;
 }
 
-static void KYTY_SYSV_ABI NpWebApi2CheckTimeout() {
+static void KATY_SYSV_ABI NpWebApi2CheckTimeout() {
 	// Timeout processing is an internal maintenance tick in Prospero. Requests
 	// complete synchronously in this implementation, so there is no pending
 	// timeout state to advance.
 }
 
-static int KYTY_SYSV_ABI NpWebApi2Terminate(int lib_ctx_id) {
+static int KATY_SYSV_ABI NpWebApi2Terminate(int lib_ctx_id) {
 	PRINT_NAME();
 
 	LOGF("\t lib_ctx_id = %d\n", lib_ctx_id);
@@ -3599,7 +3599,7 @@ static bool                g_game_update_initialized  = false;
 static int                 g_game_update_next_request = 1;
 static std::map<int, bool> g_game_update_requests;
 
-static int KYTY_SYSV_ABI GameUpdateInitialize() {
+static int KATY_SYSV_ABI GameUpdateInitialize() {
 	PRINT_NAME();
 
 	g_game_update_initialized = true;
@@ -3607,7 +3607,7 @@ static int KYTY_SYSV_ABI GameUpdateInitialize() {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI GameUpdateTerminate() {
+static int KATY_SYSV_ABI GameUpdateTerminate() {
 	PRINT_NAME();
 
 	g_game_update_initialized = false;
@@ -3616,7 +3616,7 @@ static int KYTY_SYSV_ABI GameUpdateTerminate() {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI GameUpdateCreateRequest() {
+static int KATY_SYSV_ABI GameUpdateCreateRequest() {
 	PRINT_NAME();
 
 	if (!g_game_update_initialized) {
@@ -3629,7 +3629,7 @@ static int KYTY_SYSV_ABI GameUpdateCreateRequest() {
 	return request_id;
 }
 
-static int KYTY_SYSV_ABI GameUpdateCheck(int request_id, const GameUpdateCheckParam* param,
+static int KATY_SYSV_ABI GameUpdateCheck(int request_id, const GameUpdateCheckParam* param,
                                          GameUpdateCheckResult* result) {
 	PRINT_NAME();
 
@@ -3661,7 +3661,7 @@ static int KYTY_SYSV_ABI GameUpdateCheck(int request_id, const GameUpdateCheckPa
 	return 0;
 }
 
-static int KYTY_SYSV_ABI GameUpdateAbortRequest(int request_id) {
+static int KATY_SYSV_ABI GameUpdateAbortRequest(int request_id) {
 	PRINT_NAME();
 
 	LOGF("\t request_id = %d\n", request_id);
@@ -3676,7 +3676,7 @@ static int KYTY_SYSV_ABI GameUpdateAbortRequest(int request_id) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI GameUpdateDeleteRequest(int request_id) {
+static int KATY_SYSV_ABI GameUpdateDeleteRequest(int request_id) {
 	PRINT_NAME();
 
 	LOGF("\t request_id = %d\n", request_id);
@@ -3691,7 +3691,7 @@ static int KYTY_SYSV_ABI GameUpdateDeleteRequest(int request_id) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI GameUpdateGetAddcontLatestVersion(uint32_t    service_label,
+static int KATY_SYSV_ABI GameUpdateGetAddcontLatestVersion(uint32_t    service_label,
                                                            const void* entitlement_label,
                                                            GameUpdateAddcontVersionInfo* info) {
 	PRINT_NAME();
@@ -3736,7 +3736,7 @@ namespace LibShare {
 
 LIB_VERSION("Share", 1, "Share", 1, 1);
 
-static int KYTY_SYSV_ABI ShareInitialize(size_t heap_size, int thread_priority,
+static int KATY_SYSV_ABI ShareInitialize(size_t heap_size, int thread_priority,
                                          uint64_t affinity_mask) {
 	PRINT_NAME();
 
@@ -3748,7 +3748,7 @@ static int KYTY_SYSV_ABI ShareInitialize(size_t heap_size, int thread_priority,
 	return 0;
 }
 
-static int KYTY_SYSV_ABI ShareFeaturePermit(uint32_t feature_flags) {
+static int KATY_SYSV_ABI ShareFeaturePermit(uint32_t feature_flags) {
 	PRINT_NAME();
 
 	LOGF("\t feature_flags = 0x%08" PRIx32 "\n", feature_flags);
@@ -3756,7 +3756,7 @@ static int KYTY_SYSV_ABI ShareFeaturePermit(uint32_t feature_flags) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI ShareTerminate() {
+static int KATY_SYSV_ABI ShareTerminate() {
 	PRINT_NAME();
 
 	return 0;
@@ -3781,7 +3781,7 @@ LIB_VERSION("Random", 1, "Random", 1, 1);
 constexpr int  RANDOM_ERROR_INVALID = 0x817c0016;
 constexpr auto RANDOM_MAX_SIZE      = 64u;
 
-static int KYTY_SYSV_ABI RandomGetRandomNumber(void* buf, size_t size) {
+static int KATY_SYSV_ABI RandomGetRandomNumber(void* buf, size_t size) {
 	PRINT_NAME();
 
 	if ((buf == nullptr && size != 0) || size > RANDOM_MAX_SIZE) {
@@ -3808,7 +3808,7 @@ namespace LibIme {
 
 LIB_VERSION("Ime", 1, "Ime", 1, 1);
 
-static int KYTY_SYSV_ABI ImeKeyboardOpen(int user_id, const void* param) {
+static int KATY_SYSV_ABI ImeKeyboardOpen(int user_id, const void* param) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n"
@@ -3818,7 +3818,7 @@ static int KYTY_SYSV_ABI ImeKeyboardOpen(int user_id, const void* param) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI ImeKeyboardClose(int user_id) {
+static int KATY_SYSV_ABI ImeKeyboardClose(int user_id) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n", user_id);
@@ -3826,7 +3826,7 @@ static int KYTY_SYSV_ABI ImeKeyboardClose(int user_id) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI ImeKeyboardGetResourceId(int user_id, void* resource_id_array) {
+static int KATY_SYSV_ABI ImeKeyboardGetResourceId(int user_id, void* resource_id_array) {
 	PRINT_NAME();
 
 	LOGF("\t user_id           = %d\n"
@@ -3836,7 +3836,7 @@ static int KYTY_SYSV_ABI ImeKeyboardGetResourceId(int user_id, void* resource_id
 	return 0;
 }
 
-static int KYTY_SYSV_ABI ImeKeyboardGetInfo(uint32_t resource_id, void* info) {
+static int KATY_SYSV_ABI ImeKeyboardGetInfo(uint32_t resource_id, void* info) {
 	PRINT_NAME();
 
 	LOGF("\t resource_id = 0x%08" PRIx32 "\n"
@@ -3846,7 +3846,7 @@ static int KYTY_SYSV_ABI ImeKeyboardGetInfo(uint32_t resource_id, void* info) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI ImeKeyboardSetMode(int user_id, uint32_t mode) {
+static int KATY_SYSV_ABI ImeKeyboardSetMode(int user_id, uint32_t mode) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n"
@@ -3856,7 +3856,7 @@ static int KYTY_SYSV_ABI ImeKeyboardSetMode(int user_id, uint32_t mode) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI ImeUpdate(void* handler) {
+static int KATY_SYSV_ABI ImeUpdate(void* handler) {
 	PRINT_NAME();
 
 	// LOGF("\t handler = 0x%016" PRIx64 "\n", reinterpret_cast<uint64_t>(handler));
@@ -3879,7 +3879,7 @@ namespace LibRemoteplay {
 
 LIB_VERSION("Remoteplay", 1, "Remoteplay", 1, 1);
 
-static int KYTY_SYSV_ABI RemoteplayInitialize(void* heap, size_t heap_size) {
+static int KATY_SYSV_ABI RemoteplayInitialize(void* heap, size_t heap_size) {
 	PRINT_NAME();
 
 	LOGF("\t heap      = 0x%016" PRIx64 "\n"
@@ -3889,13 +3889,13 @@ static int KYTY_SYSV_ABI RemoteplayInitialize(void* heap, size_t heap_size) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI RemoteplayTerminate() {
+static int KATY_SYSV_ABI RemoteplayTerminate() {
 	PRINT_NAME();
 
 	return 0;
 }
 
-static int KYTY_SYSV_ABI RemoteplayGetConnectionStatus(int user_id, int* status) {
+static int KATY_SYSV_ABI RemoteplayGetConnectionStatus(int user_id, int* status) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n", user_id);
@@ -3921,13 +3921,13 @@ namespace LibWebBrowserDialog {
 
 LIB_VERSION("WebBrowserDialog", 1, "WebBrowserDialog", 1, 1);
 
-static int KYTY_SYSV_ABI WebBrowserDialogInitialize() {
+static int KATY_SYSV_ABI WebBrowserDialogInitialize() {
 	PRINT_NAME();
 
 	return 0;
 }
 
-static int KYTY_SYSV_ABI WebBrowserDialogTerminate() {
+static int KATY_SYSV_ABI WebBrowserDialogTerminate() {
 	PRINT_NAME();
 
 	return 0;
@@ -3944,7 +3944,7 @@ namespace LibGameLiveStreaming {
 
 LIB_VERSION("GameLiveStreaming", 1, "GameLiveStreaming", 1, 1);
 
-static int KYTY_SYSV_ABI GameLiveStreamingInitialize(size_t heap_size) {
+static int KATY_SYSV_ABI GameLiveStreamingInitialize(size_t heap_size) {
 	PRINT_NAME();
 
 	LOGF("\t heap_size = %" PRIu64 "\n", static_cast<uint64_t>(heap_size));
@@ -3952,7 +3952,7 @@ static int KYTY_SYSV_ABI GameLiveStreamingInitialize(size_t heap_size) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI GameLiveStreamingTerminate() {
+static int KATY_SYSV_ABI GameLiveStreamingTerminate() {
 	PRINT_NAME();
 
 	return 0;
@@ -3969,7 +3969,7 @@ namespace LibSharePlay {
 
 LIB_VERSION("SharePlay", 1, "SharePlay", 1, 1);
 
-static int KYTY_SYSV_ABI SharePlayInitialize(void* heap, size_t heap_size) {
+static int KATY_SYSV_ABI SharePlayInitialize(void* heap, size_t heap_size) {
 	PRINT_NAME();
 
 	LOGF("\t heap      = 0x%016" PRIx64 "\n"
@@ -3979,7 +3979,7 @@ static int KYTY_SYSV_ABI SharePlayInitialize(void* heap, size_t heap_size) {
 	return 0;
 }
 
-static int KYTY_SYSV_ABI SharePlayTerminate() {
+static int KATY_SYSV_ABI SharePlayTerminate() {
 	PRINT_NAME();
 
 	return 0;

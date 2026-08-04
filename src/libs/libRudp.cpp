@@ -19,7 +19,7 @@ static RudpEventHandler g_event_handler = nullptr;
 static void*            g_event_arg     = nullptr;
 static bool             g_initialized   = false;
 
-static KYTY_SYSV_ABI int RudpInit(void* mem_pool, int mem_pool_size) {
+static KATY_SYSV_ABI int RudpInit(void* mem_pool, int mem_pool_size) {
 	PRINT_NAME();
 
 	LOGF("\t mem_pool      = 0x%016" PRIx64 "\n"
@@ -31,7 +31,7 @@ static KYTY_SYSV_ABI int RudpInit(void* mem_pool, int mem_pool_size) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI int RudpEnableInternalIOThread(uint32_t stack_size, uint32_t priority) {
+static KATY_SYSV_ABI int RudpEnableInternalIOThread(uint32_t stack_size, uint32_t priority) {
 	PRINT_NAME();
 
 	LOGF("\t stack_size = %" PRIu32 "\n"
@@ -41,7 +41,7 @@ static KYTY_SYSV_ABI int RudpEnableInternalIOThread(uint32_t stack_size, uint32_
 	return OK;
 }
 
-static KYTY_SYSV_ABI int RudpSetEventHandler(RudpEventHandler handler, void* arg) {
+static KATY_SYSV_ABI int RudpSetEventHandler(RudpEventHandler handler, void* arg) {
 	PRINT_NAME();
 
 	LOGF("\t handler = 0x%016" PRIx64 "\n"

@@ -1,5 +1,5 @@
 name: Game Emulation Bug Report
-description: Report KytyPS5 game boot, crash, freeze, rendering, audio, input, or gameplay behavior problems.
+description: Report KatyPS5 game boot, crash, freeze, rendering, audio, input, or gameplay behavior problems.
 title: "[GAME BUG]: "
 body:
   - type: markdown
@@ -36,9 +36,9 @@ body:
       required: true
 
   - type: input
-    id: kyty-version
+    id: katy-version
     attributes:
-      label: KytyPS5 version
+      label: KatyPS5 version
       description: Include the exact build you tested so the report can be matched to the right code.
       placeholder: "Example: v0.0.1"
     validations:
@@ -48,7 +48,7 @@ body:
     id: regression-builds
     attributes:
       label: Last working build / first broken build
-      description: Optional. Fill this in if the same game worked in an older KytyPS5 build.
+      description: Optional. Fill this in if the same game worked in an older KatyPS5 build.
       placeholder: "Example: last worked in v0.0.1, first broke in v0.0.1"
 
   - type: markdown
@@ -69,9 +69,9 @@ body:
     id: steps-to-reproduce
     attributes:
       label: Steps to reproduce
-      description: List the shortest path that triggers the problem from a fresh KytyPS5 start.
+      description: List the shortest path that triggers the problem from a fresh KatyPS5 start.
       placeholder: |
-        1. Open KytyPS5.
+        1. Open KatyPS5.
         2. Boot the game.
         3. Select ...
     validations:
@@ -136,7 +136,7 @@ body:
     id: log-file
     attributes:
       label: Log file upload
-      description: Drag the full KytyPS5 log (_kyty.txt) into this box, or link to the complete unmodified file.
+      description: Drag the full KatyPS5 log (_katy.txt) into this box, or link to the complete unmodified file.
       placeholder: "Attach the full log file here."
     validations:
       required: true

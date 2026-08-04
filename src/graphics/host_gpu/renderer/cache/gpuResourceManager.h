@@ -20,7 +20,7 @@ class GpuResourceManager {
 public:
 	GpuResourceManager(GraphicContext& graphics, CommandScheduler& scheduler);
 	~GpuResourceManager();
-	KYTY_CLASS_NO_COPY(GpuResourceManager);
+	KATY_CLASS_NO_COPY(GpuResourceManager);
 
 	[[nodiscard]] BufferCache&  GetBufferCache() { return m_buffer_cache; }
 	[[nodiscard]] TextureCache& GetTextureCache() { return m_texture_cache; }

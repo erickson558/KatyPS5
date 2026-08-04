@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_ASSERT_H_
-#define KYTY_COMMON_ASSERT_H_
+#ifndef KATY_COMMON_ASSERT_H_
+#define KATY_COMMON_ASSERT_H_
 
 #include "common/common.h"
 #include "common/logging/log.h"
@@ -29,20 +29,20 @@ void DbgExit(int status);
 
 } // namespace Common
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS || KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS || KATY_PLATFORM == KATY_PLATFORM_LINUX
 #define EXIT_HALT() (Common::DbgExit(321), 1)
 #else
 #define EXIT_HALT() (std::_Exit(321), 1)
 #endif
 
-#ifndef KYTY_FINAL
+#ifndef KATY_FINAL
 #define EXIT_IF(x)                                                                                 \
 	((void)((x) && Common::DbgExitIfHandler(#x, __FILE__, __LINE__) != 0 && (EXIT_HALT(), 1) != 0))
 #else
 #define EXIT_IF(x)                                                                                 \
 	do {                                                                                           \
-		constexpr bool kyty_exit_if_disabled = false && (x);                                       \
-		(void)kyty_exit_if_disabled;                                                               \
+		constexpr bool katy_exit_if_disabled = false && (x);                                       \
+		(void)katy_exit_if_disabled;                                                               \
 	} while (0)
 #endif
 
@@ -62,6 +62,6 @@ void DbgExit(int status);
 #define EXIT_NOT_IMPLEMENTED(x)                                                                    \
 	((void)((x) && Common::DbgNotImplementedHandler(#x, __FILE__, __LINE__) != 0 &&                \
 	        (EXIT_HALT(), 1) != 0))
-#define KYTY_NOT_IMPLEMENTED EXIT_NOT_IMPLEMENTED(true)
+#define KATY_NOT_IMPLEMENTED EXIT_NOT_IMPLEMENTED(true)
 
-#endif /* KYTY_COMMON_ASSERT_H_ */
+#endif /* KATY_COMMON_ASSERT_H_ */

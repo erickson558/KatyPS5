@@ -57,7 +57,7 @@ PipelineCache::GraphicsPipeline& PipelineCache::CreateGraphicsPipeline(
     ShaderVertexInputInfo& vs_input_info, RenderCommandBuffer& command,
     ShaderPixelInputInfo* ps_input_info, vk::PrimitiveTopology topology, bool ps_active,
     std::span<const uint32_t> vs_spirv, std::span<const uint32_t> ps_spirv) {
-	KYTY_PROFILER_BLOCK("PipelineCache::CreatePipeline(Gfx)", profiler::colors::DeepOrangeA200);
+	KATY_PROFILER_BLOCK("PipelineCache::CreatePipeline(Gfx)", profiler::colors::DeepOrangeA200);
 
 	EXIT_IF(colors == nullptr);
 	EXIT_IF(color_count > RENDER_COLOR_ATTACHMENTS_MAX);
@@ -222,7 +222,7 @@ PipelineCache::ComputePipeline&
 PipelineCache::CreateComputePipeline(ShaderComputeInputInfo&      input_info,
                                      const HW::ComputeShaderInfo& cs_regs,
                                      std::span<const uint32_t>    cs_spirv) {
-	KYTY_PROFILER_BLOCK("PipelineCache::CreatePipeline(Compute)", profiler::colors::RedA100);
+	KATY_PROFILER_BLOCK("PipelineCache::CreatePipeline(Compute)", profiler::colors::RedA100);
 
 	EXIT_IF(cs_spirv.empty());
 

@@ -298,7 +298,7 @@ static int32_t ValidateDecoderConfig(const Videodec2DecoderConfigInfo* config,
 	return OK;
 }
 
-static int32_t KYTY_SYSV_ABI
+static int32_t KATY_SYSV_ABI
 QueryComputeMemoryInfo(Videodec2ComputeMemoryInfo* compute_memory_info) {
 	PRINT_NAME();
 
@@ -316,7 +316,7 @@ QueryComputeMemoryInfo(Videodec2ComputeMemoryInfo* compute_memory_info) {
 	return OK;
 }
 
-static int32_t KYTY_SYSV_ABI AllocateComputeQueue(
+static int32_t KATY_SYSV_ABI AllocateComputeQueue(
     const Videodec2ComputeConfigInfo* compute_config_info,
     const Videodec2ComputeMemoryInfo* compute_memory_info, Videodec2ComputeQueue* compute_queue) {
 	PRINT_NAME();
@@ -355,13 +355,13 @@ static int32_t KYTY_SYSV_ABI AllocateComputeQueue(
 	return OK;
 }
 
-static int32_t KYTY_SYSV_ABI ReleaseComputeQueue(Videodec2ComputeQueue compute_queue) {
+static int32_t KATY_SYSV_ABI ReleaseComputeQueue(Videodec2ComputeQueue compute_queue) {
 	PRINT_NAME();
 
 	return compute_queue != nullptr ? OK : VIDEODEC2_ERROR_COMPUTE_QUEUE_ID;
 }
 
-static int32_t KYTY_SYSV_ABI QueryDecoderMemoryInfo(const Videodec2DecoderConfigInfo* config,
+static int32_t KATY_SYSV_ABI QueryDecoderMemoryInfo(const Videodec2DecoderConfigInfo* config,
                                                     Videodec2DecoderMemoryInfo*       memory_info) {
 	PRINT_NAME();
 
@@ -392,7 +392,7 @@ static int32_t KYTY_SYSV_ABI QueryDecoderMemoryInfo(const Videodec2DecoderConfig
 	return OK;
 }
 
-static int32_t KYTY_SYSV_ABI CreateDecoder(const Videodec2DecoderConfigInfo* config,
+static int32_t KATY_SYSV_ABI CreateDecoder(const Videodec2DecoderConfigInfo* config,
                                            const Videodec2DecoderMemoryInfo* memory_info,
                                            Videodec2Decoder*                 decoder) {
 	PRINT_NAME();
@@ -438,7 +438,7 @@ static int32_t KYTY_SYSV_ABI CreateDecoder(const Videodec2DecoderConfigInfo* con
 	return OK;
 }
 
-static int32_t KYTY_SYSV_ABI DeleteDecoder(Videodec2Decoder decoder) {
+static int32_t KATY_SYSV_ABI DeleteDecoder(Videodec2Decoder decoder) {
 	PRINT_NAME();
 
 	DecoderState* state = nullptr;
@@ -457,7 +457,7 @@ static int32_t KYTY_SYSV_ABI DeleteDecoder(Videodec2Decoder decoder) {
 	return OK;
 }
 
-static int32_t KYTY_SYSV_ABI Decode(Videodec2Decoder decoder, const Videodec2InputData* input_data,
+static int32_t KATY_SYSV_ABI Decode(Videodec2Decoder decoder, const Videodec2InputData* input_data,
                                     Videodec2FrameBuffer* frame_buffer,
                                     Videodec2OutputInfo*  output_info) {
 	PRINT_NAME();
@@ -506,7 +506,7 @@ static int32_t KYTY_SYSV_ABI Decode(Videodec2Decoder decoder, const Videodec2Inp
 	return MapDecoderResult(result);
 }
 
-static int32_t KYTY_SYSV_ABI Flush(Videodec2Decoder decoder, Videodec2FrameBuffer* frame_buffer,
+static int32_t KATY_SYSV_ABI Flush(Videodec2Decoder decoder, Videodec2FrameBuffer* frame_buffer,
                                    Videodec2OutputInfo* output_info) {
 	PRINT_NAME();
 
@@ -542,7 +542,7 @@ static int32_t KYTY_SYSV_ABI Flush(Videodec2Decoder decoder, Videodec2FrameBuffe
 	return MapDecoderResult(result);
 }
 
-static int32_t KYTY_SYSV_ABI Reset(Videodec2Decoder decoder) {
+static int32_t KATY_SYSV_ABI Reset(Videodec2Decoder decoder) {
 	PRINT_NAME();
 
 	auto* state = GetDecoder(decoder);
@@ -553,7 +553,7 @@ static int32_t KYTY_SYSV_ABI Reset(Videodec2Decoder decoder) {
 	return OK;
 }
 
-static int32_t KYTY_SYSV_ABI GetPictureInfo(const Videodec2OutputInfo* output_info,
+static int32_t KATY_SYSV_ABI GetPictureInfo(const Videodec2OutputInfo* output_info,
                                             void* first_picture_info, void* second_picture_info) {
 	PRINT_NAME();
 

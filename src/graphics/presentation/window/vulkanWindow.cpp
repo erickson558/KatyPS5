@@ -51,8 +51,8 @@
 
 // IWYU pragma: no_include <intrin.h>
 
-#define KYTY_ENABLE_DEBUG_PRINTF
-#define KYTY_DBG_INPUT
+#define KATY_ENABLE_DEBUG_PRINTF
+#define KATY_DBG_INPUT
 
 namespace Libs::Graphics {
 
@@ -826,17 +826,17 @@ void WindowContext::CreateVulkan() {
 	vk::ApplicationInfo app_info {};
 	app_info.sType              = vk::StructureType::eApplicationInfo;
 	app_info.pNext              = nullptr;
-	app_info.pApplicationName   = "Kyty";
+	app_info.pApplicationName   = "Katy";
 	app_info.applicationVersion = 1;
-	app_info.pEngineName        = "Kyty";
+	app_info.pEngineName        = "Katy";
 	app_info.engineVersion      = 1;
 	app_info.apiVersion         = VULKAN_TARGET_API_VERSION; // NOLINT
 
 	vk::ValidationFeatureEnableEXT enabled_features[] = {
-#ifdef KYTY_ENABLE_BEST_PRACTICES
+#ifdef KATY_ENABLE_BEST_PRACTICES
 	    vk::ValidationFeatureEnableEXT::eBestPractices,
 #endif
-#ifdef KYTY_ENABLE_DEBUG_PRINTF
+#ifdef KATY_ENABLE_DEBUG_PRINTF
 	    vk::ValidationFeatureEnableEXT::eDebugPrintf,
 #endif
 	};
@@ -844,7 +844,7 @@ void WindowContext::CreateVulkan() {
 	uint32_t enabled_features_count =
 	    sizeof(enabled_features) / sizeof(vk::ValidationFeatureEnableEXT);
 
-#ifdef KYTY_ENABLE_DEBUG_PRINTF
+#ifdef KATY_ENABLE_DEBUG_PRINTF
 	if (!Config::SpirvDebugPrintfEnabled()) {
 		enabled_features_count--;
 	}
@@ -923,7 +923,7 @@ void WindowContext::CreateVulkan() {
 	device_extensions.push_back(VK_EXT_COLOR_WRITE_ENABLE_EXTENSION_NAME);
 #endif
 
-#ifdef KYTY_ENABLE_DEBUG_PRINTF
+#ifdef KATY_ENABLE_DEBUG_PRINTF
 	if (Config::SpirvDebugPrintfEnabled()) {
 		device_extensions.push_back(VK_KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME);
 	}

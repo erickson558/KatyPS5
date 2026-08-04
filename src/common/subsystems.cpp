@@ -15,7 +15,7 @@ public:
 	SubsystemPrivate()          = default;
 	virtual ~SubsystemPrivate() = default;
 
-	KYTY_CLASS_NO_COPY(SubsystemPrivate);
+	KATY_CLASS_NO_COPY(SubsystemPrivate);
 
 	bool        failed {false};
 	std::string fail_msg;
@@ -155,7 +155,7 @@ public:
 		return nullptr;
 	}
 
-	KYTY_CLASS_NO_COPY(SubsystemsListPrivate);
+	KATY_CLASS_NO_COPY(SubsystemsListPrivate);
 
 	std::unique_ptr<SubsListStruct> list;
 	SubsListStruct*                 last_init = nullptr;

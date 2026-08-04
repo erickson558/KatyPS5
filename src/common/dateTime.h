@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_DATETIME_H_
-#define KYTY_COMMON_DATETIME_H_
+#ifndef KATY_COMMON_DATETIME_H_
+#define KATY_COMMON_DATETIME_H_
 
 #include "common/common.h"
 
@@ -180,4 +180,4 @@ private:
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_DATETIME_H_ */
+#endif /* KATY_COMMON_DATETIME_H_ */

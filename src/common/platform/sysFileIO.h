@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_PLATFORM_SYSFILEIO_H_
-#define KYTY_COMMON_PLATFORM_SYSFILEIO_H_
+#ifndef KATY_COMMON_PLATFORM_SYSFILEIO_H_
+#define KATY_COMMON_PLATFORM_SYSFILEIO_H_
 
 #include "common/common.h"
 #include "common/platform/sysTimer.h"
@@ -83,4 +83,4 @@ bool SysFileCopyFile(const std::filesystem::path& src, const std::filesystem::pa
 bool SysFileMoveFile(const std::filesystem::path& src, const std::filesystem::path& dst);
 void SysFileRemoveReadonly(const std::filesystem::path& name);
 
-#endif /* KYTY_COMMON_PLATFORM_SYSFILEIO_H_ */
+#endif /* KATY_COMMON_PLATFORM_SYSFILEIO_H_ */

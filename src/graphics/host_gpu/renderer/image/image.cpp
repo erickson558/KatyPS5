@@ -661,7 +661,7 @@ uint32_t RenderTargetTransferFormat(uint32_t bytes_per_element) {
 
 Image::Image(GraphicContext& graphics, CommandScheduler& scheduler, const ImageInfo& image_info)
     : info(image_info), m_graphics(&graphics), m_scheduler(&scheduler) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	ImageOps::Validate(info);
 	m_cpu_dirty = !info.data.Empty();
 	if (info.pixel_format == vk::Format::eUndefined) {
@@ -731,7 +731,7 @@ uint64_t Image::HashGuestEdges() const {
 }
 
 Image::~Image() {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	if (m_graphics == nullptr) {
 		return;
 	}

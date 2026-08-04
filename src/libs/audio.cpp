@@ -77,7 +77,7 @@ public:
 	Audio() = default;
 	virtual ~Audio();
 
-	KYTY_CLASS_NO_COPY(Audio);
+	KATY_CLASS_NO_COPY(Audio);
 
 	Id       AudioOutOpen(int type, uint32_t samples_num, uint32_t freq, Format format);
 	bool     AudioOutClose(Id handle);
@@ -176,15 +176,15 @@ uint32_t AudioOutOutputs(const OutputParam* params, uint32_t num, bool blocking)
 
 } // namespace AudioInternal
 
-KYTY_SUBSYSTEM_INIT(Audio) {
+KATY_SUBSYSTEM_INIT(Audio) {
 	EXIT_IF(g_audio != nullptr);
 
 	g_audio = new Audio;
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Audio) {}
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Audio) {}
 
-KYTY_SUBSYSTEM_DESTROY(Audio) {
+KATY_SUBSYSTEM_DESTROY(Audio) {
 	delete g_audio;
 	g_audio = nullptr;
 }
@@ -614,13 +614,13 @@ struct AudioOutPortState {
 	uint64_t reserved2[2];
 };
 
-int KYTY_SYSV_ABI AudioOutInit() {
+int KATY_SYSV_ABI AudioOutInit() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-int KYTY_SYSV_ABI AudioOutOpen(int user_id, int type, int index, uint32_t len, uint32_t freq,
+int KATY_SYSV_ABI AudioOutOpen(int user_id, int type, int index, uint32_t len, uint32_t freq,
                                uint32_t param) {
 	PRINT_NAME();
 
@@ -667,7 +667,7 @@ int KYTY_SYSV_ABI AudioOutOpen(int user_id, int type, int index, uint32_t len, u
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI AudioOutClose(int handle) {
+int KATY_SYSV_ABI AudioOutClose(int handle) {
 	PRINT_NAME();
 
 	if (!g_audio->AudioOutClose(Audio::Id(handle))) {
@@ -677,7 +677,7 @@ int KYTY_SYSV_ABI AudioOutClose(int handle) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI AudioOutGetPortState(int handle, AudioOutPortState* state) {
+int KATY_SYSV_ABI AudioOutGetPortState(int handle, AudioOutPortState* state) {
 	PRINT_NAME();
 
 	int type         = 0;
@@ -723,7 +723,7 @@ int KYTY_SYSV_ABI AudioOutGetPortState(int handle, AudioOutPortState* state) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI AudioOutSetVolume(int handle, uint32_t flag, int* vol) {
+int KATY_SYSV_ABI AudioOutSetVolume(int handle, uint32_t flag, int* vol) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n"
@@ -740,7 +740,7 @@ int KYTY_SYSV_ABI AudioOutSetVolume(int handle, uint32_t flag, int* vol) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI AudioOutOutputs(AudioOutOutputParam* param, uint32_t num) {
+int KATY_SYSV_ABI AudioOutOutputs(AudioOutOutputParam* param, uint32_t num) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(param == nullptr);
@@ -761,7 +761,7 @@ int KYTY_SYSV_ABI AudioOutOutputs(AudioOutOutputParam* param, uint32_t num) {
 	return static_cast<int>(g_audio->AudioOutOutputs(params, num));
 }
 
-int KYTY_SYSV_ABI AudioOutOutput(int handle, const void* ptr) {
+int KATY_SYSV_ABI AudioOutOutput(int handle, const void* ptr) {
 	// EXIT_NOT_IMPLEMENTED(ptr == nullptr);
 
 	Audio::OutputParam params[1];
@@ -784,7 +784,7 @@ namespace AudioIn {
 
 LIB_NAME("AudioIn", "AudioIn");
 
-int KYTY_SYSV_ABI AudioInOpen(int user_id, uint32_t type, uint32_t index, uint32_t len,
+int KATY_SYSV_ABI AudioInOpen(int user_id, uint32_t type, uint32_t index, uint32_t len,
                               uint32_t freq, uint32_t param) {
 	PRINT_NAME();
 
@@ -826,7 +826,7 @@ int KYTY_SYSV_ABI AudioInOpen(int user_id, uint32_t type, uint32_t index, uint32
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI AudioInInput(int handle, void* dest) {
+int KATY_SYSV_ABI AudioInInput(int handle, void* dest) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(dest == nullptr);
@@ -846,7 +846,7 @@ namespace VoiceQoS {
 
 LIB_NAME("VoiceQoS", "VoiceQoS");
 
-int KYTY_SYSV_ABI VoiceQoSInit(void* mem_block, uint32_t mem_size, int32_t app_type) {
+int KATY_SYSV_ABI VoiceQoSInit(void* mem_block, uint32_t mem_size, int32_t app_type) {
 	PRINT_NAME();
 
 	LOGF("\t mem_block = %016" PRIx64 "\n"
@@ -884,7 +884,7 @@ static void acm_advance_batch(AcmBatchInfo* info, size_t bytes) {
 	info->offset = std::min(info->buffer_size, info->offset + bytes);
 }
 
-int KYTY_SYSV_ABI AcmContextCreate(AcmContextId* context) {
+int KATY_SYSV_ABI AcmContextCreate(AcmContextId* context) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(context == nullptr);
@@ -896,13 +896,13 @@ int KYTY_SYSV_ABI AcmContextCreate(AcmContextId* context) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmContextDestroy(AcmContextId context) {
+int KATY_SYSV_ABI AcmContextDestroy(AcmContextId context) {
 	PRINT_NAME();
 	LOGF("\t context = %" PRIu32 "\n", context);
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmBatchStartBuffer(AcmContextId context, const void* batch_commands,
+int KATY_SYSV_ABI AcmBatchStartBuffer(AcmContextId context, const void* batch_commands,
                                       size_t batch_size, AcmBatchError* batch_error,
                                       AcmBatchId* batch) {
 	PRINT_NAME();
@@ -918,7 +918,7 @@ int KYTY_SYSV_ABI AcmBatchStartBuffer(AcmContextId context, const void* batch_co
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmBatchStartBuffers(AcmContextId context, uint32_t batch_info_count,
+int KATY_SYSV_ABI AcmBatchStartBuffers(AcmContextId context, uint32_t batch_info_count,
                                        const AcmBatchInfo* const batch_info[],
                                        AcmBatchError* batch_error, AcmBatchId* batch) {
 	PRINT_NAME();
@@ -935,17 +935,17 @@ int KYTY_SYSV_ABI AcmBatchStartBuffers(AcmContextId context, uint32_t batch_info
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmBatchWait(AcmContextId context, AcmBatchId batch, uint32_t timeout) {
+int KATY_SYSV_ABI AcmBatchWait(AcmContextId context, AcmBatchId batch, uint32_t timeout) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmBatchJobNotification(AcmBatchInfo* batch_info) {
+int KATY_SYSV_ABI AcmBatchJobNotification(AcmBatchInfo* batch_info) {
 	PRINT_NAME();
 	acm_advance_batch(batch_info, 2 * 16);
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmConvReverbSharedInput(AcmBatchInfo* batch_info, uint32_t block_count, void* in,
+int KATY_SYSV_ABI AcmConvReverbSharedInput(AcmBatchInfo* batch_info, uint32_t block_count, void* in,
                                            uint32_t count, const void* const ir[],
                                            const float* gain, void* const out[]) {
 	PRINT_NAME();
@@ -959,7 +959,7 @@ int KYTY_SYSV_ABI AcmConvReverbSharedInput(AcmBatchInfo* batch_info, uint32_t bl
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmConvReverbSharedIr(AcmBatchInfo* batch_info, uint32_t block_count,
+int KATY_SYSV_ABI AcmConvReverbSharedIr(AcmBatchInfo* batch_info, uint32_t block_count,
                                         const void* ir, uint32_t count, void* const in[],
                                         const float* gain, void* const out[]) {
 	PRINT_NAME();
@@ -973,7 +973,7 @@ int KYTY_SYSV_ABI AcmConvReverbSharedIr(AcmBatchInfo* batch_info, uint32_t block
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmFft(AcmBatchInfo* batch_info, int size, int count, int input_format,
+int KATY_SYSV_ABI AcmFft(AcmBatchInfo* batch_info, int size, int count, int input_format,
                          const void* const input[], int output_format, void* const output[],
                          uint32_t flags) {
 	PRINT_NAME();
@@ -988,7 +988,7 @@ int KYTY_SYSV_ABI AcmFft(AcmBatchInfo* batch_info, int size, int count, int inpu
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmIfft(AcmBatchInfo* batch_info, int size, int count, int input_format,
+int KATY_SYSV_ABI AcmIfft(AcmBatchInfo* batch_info, int size, int count, int input_format,
                           const void* const input[], int output_format, void* const output[],
                           uint32_t flags) {
 	PRINT_NAME();
@@ -1003,7 +1003,7 @@ int KYTY_SYSV_ABI AcmIfft(AcmBatchInfo* batch_info, int size, int count, int inp
 	return OK;
 }
 
-int KYTY_SYSV_ABI AcmPanner(AcmBatchInfo* batch_info, uint32_t in_count, const float* const in[],
+int KATY_SYSV_ABI AcmPanner(AcmBatchInfo* batch_info, uint32_t in_count, const float* const in[],
                             uint32_t biquad_count, uint32_t biquad_update_count, uint32_t out_count,
                             const void* const parameter[], void* const state[],
                             const float* const out_init[], float* const out[]) {
@@ -1105,7 +1105,7 @@ static void playback_simulate(void* arg) {
 	port->playback_finished = true;
 }
 
-int KYTY_SYSV_ABI Audio3dInitialize(int64_t reserved) {
+int KATY_SYSV_ABI Audio3dInitialize(int64_t reserved) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(reserved != 0);
@@ -1113,7 +1113,7 @@ int KYTY_SYSV_ABI Audio3dInitialize(int64_t reserved) {
 	return OK;
 }
 
-void KYTY_SYSV_ABI Audio3dGetDefaultOpenParameters(Audio3dOpenParameters* p) {
+void KATY_SYSV_ABI Audio3dGetDefaultOpenParameters(Audio3dOpenParameters* p) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(sizeof(Audio3dOpenParameters) != 0x20);
@@ -1121,7 +1121,7 @@ void KYTY_SYSV_ABI Audio3dGetDefaultOpenParameters(Audio3dOpenParameters* p) {
 	*p = Audio3dOpenParameters();
 }
 
-int KYTY_SYSV_ABI Audio3dPortOpen(int user_id, const Audio3dOpenParameters* parameters,
+int KATY_SYSV_ABI Audio3dPortOpen(int user_id, const Audio3dOpenParameters* parameters,
                                   uint32_t* id) {
 	PRINT_NAME();
 
@@ -1180,7 +1180,7 @@ int KYTY_SYSV_ABI Audio3dPortOpen(int user_id, const Audio3dOpenParameters* para
 	return OK;
 }
 
-int KYTY_SYSV_ABI Audio3dPortSetAttribute(uint32_t port_id, uint32_t attribute_id,
+int KATY_SYSV_ABI Audio3dPortSetAttribute(uint32_t port_id, uint32_t attribute_id,
                                           const void* attribute, size_t attribute_size) {
 	PRINT_NAME();
 
@@ -1213,7 +1213,7 @@ int KYTY_SYSV_ABI Audio3dPortSetAttribute(uint32_t port_id, uint32_t attribute_i
 	return OK;
 }
 
-int KYTY_SYSV_ABI Audio3dPortGetQueueLevel(uint32_t port_id, uint32_t* queue_level,
+int KATY_SYSV_ABI Audio3dPortGetQueueLevel(uint32_t port_id, uint32_t* queue_level,
                                            uint32_t* queue_available) {
 	PRINT_NAME();
 
@@ -1253,7 +1253,7 @@ int KYTY_SYSV_ABI Audio3dPortGetQueueLevel(uint32_t port_id, uint32_t* queue_lev
 	return OK;
 }
 
-int KYTY_SYSV_ABI Audio3dPortAdvance(uint32_t port_id) {
+int KATY_SYSV_ABI Audio3dPortAdvance(uint32_t port_id) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(port_id >= MAX_PORTS);
@@ -1281,7 +1281,7 @@ int KYTY_SYSV_ABI Audio3dPortAdvance(uint32_t port_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI Audio3dPortPush(uint32_t port_id, uint32_t blocking) {
+int KATY_SYSV_ABI Audio3dPortPush(uint32_t port_id, uint32_t blocking) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(port_id >= MAX_PORTS);
@@ -1587,8 +1587,8 @@ struct Ngs2GeomAttribute {
 	uint32_t             reserved[4] = {};
 };
 
-using Ngs2BufferAllocHandler = int32_t KYTY_SYSV_ABI (*)(Ngs2ContextBufferInfo*);
-using Ngs2BufferFreeHandler  = int32_t  KYTY_SYSV_ABI (*)(Ngs2ContextBufferInfo*);
+using Ngs2BufferAllocHandler = int32_t KATY_SYSV_ABI (*)(Ngs2ContextBufferInfo*);
+using Ngs2BufferFreeHandler  = int32_t  KATY_SYSV_ABI (*)(Ngs2ContextBufferInfo*);
 
 struct Ngs2BufferAllocator {
 	Ngs2BufferAllocHandler alloc_handler = nullptr;
@@ -1744,7 +1744,7 @@ static Ngs2SystemOption Ngs2DefaultSystemOption() {
 	return option;
 }
 
-int KYTY_SYSV_ABI Ngs2SystemResetOption(Ngs2SystemOption* option) {
+int KATY_SYSV_ABI Ngs2SystemResetOption(Ngs2SystemOption* option) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(option == nullptr);
@@ -1772,7 +1772,7 @@ static bool Ngs2RackIsCustom(Ngs2RackType type) {
 	}
 }
 
-int KYTY_SYSV_ABI Ngs2SystemQueryBufferSize(const Ngs2SystemOption* option,
+int KATY_SYSV_ABI Ngs2SystemQueryBufferSize(const Ngs2SystemOption* option,
                                             Ngs2ContextBufferInfo*  buffer_info) {
 	PRINT_NAME();
 
@@ -1792,7 +1792,7 @@ int KYTY_SYSV_ABI Ngs2SystemQueryBufferSize(const Ngs2SystemOption* option,
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2SystemCreate(const Ngs2SystemOption*      option,
+int KATY_SYSV_ABI Ngs2SystemCreate(const Ngs2SystemOption*      option,
                                    const Ngs2ContextBufferInfo* buffer_info, uintptr_t* handle) {
 	PRINT_NAME();
 
@@ -1906,7 +1906,7 @@ static void Ngs2FillDefaultRackOption(uint32_t rack_id, Ngs2RackOptionUnion* opt
 	}
 }
 
-int KYTY_SYSV_ABI Ngs2RackQueryBufferSize(uint32_t rack_id, const Ngs2RackOption* option,
+int KATY_SYSV_ABI Ngs2RackQueryBufferSize(uint32_t rack_id, const Ngs2RackOption* option,
                                           Ngs2ContextBufferInfo* buffer_info) {
 	PRINT_NAME();
 
@@ -1929,7 +1929,7 @@ int KYTY_SYSV_ABI Ngs2RackQueryBufferSize(uint32_t rack_id, const Ngs2RackOption
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2SystemCreateWithAllocator(const Ngs2SystemOption*    option,
+int KATY_SYSV_ABI Ngs2SystemCreateWithAllocator(const Ngs2SystemOption*    option,
                                                 const Ngs2BufferAllocator* allocator,
                                                 uintptr_t*                 handle) {
 	PRINT_NAME();
@@ -1980,7 +1980,7 @@ int KYTY_SYSV_ABI Ngs2SystemCreateWithAllocator(const Ngs2SystemOption*    optio
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2SystemSetGrainSamples(uintptr_t system_handle, uint32_t num_samples) {
+int KATY_SYSV_ABI Ngs2SystemSetGrainSamples(uintptr_t system_handle, uint32_t num_samples) {
 	PRINT_NAME();
 	LOGF("\t system_handle = 0x%016" PRIx64 "\n"
 	     "\t num_samples   = %u\n",
@@ -1994,7 +1994,7 @@ int KYTY_SYSV_ABI Ngs2SystemSetGrainSamples(uintptr_t system_handle, uint32_t nu
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2SystemDestroy(uintptr_t system_handle, Ngs2ContextBufferInfo* buffer_info) {
+int KATY_SYSV_ABI Ngs2SystemDestroy(uintptr_t system_handle, Ngs2ContextBufferInfo* buffer_info) {
 	PRINT_NAME();
 	LOGF("\t system_handle = 0x%016" PRIx64 "\n", static_cast<uint64_t>(system_handle));
 
@@ -2005,7 +2005,7 @@ int KYTY_SYSV_ABI Ngs2SystemDestroy(uintptr_t system_handle, Ngs2ContextBufferIn
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2RackCreate(uintptr_t system_handle, uint32_t rack_id,
+int KATY_SYSV_ABI Ngs2RackCreate(uintptr_t system_handle, uint32_t rack_id,
                                  const Ngs2RackOption*        option,
                                  const Ngs2ContextBufferInfo* buffer_info, uintptr_t* handle) {
 	PRINT_NAME();
@@ -2112,7 +2112,7 @@ int KYTY_SYSV_ABI Ngs2RackCreate(uintptr_t system_handle, uint32_t rack_id,
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2RackCreateWithAllocator(uintptr_t system_handle, uint32_t rack_id,
+int KATY_SYSV_ABI Ngs2RackCreateWithAllocator(uintptr_t system_handle, uint32_t rack_id,
                                               const Ngs2RackOption*      option,
                                               const Ngs2BufferAllocator* allocator,
                                               uintptr_t*                 handle) {
@@ -2179,7 +2179,7 @@ int KYTY_SYSV_ABI Ngs2RackCreateWithAllocator(uintptr_t system_handle, uint32_t 
 	return result;
 }
 
-int KYTY_SYSV_ABI Ngs2RackDestroy(uintptr_t rack_handle, Ngs2ContextBufferInfo* buffer_info) {
+int KATY_SYSV_ABI Ngs2RackDestroy(uintptr_t rack_handle, Ngs2ContextBufferInfo* buffer_info) {
 	PRINT_NAME();
 	LOGF("\t rack_handle = 0x%016" PRIx64 "\n", static_cast<uint64_t>(rack_handle));
 
@@ -2190,7 +2190,7 @@ int KYTY_SYSV_ABI Ngs2RackDestroy(uintptr_t rack_handle, Ngs2ContextBufferInfo* 
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2RackLock(uintptr_t rack_handle) {
+int KATY_SYSV_ABI Ngs2RackLock(uintptr_t rack_handle) {
 	PRINT_NAME();
 	LOGF("\t rack_handle = 0x%016" PRIx64 "\n", static_cast<uint64_t>(rack_handle));
 
@@ -2205,7 +2205,7 @@ int KYTY_SYSV_ABI Ngs2RackLock(uintptr_t rack_handle) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2RackUnlock(uintptr_t rack_handle) {
+int KATY_SYSV_ABI Ngs2RackUnlock(uintptr_t rack_handle) {
 	PRINT_NAME();
 	LOGF("\t rack_handle = 0x%016" PRIx64 "\n", static_cast<uint64_t>(rack_handle));
 
@@ -2220,7 +2220,7 @@ int KYTY_SYSV_ABI Ngs2RackUnlock(uintptr_t rack_handle) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2SystemRender(uintptr_t system_handle, const Ngs2RenderBufferInfo* buffer_info,
+int KATY_SYSV_ABI Ngs2SystemRender(uintptr_t system_handle, const Ngs2RenderBufferInfo* buffer_info,
                                    uint32_t num_buffer_info) {
 	static std::atomic_uint32_t render_log_count = 0;
 	const auto log_index     = render_log_count.fetch_add(1, std::memory_order_relaxed);
@@ -2289,7 +2289,7 @@ int KYTY_SYSV_ABI Ngs2SystemRender(uintptr_t system_handle, const Ngs2RenderBuff
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2ParseWaveformData(const void* data, size_t data_size,
+int KATY_SYSV_ABI Ngs2ParseWaveformData(const void* data, size_t data_size,
                                         Ngs2WaveformInfo* info) {
 	PRINT_NAME();
 	LOGF("\t data = 0x%016" PRIx64 ", data_size = 0x%016" PRIx64 "\n",
@@ -2309,7 +2309,7 @@ int KYTY_SYSV_ABI Ngs2ParseWaveformData(const void* data, size_t data_size,
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2CalcWaveformBlock(const Ngs2WaveformFormat* format, uint32_t sample_pos,
+int KATY_SYSV_ABI Ngs2CalcWaveformBlock(const Ngs2WaveformFormat* format, uint32_t sample_pos,
                                         uint32_t num_samples, Ngs2WaveformBlock* block) {
 	PRINT_NAME();
 	LOGF("\t format = 0x%016" PRIx64 ", sample_pos = %" PRIu32 ", num_samples = %" PRIu32 "\n",
@@ -2322,7 +2322,7 @@ int KYTY_SYSV_ABI Ngs2CalcWaveformBlock(const Ngs2WaveformFormat* format, uint32
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2PanInit(Ngs2PanWork* work, const float* speaker_angles, float unit_angle,
+int KATY_SYSV_ABI Ngs2PanInit(Ngs2PanWork* work, const float* speaker_angles, float unit_angle,
                               uint32_t num_speakers) {
 	PRINT_NAME();
 	LOGF("\t work = 0x%016" PRIx64 ", num_speakers = %" PRIu32 "\n",
@@ -2341,7 +2341,7 @@ int KYTY_SYSV_ABI Ngs2PanInit(Ngs2PanWork* work, const float* speaker_angles, fl
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2PanGetVolumeMatrix(Ngs2PanWork* work, const Ngs2PanParam* params,
+int KATY_SYSV_ABI Ngs2PanGetVolumeMatrix(Ngs2PanWork* work, const Ngs2PanParam* params,
                                          uint32_t num_params, uint32_t matrix_format,
                                          float* out_volume_matrix) {
 	PRINT_NAME();
@@ -2362,7 +2362,7 @@ int KYTY_SYSV_ABI Ngs2PanGetVolumeMatrix(Ngs2PanWork* work, const Ngs2PanParam* 
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2GeomResetListenerParam(Ngs2GeomListenerParam* out_listener_param) {
+int KATY_SYSV_ABI Ngs2GeomResetListenerParam(Ngs2GeomListenerParam* out_listener_param) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(out_listener_param == nullptr);
@@ -2375,7 +2375,7 @@ int KYTY_SYSV_ABI Ngs2GeomResetListenerParam(Ngs2GeomListenerParam* out_listener
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2GeomResetSourceParam(Ngs2GeomSourceParam* out_source_param) {
+int KATY_SYSV_ABI Ngs2GeomResetSourceParam(Ngs2GeomSourceParam* out_source_param) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(out_source_param == nullptr);
@@ -2401,7 +2401,7 @@ int KYTY_SYSV_ABI Ngs2GeomResetSourceParam(Ngs2GeomSourceParam* out_source_param
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2GeomCalcListener(const Ngs2GeomListenerParam* param,
+int KATY_SYSV_ABI Ngs2GeomCalcListener(const Ngs2GeomListenerParam* param,
                                        Ngs2GeomListenerWork* out_work, uint32_t flags) {
 	PRINT_NAME();
 	LOGF("\t flags = 0x%08" PRIx32 "\n", flags);
@@ -2420,7 +2420,7 @@ int KYTY_SYSV_ABI Ngs2GeomCalcListener(const Ngs2GeomListenerParam* param,
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2GeomApply(const Ngs2GeomListenerWork* listener,
+int KATY_SYSV_ABI Ngs2GeomApply(const Ngs2GeomListenerWork* listener,
                                 const Ngs2GeomSourceParam* source, Ngs2GeomAttribute* out_attrib,
                                 uint32_t flags) {
 	PRINT_NAME();
@@ -2445,7 +2445,7 @@ int KYTY_SYSV_ABI Ngs2GeomApply(const Ngs2GeomListenerWork* listener,
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2RackGetVoiceHandle(uintptr_t rack_handle, uint32_t voice_id,
+int KATY_SYSV_ABI Ngs2RackGetVoiceHandle(uintptr_t rack_handle, uint32_t voice_id,
                                          uintptr_t* handle) {
 	PRINT_NAME();
 
@@ -2474,7 +2474,7 @@ int KYTY_SYSV_ABI Ngs2RackGetVoiceHandle(uintptr_t rack_handle, uint32_t voice_i
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-int KYTY_SYSV_ABI Ngs2VoiceControl(uintptr_t voice_handle, const Ngs2VoiceParamHeader* param_list) {
+int KATY_SYSV_ABI Ngs2VoiceControl(uintptr_t voice_handle, const Ngs2VoiceParamHeader* param_list) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(param_list == nullptr);
@@ -2613,7 +2613,7 @@ int KYTY_SYSV_ABI Ngs2VoiceControl(uintptr_t voice_handle, const Ngs2VoiceParamH
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2VoiceRunCommands(uintptr_t voice_handle, const void* commands,
+int KATY_SYSV_ABI Ngs2VoiceRunCommands(uintptr_t voice_handle, const void* commands,
                                        uint32_t num_commands, uint32_t flags) {
 	PRINT_NAME();
 
@@ -2625,7 +2625,7 @@ int KYTY_SYSV_ABI Ngs2VoiceRunCommands(uintptr_t voice_handle, const void* comma
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2VoiceGetState(uintptr_t voice_handle, Ngs2VoiceState* state,
+int KATY_SYSV_ABI Ngs2VoiceGetState(uintptr_t voice_handle, Ngs2VoiceState* state,
                                     size_t state_size) {
 	PRINT_NAME();
 
@@ -2688,7 +2688,7 @@ int KYTY_SYSV_ABI Ngs2VoiceGetState(uintptr_t voice_handle, Ngs2VoiceState* stat
 	return OK;
 }
 
-int KYTY_SYSV_ABI Ngs2VoiceGetStateFlags(uintptr_t voice_handle, uint32_t* state_flags) {
+int KATY_SYSV_ABI Ngs2VoiceGetStateFlags(uintptr_t voice_handle, uint32_t* state_flags) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(state_flags == nullptr);

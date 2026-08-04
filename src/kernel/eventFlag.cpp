@@ -25,7 +25,7 @@ public:
 	    : m_name(name), m_single_thread(single), m_bits(bits) {}
 	virtual ~KernelEventFlagPrivate();
 
-	KYTY_CLASS_NO_COPY(KernelEventFlagPrivate);
+	KATY_CLASS_NO_COPY(KernelEventFlagPrivate);
 
 	void   Set(uint64_t bits);
 	void   Clear(uint64_t bits);
@@ -236,7 +236,7 @@ void KernelEventFlagPrivate::Cancel(uint64_t bits, int* num_waiting_threads) {
 	m_status = Status::Set;
 }
 
-int KYTY_SYSV_ABI KernelCreateEventFlag(KernelEventFlag* ef, const char* name, uint32_t attr,
+int KATY_SYSV_ABI KernelCreateEventFlag(KernelEventFlag* ef, const char* name, uint32_t attr,
                                         uint64_t init_pattern, const void* param) {
 	PRINT_NAME();
 
@@ -272,7 +272,7 @@ int KYTY_SYSV_ABI KernelCreateEventFlag(KernelEventFlag* ef, const char* name, u
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelDeleteEventFlag(KernelEventFlag ef) {
+int KATY_SYSV_ABI KernelDeleteEventFlag(KernelEventFlag ef) {
 	PRINT_NAME();
 
 	if (ef == nullptr) {
@@ -284,7 +284,7 @@ int KYTY_SYSV_ABI KernelDeleteEventFlag(KernelEventFlag ef) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelWaitEventFlag(KernelEventFlag ef, uint64_t bit_pattern, uint32_t wait_mode,
+int KATY_SYSV_ABI KernelWaitEventFlag(KernelEventFlag ef, uint64_t bit_pattern, uint32_t wait_mode,
                                       uint64_t* result_pat, KernelUseconds* timeout) {
 	PRINT_NAME();
 
@@ -312,7 +312,7 @@ int KYTY_SYSV_ABI KernelWaitEventFlag(KernelEventFlag ef, uint64_t bit_pattern, 
 	return ret;
 }
 
-int KYTY_SYSV_ABI KernelPollEventFlag(KernelEventFlag ef, uint64_t bit_pattern, uint32_t wait_mode,
+int KATY_SYSV_ABI KernelPollEventFlag(KernelEventFlag ef, uint64_t bit_pattern, uint32_t wait_mode,
                                       uint64_t* result_pat) {
 	PRINT_NAME();
 
@@ -340,7 +340,7 @@ int KYTY_SYSV_ABI KernelPollEventFlag(KernelEventFlag ef, uint64_t bit_pattern, 
 	return ret;
 }
 
-int KYTY_SYSV_ABI KernelSetEventFlag(KernelEventFlag ef, uint64_t bit_pattern) {
+int KATY_SYSV_ABI KernelSetEventFlag(KernelEventFlag ef, uint64_t bit_pattern) {
 	PRINT_NAME();
 
 	if (ef == nullptr) {
@@ -352,7 +352,7 @@ int KYTY_SYSV_ABI KernelSetEventFlag(KernelEventFlag ef, uint64_t bit_pattern) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelClearEventFlag(KernelEventFlag ef, uint64_t bit_pattern) {
+int KATY_SYSV_ABI KernelClearEventFlag(KernelEventFlag ef, uint64_t bit_pattern) {
 	PRINT_NAME();
 
 	if (ef == nullptr) {
@@ -364,7 +364,7 @@ int KYTY_SYSV_ABI KernelClearEventFlag(KernelEventFlag ef, uint64_t bit_pattern)
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelCancelEventFlag(KernelEventFlag ef, uint64_t set_pattern,
+int KATY_SYSV_ABI KernelCancelEventFlag(KernelEventFlag ef, uint64_t set_pattern,
                                         int* num_wait_threads) {
 	PRINT_NAME();
 

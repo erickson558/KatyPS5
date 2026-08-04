@@ -41,7 +41,7 @@ public:
 	explicit KernelEqueuePrivate(KernelEqueue handle): m_handle(handle) {}
 	virtual ~KernelEqueuePrivate();
 
-	KYTY_CLASS_NO_COPY(KernelEqueuePrivate);
+	KATY_CLASS_NO_COPY(KernelEqueuePrivate);
 
 	[[nodiscard]] const std::string& GetName() const { return m_name; }
 	void                             SetName(const std::string& m_name) { this->m_name = m_name; }
@@ -311,7 +311,7 @@ KernelEqueueRef KernelPinEqueue(KernelEqueue eq) {
 	return entry != g_equeues.end() ? entry->second : KernelEqueueRef {};
 }
 
-int KYTY_SYSV_ABI KernelCreateEqueue(KernelEqueue* eq, const char* name) {
+int KATY_SYSV_ABI KernelCreateEqueue(KernelEqueue* eq, const char* name) {
 	PRINT_NAME();
 
 	if (eq == nullptr || name == nullptr) {
@@ -334,7 +334,7 @@ int KYTY_SYSV_ABI KernelCreateEqueue(KernelEqueue* eq, const char* name) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAddEvent(KernelEqueue eq, const KernelEqueueEvent& event) {
+int KATY_SYSV_ABI KernelAddEvent(KernelEqueue eq, const KernelEqueueEvent& event) {
 	auto owner = KernelPinEqueue(eq);
 	if (!owner) {
 		return KERNEL_ERROR_EBADF;
@@ -343,7 +343,7 @@ int KYTY_SYSV_ABI KernelAddEvent(KernelEqueue eq, const KernelEqueueEvent& event
 	return owner->AddEvent(event);
 }
 
-int KYTY_SYSV_ABI KernelTriggerEvent(KernelEqueue eq, uintptr_t ident, int16_t filter,
+int KATY_SYSV_ABI KernelTriggerEvent(KernelEqueue eq, uintptr_t ident, int16_t filter,
                                      void* trigger_data) {
 	auto owner = KernelPinEqueue(eq);
 	if (!owner) {
@@ -353,7 +353,7 @@ int KYTY_SYSV_ABI KernelTriggerEvent(KernelEqueue eq, uintptr_t ident, int16_t f
 	return owner->TriggerEvent(ident, filter, trigger_data);
 }
 
-int KYTY_SYSV_ABI KernelDeleteEvent(KernelEqueue eq, uintptr_t ident, int16_t filter) {
+int KATY_SYSV_ABI KernelDeleteEvent(KernelEqueue eq, uintptr_t ident, int16_t filter) {
 	auto owner = KernelPinEqueue(eq);
 	if (!owner) {
 		return KERNEL_ERROR_EBADF;
@@ -362,7 +362,7 @@ int KYTY_SYSV_ABI KernelDeleteEvent(KernelEqueue eq, uintptr_t ident, int16_t fi
 	return owner->DeleteEvent(ident, filter);
 }
 
-int KYTY_SYSV_ABI KernelDeleteEqueue(KernelEqueue eq) {
+int KATY_SYSV_ABI KernelDeleteEqueue(KernelEqueue eq) {
 	PRINT_NAME();
 
 	KernelEqueueRef owner;
@@ -383,7 +383,7 @@ int KYTY_SYSV_ABI KernelDeleteEqueue(KernelEqueue eq) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelWaitEqueue(KernelEqueue eq, KernelEvent* ev, int num, int* out,
+int KATY_SYSV_ABI KernelWaitEqueue(KernelEqueue eq, KernelEvent* ev, int num, int* out,
                                    const KernelUseconds* timo) {
 	PRINT_NAME();
 
@@ -438,7 +438,7 @@ int KYTY_SYSV_ABI KernelWaitEqueue(KernelEqueue eq, KernelEvent* ev, int num, in
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAddUserEvent(KernelEqueue eq, int id) {
+int KATY_SYSV_ABI KernelAddUserEvent(KernelEqueue eq, int id) {
 	PRINT_NAME();
 
 	LOGF("\t user event add: eq = 0x%016" PRIx64 ", id = %d\n", static_cast<uint64_t>(eq), id);
@@ -456,7 +456,7 @@ int KYTY_SYSV_ABI KernelAddUserEvent(KernelEqueue eq, int id) {
 	return KernelAddEvent(eq, event);
 }
 
-int KYTY_SYSV_ABI KernelAddUserEventEdge(KernelEqueue eq, int id) {
+int KATY_SYSV_ABI KernelAddUserEventEdge(KernelEqueue eq, int id) {
 	PRINT_NAME();
 
 	LOGF("\t user event edge add: eq = 0x%016" PRIx64 ", id = %d\n", static_cast<uint64_t>(eq), id);
@@ -474,7 +474,7 @@ int KYTY_SYSV_ABI KernelAddUserEventEdge(KernelEqueue eq, int id) {
 	return KernelAddEvent(eq, event);
 }
 
-int KYTY_SYSV_ABI KernelTriggerUserEvent(KernelEqueue eq, int id, void* udata) {
+int KATY_SYSV_ABI KernelTriggerUserEvent(KernelEqueue eq, int id, void* udata) {
 	PRINT_NAME();
 
 	LOGF("\t user event trigger: eq = 0x%016" PRIx64 ", id = %d, udata = 0x%016" PRIx64 "\n",
@@ -483,7 +483,7 @@ int KYTY_SYSV_ABI KernelTriggerUserEvent(KernelEqueue eq, int id, void* udata) {
 	return KernelTriggerEvent(eq, static_cast<uintptr_t>(id), KERNEL_EVFILT_USER, udata);
 }
 
-int KYTY_SYSV_ABI KernelTriggerUserEventForAll(int id, void* udata) {
+int KATY_SYSV_ABI KernelTriggerUserEventForAll(int id, void* udata) {
 	int                          triggered = 0;
 	std::vector<KernelEqueueRef> queues;
 
@@ -503,7 +503,7 @@ int KYTY_SYSV_ABI KernelTriggerUserEventForAll(int id, void* udata) {
 	return (triggered > 0 ? OK : KERNEL_ERROR_ENOENT);
 }
 
-int KYTY_SYSV_ABI KernelDeleteUserEvent(KernelEqueue eq, int id) {
+int KATY_SYSV_ABI KernelDeleteUserEvent(KernelEqueue eq, int id) {
 	PRINT_NAME();
 
 	LOGF("\t user event delete: eq = 0x%016" PRIx64 ", id = %d\n", static_cast<uint64_t>(eq), id);
@@ -511,7 +511,7 @@ int KYTY_SYSV_ABI KernelDeleteUserEvent(KernelEqueue eq, int id) {
 	return KernelDeleteEvent(eq, static_cast<uintptr_t>(id), KERNEL_EVFILT_USER);
 }
 
-int KYTY_SYSV_ABI KernelAddHRTimerEvent(KernelEqueue eq, int id, const KernelTimespec* ts,
+int KATY_SYSV_ABI KernelAddHRTimerEvent(KernelEqueue eq, int id, const KernelTimespec* ts,
                                         void* udata) {
 	if (ts == nullptr) {
 		return KERNEL_ERROR_EFAULT;
@@ -537,11 +537,11 @@ int KYTY_SYSV_ABI KernelAddHRTimerEvent(KernelEqueue eq, int id, const KernelTim
 	return KernelAddEvent(eq, event);
 }
 
-int KYTY_SYSV_ABI KernelDeleteHRTimerEvent(KernelEqueue eq, int id) {
+int KATY_SYSV_ABI KernelDeleteHRTimerEvent(KernelEqueue eq, int id) {
 	return KernelDeleteEvent(eq, static_cast<uintptr_t>(id), KERNEL_EVFILT_HRTIMER);
 }
 
-int KYTY_SYSV_ABI KernelAddAmprEvent(KernelEqueue eq, int id, void* udata) {
+int KATY_SYSV_ABI KernelAddAmprEvent(KernelEqueue eq, int id, void* udata) {
 	PRINT_NAME();
 
 	LOGF("\t AMPR event add: eq = 0x%016" PRIx64 ", id = %d, udata = 0x%016" PRIx64 "\n",
@@ -563,7 +563,7 @@ int KYTY_SYSV_ABI KernelAddAmprEvent(KernelEqueue eq, int id, void* udata) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAddAmprSystemEvent(KernelEqueue eq, int id, void* udata) {
+int KATY_SYSV_ABI KernelAddAmprSystemEvent(KernelEqueue eq, int id, void* udata) {
 	PRINT_NAME();
 
 	LOGF("\t AMPR system event add: eq = 0x%016" PRIx64 ", id = %d, udata = 0x%016" PRIx64 "\n",
@@ -572,7 +572,7 @@ int KYTY_SYSV_ABI KernelAddAmprSystemEvent(KernelEqueue eq, int id, void* udata)
 	return KernelAddAmprEvent(eq, id, udata);
 }
 
-int KYTY_SYSV_ABI KernelDeleteAmprEvent(KernelEqueue eq, int id) {
+int KATY_SYSV_ABI KernelDeleteAmprEvent(KernelEqueue eq, int id) {
 	PRINT_NAME();
 
 	LOGF("\t AMPR event delete: eq = 0x%016" PRIx64 ", id = %d\n", static_cast<uint64_t>(eq), id);
@@ -584,7 +584,7 @@ int KYTY_SYSV_ABI KernelDeleteAmprEvent(KernelEqueue eq, int id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelDeleteAmprSystemEvent(KernelEqueue eq, int id) {
+int KATY_SYSV_ABI KernelDeleteAmprSystemEvent(KernelEqueue eq, int id) {
 	PRINT_NAME();
 
 	LOGF("\t AMPR system event delete: eq = 0x%016" PRIx64 ", id = %d\n", static_cast<uint64_t>(eq),
@@ -593,7 +593,7 @@ int KYTY_SYSV_ABI KernelDeleteAmprSystemEvent(KernelEqueue eq, int id) {
 	return KernelDeleteAmprEvent(eq, id);
 }
 
-intptr_t KYTY_SYSV_ABI KernelGetEventData(const KernelEvent* ev) {
+intptr_t KATY_SYSV_ABI KernelGetEventData(const KernelEvent* ev) {
 	PRINT_NAME();
 
 	if (ev != nullptr) {
@@ -603,7 +603,7 @@ intptr_t KYTY_SYSV_ABI KernelGetEventData(const KernelEvent* ev) {
 	return 0;
 }
 
-intptr_t KYTY_SYSV_ABI KernelGetEventFflags(const KernelEvent* ev) {
+intptr_t KATY_SYSV_ABI KernelGetEventFflags(const KernelEvent* ev) {
 	PRINT_NAME();
 
 	if (ev != nullptr) {
@@ -613,7 +613,7 @@ intptr_t KYTY_SYSV_ABI KernelGetEventFflags(const KernelEvent* ev) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI KernelGetEventFilter(const KernelEvent* ev) {
+int KATY_SYSV_ABI KernelGetEventFilter(const KernelEvent* ev) {
 	PRINT_NAME();
 
 	if (ev != nullptr) {
@@ -623,7 +623,7 @@ int KYTY_SYSV_ABI KernelGetEventFilter(const KernelEvent* ev) {
 	return 0;
 }
 
-uintptr_t KYTY_SYSV_ABI KernelGetEventId(const KernelEvent* ev) {
+uintptr_t KATY_SYSV_ABI KernelGetEventId(const KernelEvent* ev) {
 	PRINT_NAME();
 
 	if (ev != nullptr) {
@@ -633,7 +633,7 @@ uintptr_t KYTY_SYSV_ABI KernelGetEventId(const KernelEvent* ev) {
 	return 0;
 }
 
-void* KYTY_SYSV_ABI KernelGetEventUserData(const KernelEvent* ev) {
+void* KATY_SYSV_ABI KernelGetEventUserData(const KernelEvent* ev) {
 	PRINT_NAME();
 
 	if (ev != nullptr) {
@@ -643,7 +643,7 @@ void* KYTY_SYSV_ABI KernelGetEventUserData(const KernelEvent* ev) {
 	return nullptr;
 }
 
-int KYTY_SYSV_ABI KernelGetEventError(const KernelEvent* ev) {
+int KATY_SYSV_ABI KernelGetEventError(const KernelEvent* ev) {
 	PRINT_NAME();
 
 	if (ev != nullptr && (ev->flags & EV_ERROR) != 0) {

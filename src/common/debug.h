@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_DEBUG_H_
-#define KYTY_COMMON_DEBUG_H_
+#ifndef KATY_COMMON_DEBUG_H_
+#define KATY_COMMON_DEBUG_H_
 
 #include "common/common.h"
 #include "common/stringUtils.h"
@@ -9,8 +9,8 @@
 
 namespace Common {
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS && KYTY_BUILD == KYTY_BUILD_DEBUG &&                    \
-    KYTY_COMPILER == KYTY_COMPILER_CLANG
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS && KATY_BUILD == KATY_BUILD_DEBUG &&                    \
+    KATY_COMPILER == KATY_COMPILER_CLANG
 constexpr int DEBUG_MAX_STACK_DEPTH = 20;
 #else
 constexpr int DEBUG_MAX_STACK_DEPTH = 15;
@@ -40,4 +40,4 @@ struct DebugStack {
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_DEBUG_H_ */
+#endif /* KATY_COMMON_DEBUG_H_ */

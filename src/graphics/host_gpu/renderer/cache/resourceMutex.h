@@ -13,7 +13,7 @@ class ResourceMutex final {
 public:
 	ResourceMutex() = default;
 	~ResourceMutex();
-	KYTY_CLASS_NO_COPY(ResourceMutex);
+	KATY_CLASS_NO_COPY(ResourceMutex);
 
 	void               lock();
 	void               unlock();

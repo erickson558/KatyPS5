@@ -88,7 +88,7 @@ static bool UsesStencilOpValue(uint8_t fail, uint8_t pass, uint8_t depth_fail) {
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void RenderExecutor::ResolveRenderDepthTarget(uint64_t submit_id, RenderCommandBuffer& buffer,
                                               RenderDepthInfo& r) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	(void)submit_id;
 	const auto& hw = buffer.GetRegisters();
 	const auto& z  = hw.GetDepthRenderTarget();

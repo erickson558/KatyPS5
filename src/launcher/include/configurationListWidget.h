@@ -21,7 +21,7 @@ class ConfigurationListWidget;
 
 class ConfigurationListWidget: public QWidget {
 	Q_OBJECT
-	KYTY_QT_CLASS_NO_COPY(ConfigurationListWidget);
+	KATY_QT_CLASS_NO_COPY(ConfigurationListWidget);
 
 public:
 	explicit ConfigurationListWidget(QWidget* parent = nullptr);

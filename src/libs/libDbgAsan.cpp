@@ -125,7 +125,7 @@ static void KernelFree(uintptr_t addr, size_t size) {
 	FreeShadow(addr, addr + size - 1);
 }
 
-static void KYTY_SYSV_ABI asan_init() {
+static void KATY_SYSV_ABI asan_init() {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(g_ctx != nullptr);
@@ -141,11 +141,11 @@ static void KYTY_SYSV_ABI asan_init() {
 	LibKernel::Memory::RegisterCallbacks(KernelAlloc, KernelFree);
 }
 
-static void KYTY_SYSV_ABI asan_version_mismatch_check_v8() {
+static void KATY_SYSV_ABI asan_version_mismatch_check_v8() {
 	PRINT_NAME();
 }
 
-static void KYTY_SYSV_ABI asan_register_elf_globals(uintptr_t* flag, Global* start, Global* stop) {
+static void KATY_SYSV_ABI asan_register_elf_globals(uintptr_t* flag, Global* start, Global* stop) {
 	PRINT_NAME();
 
 	LOGF("\t flag  = %016" PRIx64 "\n"
@@ -197,21 +197,21 @@ static void KYTY_SYSV_ABI asan_register_elf_globals(uintptr_t* flag, Global* sta
 	*flag = 0;
 }
 
-static void KYTY_SYSV_ABI asan_before_dynamic_init(const char* module_name) {
+static void KATY_SYSV_ABI asan_before_dynamic_init(const char* module_name) {
 	PRINT_NAME();
 
 	LOGF("\t name = %s\n", module_name);
 }
 
-static void KYTY_SYSV_ABI asan_after_dynamic_init() {
+static void KATY_SYSV_ABI asan_after_dynamic_init() {
 	PRINT_NAME();
 }
 
-static void* KYTY_SYSV_ABI asan_memcpy(void* dst, const void* src, size_t size) {
+static void* KATY_SYSV_ABI asan_memcpy(void* dst, const void* src, size_t size) {
 	return std::memcpy(dst, src, size);
 }
 
-static void* KYTY_SYSV_ABI asan_memset(void* dst, int ch, size_t size) {
+static void* KATY_SYSV_ABI asan_memset(void* dst, int ch, size_t size) {
 	return std::memset(dst, ch, size);
 }
 

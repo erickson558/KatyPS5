@@ -87,14 +87,14 @@ static void SetupLogger() {
 
 	switch (g_direction) {
 		case Direction::Silent:
-			g_logger = MakeLogger("kyty", std::make_shared<spdlog::sinks::null_sink_mt>());
+			g_logger = MakeLogger("katy", std::make_shared<spdlog::sinks::null_sink_mt>());
 			break;
 		case Direction::Console:
-			g_logger = MakeLogger("kyty", std::make_shared<spdlog::sinks::stdout_sink_mt>());
+			g_logger = MakeLogger("katy", std::make_shared<spdlog::sinks::stdout_sink_mt>());
 			break;
 		case Direction::File:
 			if (!g_output_file.empty()) {
-				g_logger = MakeFileLogger("kyty", g_output_file);
+				g_logger = MakeFileLogger("katy", g_output_file);
 			}
 			break;
 	}
@@ -149,7 +149,7 @@ void WriteFatal(fmt::text_style style, std::string_view text) {
 	Flush();
 }
 
-KYTY_SUBSYSTEM_INIT(Log) {
+KATY_SUBSYSTEM_INIT(Log) {
 	g_initialized = true;
 	switch (Config::GetPrintfDirection()) {
 		case Config::OutputDirection::Silent: g_direction = Direction::Silent; break;
@@ -161,13 +161,13 @@ KYTY_SUBSYSTEM_INIT(Log) {
 	SetupLogger();
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Log) {
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Log) {
 	Flush();
 	std::lock_guard lock(g_logger_mutex);
 	g_logger.reset();
 }
 
-KYTY_SUBSYSTEM_DESTROY(Log) {
+KATY_SUBSYSTEM_DESTROY(Log) {
 	Flush();
 	std::lock_guard lock(g_logger_mutex);
 	g_logger.reset();

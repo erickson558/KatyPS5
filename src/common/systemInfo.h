@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_SYSTEM_INFO_H_
-#define KYTY_COMMON_SYSTEM_INFO_H_
+#ifndef KATY_COMMON_SYSTEM_INFO_H_
+#define KATY_COMMON_SYSTEM_INFO_H_
 
 #include <string>
 
@@ -13,4 +13,4 @@ struct SystemInfo {
 
 } // namespace Common
 
-#endif /* KYTY_COMMON_SYSTEM_INFO_H_ */
+#endif /* KATY_COMMON_SYSTEM_INFO_H_ */

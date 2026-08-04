@@ -43,9 +43,9 @@ public:
 	};
 
 	MountPoints() { EXIT_NOT_IMPLEMENTED(!Common::Thread::IsMainThread()); }
-	virtual ~MountPoints() { KYTY_NOT_IMPLEMENTED; }
+	virtual ~MountPoints() { KATY_NOT_IMPLEMENTED; }
 
-	KYTY_CLASS_NO_COPY(MountPoints);
+	KATY_CLASS_NO_COPY(MountPoints);
 
 	void Mount(const std::filesystem::path& folder, const std::string& point);
 	void Umount(const std::string& folder_or_point);
@@ -76,9 +76,9 @@ struct File {
 class FileDescriptors {
 public:
 	FileDescriptors() { EXIT_NOT_IMPLEMENTED(!Common::Thread::IsMainThread()); }
-	virtual ~FileDescriptors() { KYTY_NOT_IMPLEMENTED; }
+	virtual ~FileDescriptors() { KATY_NOT_IMPLEMENTED; }
 
-	KYTY_CLASS_NO_COPY(FileDescriptors);
+	KATY_CLASS_NO_COPY(FileDescriptors);
 
 	int   CreateDescriptor();
 	void  DeleteDescriptor(int d);
@@ -156,7 +156,7 @@ void FileDescriptors::DeleteDescriptor(int d) {
 	EXIT_IF(m_files[index] == nullptr);
 	EXIT_IF(m_files[index]->opened);
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM != KATY_PLATFORM_WINDOWS
 	// Close host files opened before a failed descriptor setup.
 	m_files[index]->f.Close();
 #endif
@@ -231,7 +231,7 @@ void MountPoints::Umount(const std::string& folder_or_point) {
 	}
 }
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM != KATY_PLATFORM_WINDOWS
 // Resolve guest paths case-insensitively on case-sensitive hosts.
 static std::filesystem::path ResolvePathIgnoringCase(const std::filesystem::path& path) {
 	std::error_code ec;
@@ -298,7 +298,7 @@ std::filesystem::path MountPoints::GetRealFilename(const std::string& mounted_fi
 		while (Common::StartsWith(rel_path, '/')) {
 			rel_path = Common::RemoveFirst(rel_path, 1);
 		}
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		if (HasWindowsForbiddenFilenameCharacter(rel_path)) {
 			::printf("FileSystem: Windows-incompatible guest filename: %s\n",
 			         mounted_file_name.c_str());
@@ -327,7 +327,7 @@ std::filesystem::path MountPoints::GetRealDirectory(const std::string& mounted_d
 		while (Common::StartsWith(rel_path, '/')) {
 			rel_path = Common::RemoveFirst(rel_path, 1);
 		}
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		return p.dir / rel_path;
 #else
 		return ResolvePathIgnoringCase(p.dir / rel_path);
@@ -337,18 +337,18 @@ std::filesystem::path MountPoints::GetRealDirectory(const std::string& mounted_d
 	return mounted_directory;
 }
 
-KYTY_SUBSYSTEM_INIT(FileSystem) {
+KATY_SUBSYSTEM_INIT(FileSystem) {
 	g_mount_points = new MountPoints;
 	g_files        = new FileDescriptors;
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(FileSystem) {
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(FileSystem) {
 	if (g_files != nullptr) {
 		g_files->CloseAll();
 	}
 }
 
-KYTY_SUBSYSTEM_DESTROY(FileSystem) {
+KATY_SUBSYSTEM_DESTROY(FileSystem) {
 	if (g_files != nullptr) {
 		g_files->CloseAll();
 	}
@@ -370,7 +370,7 @@ std::filesystem::path GetRealFilename(const std::string& mounted_file_name) {
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-int KYTY_SYSV_ABI KernelOpen(const char* path, int flags, uint16_t mode) {
+int KATY_SYSV_ABI KernelOpen(const char* path, int flags, uint16_t mode) {
 	PRINT_NAME();
 
 	if (path == nullptr) {
@@ -508,7 +508,7 @@ int KYTY_SYSV_ABI KernelOpen(const char* path, int flags, uint16_t mode) {
 	return descriptor;
 }
 
-int KYTY_SYSV_ABI KernelClose(int d) {
+int KATY_SYSV_ABI KernelClose(int d) {
 	PRINT_NAME();
 
 	if (d < DESCRIPTOR_MIN) {
@@ -541,7 +541,7 @@ int KYTY_SYSV_ABI KernelClose(int d) {
 	return OK;
 }
 
-int64_t KYTY_SYSV_ABI KernelRead(int d, void* buf, size_t nbytes) {
+int64_t KATY_SYSV_ABI KernelRead(int d, void* buf, size_t nbytes) {
 	PRINT_NAME();
 
 	if (d < DESCRIPTOR_MIN) {
@@ -601,7 +601,7 @@ int64_t KYTY_SYSV_ABI KernelRead(int d, void* buf, size_t nbytes) {
 	return bytes_read;
 }
 
-int64_t KYTY_SYSV_ABI KernelWrite(int d, const void* buf, size_t nbytes) {
+int64_t KATY_SYSV_ABI KernelWrite(int d, const void* buf, size_t nbytes) {
 	PRINT_NAME();
 
 	if (buf == nullptr) {
@@ -666,7 +666,7 @@ int64_t KYTY_SYSV_ABI KernelWrite(int d, const void* buf, size_t nbytes) {
 	return bytes_written;
 }
 
-int64_t KYTY_SYSV_ABI KernelPread(int d, void* buf, size_t nbytes, int64_t offset) {
+int64_t KATY_SYSV_ABI KernelPread(int d, void* buf, size_t nbytes, int64_t offset) {
 	PRINT_NAME();
 
 	if (d < DESCRIPTOR_MIN) {
@@ -729,7 +729,7 @@ int64_t KYTY_SYSV_ABI KernelPread(int d, void* buf, size_t nbytes, int64_t offse
 	return bytes_read;
 }
 
-int64_t KYTY_SYSV_ABI KernelPwrite(int d, const void* buf, size_t nbytes, int64_t offset) {
+int64_t KATY_SYSV_ABI KernelPwrite(int d, const void* buf, size_t nbytes, int64_t offset) {
 	PRINT_NAME();
 
 	if (d < DESCRIPTOR_MIN) {
@@ -782,7 +782,7 @@ int64_t KYTY_SYSV_ABI KernelPwrite(int d, const void* buf, size_t nbytes, int64_
 	return bytes_written;
 }
 
-int64_t KYTY_SYSV_ABI KernelLseek(int d, int64_t offset, int whence) {
+int64_t KATY_SYSV_ABI KernelLseek(int d, int64_t offset, int whence) {
 	PRINT_NAME();
 
 	if (d < DESCRIPTOR_MIN) {
@@ -841,7 +841,7 @@ int64_t KYTY_SYSV_ABI KernelLseek(int d, int64_t offset, int whence) {
 	return pos;
 }
 
-int KYTY_SYSV_ABI KernelStat(const char* path, FileStat* sb) {
+int KATY_SYSV_ABI KernelStat(const char* path, FileStat* sb) {
 	PRINT_NAME();
 
 	if (path == nullptr || sb == nullptr) {
@@ -892,7 +892,7 @@ int KYTY_SYSV_ABI KernelStat(const char* path, FileStat* sb) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelFstat(int d, FileStat* sb) {
+int KATY_SYSV_ABI KernelFstat(int d, FileStat* sb) {
 	PRINT_NAME();
 
 	if (d < DESCRIPTOR_MIN) {
@@ -964,7 +964,7 @@ int KYTY_SYSV_ABI KernelFstat(int d, FileStat* sb) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelFtruncate(int d, int64_t length) {
+int KATY_SYSV_ABI KernelFtruncate(int d, int64_t length) {
 	PRINT_NAME();
 
 	if (d < DESCRIPTOR_MIN) {
@@ -1005,7 +1005,7 @@ int KYTY_SYSV_ABI KernelFtruncate(int d, int64_t length) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelUnlink(const char* path) {
+int KATY_SYSV_ABI KernelUnlink(const char* path) {
 	PRINT_NAME();
 
 	if (path == nullptr) {
@@ -1042,7 +1042,7 @@ int KYTY_SYSV_ABI KernelUnlink(const char* path) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelRename(const char* from, const char* to) {
+int KATY_SYSV_ABI KernelRename(const char* from, const char* to) {
 	PRINT_NAME();
 
 	if (from == nullptr || to == nullptr) {
@@ -1076,7 +1076,7 @@ int KYTY_SYSV_ABI KernelRename(const char* from, const char* to) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelGetdirentries(int fd, char* buf, int nbytes, int64_t* basep) {
+int KATY_SYSV_ABI KernelGetdirentries(int fd, char* buf, int nbytes, int64_t* basep) {
 	PRINT_NAME();
 
 	if (fd < DESCRIPTOR_MIN) {
@@ -1200,13 +1200,13 @@ int KYTY_SYSV_ABI KernelGetdirentries(int fd, char* buf, int nbytes, int64_t* ba
 	return static_cast<int64_t>(bytes_written);
 }
 
-int KYTY_SYSV_ABI KernelGetdents(int fd, char* buf, int nbytes) {
+int KATY_SYSV_ABI KernelGetdents(int fd, char* buf, int nbytes) {
 	PRINT_NAME();
 
 	return KernelGetdirentries(fd, buf, nbytes, nullptr);
 }
 
-int KYTY_SYSV_ABI KernelMkdir(const char* path, uint16_t mode) {
+int KATY_SYSV_ABI KernelMkdir(const char* path, uint16_t mode) {
 	PRINT_NAME();
 
 	if (path == nullptr) {
@@ -1238,7 +1238,7 @@ int KYTY_SYSV_ABI KernelMkdir(const char* path, uint16_t mode) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelRmdir(const char* path) {
+int KATY_SYSV_ABI KernelRmdir(const char* path) {
 	PRINT_NAME();
 
 	if (path == nullptr) {
@@ -1260,7 +1260,7 @@ int KYTY_SYSV_ABI KernelRmdir(const char* path) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelCheckReachability(const char* path) {
+int KATY_SYSV_ABI KernelCheckReachability(const char* path) {
 	PRINT_NAME();
 
 	if (path == nullptr) {

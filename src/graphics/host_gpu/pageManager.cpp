@@ -13,7 +13,7 @@
 #include <mutex>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -35,7 +35,7 @@ constexpr uint64_t REGION_SIZE  = TRACKER_REGION_SIZE;
 constexpr uint64_t ADDRESS_SIZE = TRACKER_ADDRESS_SIZE;
 constexpr uint64_t REGION_COUNT = ADDRESS_SIZE / REGION_SIZE;
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM != KATY_PLATFORM_WINDOWS
 // The tracker reuses Win32 memory-protection tags as internal page-state values.
 // Mirror their canonical numeric values so the shared state-machine logic is identical.
 constexpr uint32_t PAGE_NOACCESS  = 0x01;
@@ -52,7 +52,7 @@ constexpr uint32_t READ_WRITE_PROTECTION = PAGE_READWRITE;
 	std::fputs("PageManager fail-fast: ", stderr);
 	std::fputs(reason != nullptr ? reason : "invalid page state", stderr);
 	std::fputc('\n', stderr);
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	void*      frames[16] {};
 	const auto frame_count =
 	    CaptureStackBackTrace(0, static_cast<DWORD>(std::size(frames)), frames, nullptr);
@@ -68,7 +68,7 @@ constexpr uint32_t READ_WRITE_PROTECTION = PAGE_READWRITE;
 	::backtrace_symbols_fd(frames, frame_count, STDERR_FILENO);
 #endif
 	std::fflush(stderr);
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	TerminateProcess(GetCurrentProcess(), static_cast<UINT>(EXCEPTION_NONCONTINUABLE_EXCEPTION));
 #endif
 	std::_Exit(322);
@@ -102,7 +102,7 @@ public:
 		}
 	}
 	~SpinGuard() { m_lock.clear(std::memory_order_release); }
-	KYTY_CLASS_NO_COPY(SpinGuard);
+	KATY_CLASS_NO_COPY(SpinGuard);
 
 private:
 	std::atomic_flag& m_lock;
@@ -182,7 +182,7 @@ struct PageManager::Impl {
 	};
 
 	Impl() {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		SYSTEM_INFO info {};
 		GetSystemInfo(&info);
 		if (info.dwPageSize != PAGE_SIZE) {

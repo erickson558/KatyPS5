@@ -60,7 +60,7 @@ public:
 
 	TileManager(GraphicContext& graphics, CommandScheduler& scheduler, StreamBuffer& stream_buffer);
 	~TileManager();
-	KYTY_CLASS_NO_COPY(TileManager);
+	KATY_CLASS_NO_COPY(TileManager);
 
 	// The returned device-local buffer remains alive through the current scheduler tick.
 	[[nodiscard]] Result Detile(vk::Buffer tiled, uint64_t tiled_offset, uint64_t tiled_capacity,

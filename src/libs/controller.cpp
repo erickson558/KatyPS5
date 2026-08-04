@@ -50,7 +50,7 @@ public:
 	GameController()          = default;
 	virtual ~GameController() = default;
 
-	KYTY_CLASS_NO_COPY(GameController);
+	KATY_CLASS_NO_COPY(GameController);
 
 	void Connect(int id);
 	void Disconnect(int id);
@@ -111,16 +111,16 @@ static void pad_fill_data(PadData* data, const ControllerState& state, bool conn
 	data->device_unique_data_len = 0;
 }
 
-KYTY_SUBSYSTEM_INIT(Controller) {
+KATY_SUBSYSTEM_INIT(Controller) {
 	EXIT_IF(g_controller != nullptr);
 
 	g_controller = new GameController;
 	g_controller->Connect(HOST_INPUT_CONTROLLER_ID);
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Controller) {}
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Controller) {}
 
-KYTY_SUBSYSTEM_DESTROY(Controller) {}
+KATY_SUBSYSTEM_DESTROY(Controller) {}
 
 void GameController::Connect(int id) {
 	Common::LockGuard lock(m_mutex);
@@ -334,13 +334,13 @@ void ControllerAxis(int id, Axis axis, int value) {
 	g_controller->Axis(id, axis, value);
 }
 
-int KYTY_SYSV_ABI PadInit() {
+int KATY_SYSV_ABI PadInit() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-int KYTY_SYSV_ABI PadOpen(int user_id, int type, int index, const void* param) {
+int KATY_SYSV_ABI PadOpen(int user_id, int type, int index, const void* param) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n"
@@ -360,7 +360,7 @@ int KYTY_SYSV_ABI PadOpen(int user_id, int type, int index, const void* param) {
 	return handle;
 }
 
-int KYTY_SYSV_ABI PadGetHandle(int user_id, int type, int index) {
+int KATY_SYSV_ABI PadGetHandle(int user_id, int type, int index) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n"
@@ -377,7 +377,7 @@ int KYTY_SYSV_ABI PadGetHandle(int user_id, int type, int index) {
 	return 1;
 }
 
-int KYTY_SYSV_ABI PadSetMotionSensorState(int handle, bool enable) {
+int KATY_SYSV_ABI PadSetMotionSensorState(int handle, bool enable) {
 	PRINT_NAME();
 
 	if (handle != 1) {
@@ -389,7 +389,7 @@ int KYTY_SYSV_ABI PadSetMotionSensorState(int handle, bool enable) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PadSetAngularVelocityDeadbandState(int handle, bool enable) {
+int KATY_SYSV_ABI PadSetAngularVelocityDeadbandState(int handle, bool enable) {
 	PRINT_NAME();
 
 	if (handle != 1) {
@@ -401,7 +401,7 @@ int KYTY_SYSV_ABI PadSetAngularVelocityDeadbandState(int handle, bool enable) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PadResetOrientation(int handle) {
+int KATY_SYSV_ABI PadResetOrientation(int handle) {
 	PRINT_NAME();
 
 	if (handle != 1) {
@@ -411,7 +411,7 @@ int KYTY_SYSV_ABI PadResetOrientation(int handle) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PadGetControllerInformation(int handle, PadControllerInformation* info) {
+int KATY_SYSV_ABI PadGetControllerInformation(int handle, PadControllerInformation* info) {
 	PRINT_NAME();
 
 	EXIT_IF(g_controller == nullptr);
@@ -443,7 +443,7 @@ int KYTY_SYSV_ABI PadGetControllerInformation(int handle, PadControllerInformati
 	return OK;
 }
 
-int KYTY_SYSV_ABI PadReadState(int handle, PadData* data) {
+int KATY_SYSV_ABI PadReadState(int handle, PadData* data) {
 	PRINT_NAME();
 
 	if (handle != 1) {
@@ -466,7 +466,7 @@ int KYTY_SYSV_ABI PadReadState(int handle, PadData* data) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PadRead(int handle, PadData* data, int num) {
+int KATY_SYSV_ABI PadRead(int handle, PadData* data, int num) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(num < 1 || num > 64);
@@ -501,7 +501,7 @@ int KYTY_SYSV_ABI PadRead(int handle, PadData* data, int num) {
 	return ret_num;
 }
 
-int KYTY_SYSV_ABI PadSetVibration(int handle, const PadVibrationParam* param) {
+int KATY_SYSV_ABI PadSetVibration(int handle, const PadVibrationParam* param) {
 	PRINT_NAME();
 
 	if (handle != 1) {
@@ -518,7 +518,7 @@ int KYTY_SYSV_ABI PadSetVibration(int handle, const PadVibrationParam* param) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PadResetLightBar(int handle) {
+int KATY_SYSV_ABI PadResetLightBar(int handle) {
 	PRINT_NAME();
 
 	if (handle != 1) {
@@ -528,7 +528,7 @@ int KYTY_SYSV_ABI PadResetLightBar(int handle) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PadSetLightBar(int handle, const PadLightBarParam* param) {
+int KATY_SYSV_ABI PadSetLightBar(int handle, const PadLightBarParam* param) {
 	PRINT_NAME();
 
 	if (handle != 1) {

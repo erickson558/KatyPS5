@@ -7,7 +7,7 @@
 
 namespace Libs::Controller {
 
-KYTY_SUBSYSTEM_DEFINE(Controller);
+KATY_SUBSYSTEM_DEFINE(Controller);
 
 constexpr int HOST_INPUT_CONTROLLER_ID = -1000;
 
@@ -54,18 +54,18 @@ void ControllerDisconnect(int id);
 void ControllerButton(int id, uint32_t button, bool down);
 void ControllerAxis(int id, Axis axis, int value);
 
-int KYTY_SYSV_ABI PadInit();
-int KYTY_SYSV_ABI PadOpen(int user_id, int type, int index, const void* param);
-int KYTY_SYSV_ABI PadGetHandle(int user_id, int type, int index);
-int KYTY_SYSV_ABI PadSetMotionSensorState(int handle, bool enable);
-int KYTY_SYSV_ABI PadSetAngularVelocityDeadbandState(int handle, bool enable);
-int KYTY_SYSV_ABI PadResetOrientation(int handle);
-int KYTY_SYSV_ABI PadGetControllerInformation(int handle, PadControllerInformation* info);
-int KYTY_SYSV_ABI PadReadState(int handle, PadData* data);
-int KYTY_SYSV_ABI PadRead(int handle, PadData* data, int num);
-int KYTY_SYSV_ABI PadSetVibration(int handle, const PadVibrationParam* param);
-int KYTY_SYSV_ABI PadResetLightBar(int handle);
-int KYTY_SYSV_ABI PadSetLightBar(int handle, const PadLightBarParam* param);
+int KATY_SYSV_ABI PadInit();
+int KATY_SYSV_ABI PadOpen(int user_id, int type, int index, const void* param);
+int KATY_SYSV_ABI PadGetHandle(int user_id, int type, int index);
+int KATY_SYSV_ABI PadSetMotionSensorState(int handle, bool enable);
+int KATY_SYSV_ABI PadSetAngularVelocityDeadbandState(int handle, bool enable);
+int KATY_SYSV_ABI PadResetOrientation(int handle);
+int KATY_SYSV_ABI PadGetControllerInformation(int handle, PadControllerInformation* info);
+int KATY_SYSV_ABI PadReadState(int handle, PadData* data);
+int KATY_SYSV_ABI PadRead(int handle, PadData* data, int num);
+int KATY_SYSV_ABI PadSetVibration(int handle, const PadVibrationParam* param);
+int KATY_SYSV_ABI PadResetLightBar(int handle);
+int KATY_SYSV_ABI PadSetLightBar(int handle, const PadLightBarParam* param);
 
 } // namespace Libs::Controller
 

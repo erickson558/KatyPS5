@@ -117,7 +117,7 @@ struct TlsRegStub {
 };
 
 struct SafeCall {
-	using func_t = KYTY_MS_ABI uint8_t* (*)();
+	using func_t = KATY_MS_ABI uint8_t* (*)();
 
 	void SetFunc(func_t func) { *reinterpret_cast<func_t*>(&code[0x22]) = func; }
 

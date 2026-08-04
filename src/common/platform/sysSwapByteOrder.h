@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_PLATFORM_SYSSWAPBYTEORDER_H_
-#define KYTY_COMMON_PLATFORM_SYSSWAPBYTEORDER_H_
+#ifndef KATY_COMMON_PLATFORM_SYSSWAPBYTEORDER_H_
+#define KATY_COMMON_PLATFORM_SYSSWAPBYTEORDER_H_
 
 #include "common/common.h"
 
@@ -50,4 +50,4 @@ inline void SwapByteOrder(T& x) {
 template <typename T>
 inline void NoSwapByteOrder(T& x) {}
 
-#endif /* KYTY_COMMON_PLATFORM_SYSSWAPBYTEORDER_H_ */
+#endif /* KATY_COMMON_PLATFORM_SYSSWAPBYTEORDER_H_ */

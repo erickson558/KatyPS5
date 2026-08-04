@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_LOGGING_LOG_H_
-#define KYTY_COMMON_LOGGING_LOG_H_
+#ifndef KATY_COMMON_LOGGING_LOG_H_
+#define KATY_COMMON_LOGGING_LOG_H_
 
 #include "common/common.h"
 #include "common/subsystems.h"
@@ -10,7 +10,7 @@
 
 namespace Log {
 
-KYTY_SUBSYSTEM_DEFINE(Log);
+KATY_SUBSYSTEM_DEFINE(Log);
 
 enum class Direction { Silent, Console, File };
 
@@ -56,4 +56,4 @@ inline constexpr auto BrightWhite   = fmt::fg(fmt::terminal_color::bright_white)
 		}                                                                                          \
 	} while (false)
 
-#endif /* KYTY_COMMON_LOGGING_LOG_H_ */
+#endif /* KATY_COMMON_LOGGING_LOG_H_ */

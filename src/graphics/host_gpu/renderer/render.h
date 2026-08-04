@@ -53,7 +53,7 @@ class FenceResourceRetainer {
 public:
 	FenceResourceRetainer() = default;
 	~FenceResourceRetainer();
-	KYTY_CLASS_NO_COPY(FenceResourceRetainer);
+	KATY_CLASS_NO_COPY(FenceResourceRetainer);
 
 	void               Retain(std::shared_ptr<void> resource);
 	void               ReleaseAfterFence() noexcept;
@@ -94,7 +94,7 @@ public:
 	explicit CommandBuffer(CommandScheduler& scheduler);
 	~CommandBuffer();
 
-	KYTY_CLASS_NO_COPY(CommandBuffer);
+	KATY_CLASS_NO_COPY(CommandBuffer);
 
 	[[nodiscard]] bool IsInvalid() const;
 
@@ -168,7 +168,7 @@ private:
 class RenderExecutor {
 public:
 	explicit RenderExecutor(RenderContext& context): m_context(context) {}
-	KYTY_CLASS_NO_COPY(RenderExecutor);
+	KATY_CLASS_NO_COPY(RenderExecutor);
 
 	void DrawIndex(uint64_t submit_id, RenderCommandBuffer& buffer, uint32_t index_type_and_size,
 	               uint32_t index_count, const void* index_addr, uint32_t flags, uint32_t type,

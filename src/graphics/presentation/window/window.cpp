@@ -34,7 +34,7 @@
 #include "graphics/presentation/renderDoc.h"
 #include "graphics/presentation/window/hostInput.h"
 #include "graphics/presentation/window/windowInternal.h"
-#include "kytyGitVersion.h"
+#include "katyGitVersion.h"
 #include "libs/controller.h"
 #include "loader/systemContent.h"
 
@@ -55,8 +55,8 @@
 
 // IWYU pragma: no_include <intrin.h>
 
-#define KYTY_ENABLE_DEBUG_PRINTF
-#define KYTY_DBG_INPUT
+#define KATY_ENABLE_DEBUG_PRINTF
+#define KATY_DBG_INPUT
 
 namespace Libs::Graphics {
 
@@ -183,11 +183,11 @@ struct EventDisplay {
 	DisplayOrientation orientation;
 };
 
-constexpr uint32_t KYTY_SDL_BUTTON_LMASK  = SDL_BUTTON_LMASK;  // NOLINT(hicpp-signed-bitwise)
-constexpr uint32_t KYTY_SDL_BUTTON_MMASK  = SDL_BUTTON_MMASK;  // NOLINT(hicpp-signed-bitwise)
-constexpr uint32_t KYTY_SDL_BUTTON_RMASK  = SDL_BUTTON_RMASK;  // NOLINT(hicpp-signed-bitwise)
-constexpr uint32_t KYTY_SDL_BUTTON_X1MASK = SDL_BUTTON_X1MASK; // NOLINT(hicpp-signed-bitwise)
-constexpr uint32_t KYTY_SDL_BUTTON_X2MASK = SDL_BUTTON_X2MASK; // NOLINT(hicpp-signed-bitwise)
+constexpr uint32_t KATY_SDL_BUTTON_LMASK  = SDL_BUTTON_LMASK;  // NOLINT(hicpp-signed-bitwise)
+constexpr uint32_t KATY_SDL_BUTTON_MMASK  = SDL_BUTTON_MMASK;  // NOLINT(hicpp-signed-bitwise)
+constexpr uint32_t KATY_SDL_BUTTON_RMASK  = SDL_BUTTON_RMASK;  // NOLINT(hicpp-signed-bitwise)
+constexpr uint32_t KATY_SDL_BUTTON_X1MASK = SDL_BUTTON_X1MASK; // NOLINT(hicpp-signed-bitwise)
+constexpr uint32_t KATY_SDL_BUTTON_X2MASK = SDL_BUTTON_X2MASK; // NOLINT(hicpp-signed-bitwise)
 
 namespace {
 
@@ -195,10 +195,10 @@ std::unique_ptr<WindowContext> g_window;
 
 } // namespace
 
-constexpr const char* KYTY_SDL_WINDOW_CAPTION = "Game";
-constexpr uint32_t    KYTY_SDL_WINDOW_FLAGS =
+constexpr const char* KATY_SDL_WINDOW_CAPTION = "Game";
+constexpr uint32_t    KATY_SDL_WINDOW_FLAGS =
     (static_cast<uint32_t>(SDL_WINDOW_HIDDEN) | static_cast<uint32_t>(SDL_WINDOW_VULKAN));
-constexpr int KYTY_SDL_WINDOWPOS_CENTERED = SDL_WINDOWPOS_CENTERED; /*NOLINT(hicpp-signed-bitwise)*/
+constexpr int KATY_SDL_WINDOWPOS_CENTERED = SDL_WINDOWPOS_CENTERED; /*NOLINT(hicpp-signed-bitwise)*/
 
 static void SetPause(WindowLoopState& game, bool flag) {
 	LOGF("Pause: %s\n", flag ? "true" : "false");
@@ -219,14 +219,14 @@ static void GameEventTerminate(WindowLoopState& game) {
 }
 
 static void GameEventKeyboard(WindowLoopState& game, const EventKeyboard& key) {
-#ifdef KYTY_DBG_INPUT
+#ifdef KATY_DBG_INPUT
 	LOGF("Key: time = %.04f, %s%s, %s%s, %s, scan = %d, key = %d, mod = %04" PRIx16 "\n",
 	     key.timestamp_seconds, (key.down ? "down" : ""), (key.up ? "up" : ""),
 	     (key.pressed ? "pressed" : ""), (key.released ? "released" : ""),
 	     (key.repeat ? "repeat" : ""), key.scan_code, key.key_code, key.mod);
 #endif
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS || KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS || KATY_PLATFORM == KATY_PLATFORM_LINUX
 	if (key.down) {
 		switch (key.key_code) {
 			case SDLK_ESCAPE: game.need_exit = true; break;
@@ -248,7 +248,7 @@ static void GameEventKeyboard(WindowLoopState& game, const EventKeyboard& key) {
 }
 
 static void GameEventMouse([[maybe_unused]] const EventMouse& mb) {
-#ifdef KYTY_DBG_INPUT
+#ifdef KATY_DBG_INPUT
 	if (mb.wheel) {
 		LOGF("Mouse wheel: time = %.04f, %s[%d, %d]\n", mb.timestamp_seconds,
 		     (mb.touch ? "touch, " : ""), mb.x, mb.y);
@@ -286,7 +286,7 @@ static void GameEventMouse([[maybe_unused]] const EventMouse& mb) {
 }
 
 static void GameEventFinger([[maybe_unused]] const EventFinger& f) {
-#ifdef KYTY_DBG_INPUT
+#ifdef KATY_DBG_INPUT
 	if (f.motion) {
 		LOGF("Finger motion: time = %.04f, %d, %d, (x,y) = [%f, %f], (dx,dy) = [%f, %f], pressure "
 		     "= %f\n",
@@ -303,7 +303,7 @@ static void GameEventFinger([[maybe_unused]] const EventFinger& f) {
 static void GameEventController([[maybe_unused]] const EventController& f) {
 	EXIT_NOT_IMPLEMENTED(f.remapped);
 
-#ifdef KYTY_DBG_INPUT
+#ifdef KATY_DBG_INPUT
 	if (f.added || f.removed) {
 		LOGF("Controller %s: %d, time = %.04f\n", (f.added ? "added" : "removed"), f.id,
 		     f.timestamp_seconds);
@@ -452,7 +452,7 @@ void WindowContext::ProcessDisplayEvent(const SDL_DisplayEvent& display) {
 		case SDL_DISPLAYEVENT_ORIENTATION: sdl = true; [[fallthrough]];
 		case static_cast<Uint8>(DisplayOrientation::DisplayEventOrientation): {
 			LOGF("Display %" PRIu32 "[%s] changed orientation to %d - ", display.display,
-			     sdl ? "SDL" : "Kyty", static_cast<int>(display.data1));
+			     sdl ? "SDL" : "Katy", static_cast<int>(display.data1));
 
 			switch (display.data1) {
 				case SDL_ORIENTATION_UNKNOWN: LOGF("UNKNOWN\n"); break;
@@ -575,11 +575,11 @@ void WindowContext::ProcessEvent(double time_s) {
 
 			mb.down              = false;
 			mb.up                = false;
-			mb.left              = ((event->motion.state & KYTY_SDL_BUTTON_LMASK) != 0u);
-			mb.middle            = ((event->motion.state & KYTY_SDL_BUTTON_MMASK) != 0u);
-			mb.right             = ((event->motion.state & KYTY_SDL_BUTTON_RMASK) != 0u);
-			mb.x1                = ((event->motion.state & KYTY_SDL_BUTTON_X1MASK) != 0u);
-			mb.x2                = ((event->motion.state & KYTY_SDL_BUTTON_X2MASK) != 0u);
+			mb.left              = ((event->motion.state & KATY_SDL_BUTTON_LMASK) != 0u);
+			mb.middle            = ((event->motion.state & KATY_SDL_BUTTON_MMASK) != 0u);
+			mb.right             = ((event->motion.state & KATY_SDL_BUTTON_RMASK) != 0u);
+			mb.x1                = ((event->motion.state & KATY_SDL_BUTTON_X1MASK) != 0u);
+			mb.x2                = ((event->motion.state & KATY_SDL_BUTTON_X2MASK) != 0u);
 			mb.touch             = (event->motion.which == SDL_TOUCH_MOUSEID);
 			mb.pressed           = false;
 			mb.released          = false;
@@ -779,7 +779,7 @@ static void WindowCreate(WindowContext& context) {
 	int width  = static_cast<int>(context.graphic_ctx.screen_width);
 	int height = static_cast<int>(context.graphic_ctx.screen_height);
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "0");
 #endif
 
@@ -790,7 +790,7 @@ static void WindowCreate(WindowContext& context) {
 
 	LOGF("WindowCreate(): width = %d, height = %d\n", width, height);
 
-	uint32_t window_flags = KYTY_SDL_WINDOW_FLAGS;
+	uint32_t window_flags = KATY_SDL_WINDOW_FLAGS;
 	if (Config::FullscreenEnabled()) {
 		window_flags |= static_cast<uint32_t>(SDL_WINDOW_FULLSCREEN_DESKTOP);
 	}
@@ -798,12 +798,12 @@ static void WindowCreate(WindowContext& context) {
 	// macOS 26 window chrome (CoreUI asset decode, SwiftUI titlebar) has been observed
 	// throwing NSExceptions under Rosetta during the first CATransaction commit. A
 	// borderless window skips that machinery entirely.
-	if (std::getenv("KYTY_BORDERLESS") != nullptr) {
+	if (std::getenv("KATY_BORDERLESS") != nullptr) {
 		window_flags |= static_cast<uint32_t>(SDL_WINDOW_BORDERLESS);
 	}
 #endif
-	context.window = SDL_CreateWindow(KYTY_SDL_WINDOW_CAPTION, KYTY_SDL_WINDOWPOS_CENTERED,
-	                                  KYTY_SDL_WINDOWPOS_CENTERED, width, height, window_flags);
+	context.window = SDL_CreateWindow(KATY_SDL_WINDOW_CAPTION, KATY_SDL_WINDOWPOS_CENTERED,
+	                                  KATY_SDL_WINDOWPOS_CENTERED, width, height, window_flags);
 
 	context.window_hidden = true;
 
@@ -831,7 +831,7 @@ Presenter& WindowInit(uint32_t width, uint32_t height) {
 }
 
 void WindowRun() {
-	KYTY_PROFILER_THREAD("Thread_Window");
+	KATY_PROFILER_THREAD("Thread_Window");
 	EXIT_IF(g_window == nullptr);
 
 	g_window->Run();
@@ -933,20 +933,20 @@ void WindowContext::UpdateTitle() {
 	static uint64_t fps_frames  = 0;
 	static double   current_fps = 0.0;
 
-#if KYTY_BUILD == KYTY_BUILD_DEBUG
+#if KATY_BUILD == KATY_BUILD_DEBUG
 	static constexpr auto build_type = "Debug";
-#elif KYTY_BUILD == KYTY_BUILD_RELEASE
+#elif KATY_BUILD == KATY_BUILD_RELEASE
 	static constexpr auto build_type = "Release";
 #else
 	static constexpr auto build_type = "Unknown";
 #endif
 
-#if defined(KYTY_OFFICIAL_BUILD)
-	static constexpr auto build_label = "Official build " KYTY_RELEASE_TAG;
-#elif defined(KYTY_FORK_BUILD)
-	static constexpr auto build_label = "Fork build " KYTY_BUILD_REPOSITORY " " KYTY_GIT_HASH;
+#if defined(KATY_OFFICIAL_BUILD)
+	static constexpr auto build_label = "Official build " KATY_RELEASE_TAG;
+#elif defined(KATY_FORK_BUILD)
+	static constexpr auto build_label = "Fork build " KATY_BUILD_REPOSITORY " " KATY_GIT_HASH;
 #else
-	static constexpr auto build_label = "Source build " KYTY_GIT_HASH;
+	static constexpr auto build_label = "Source build " KATY_GIT_HASH;
 #endif
 
 	const auto now       = Common::Timer::QueryPerformanceCounter();

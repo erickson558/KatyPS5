@@ -27,7 +27,7 @@ void RenderExecutor::ResolveRenderColorTarget(uint64_t submit_id, RenderCommandB
                                               uint32_t         render_target_slice_offset,
                                               uint32_t render_target_slot, bool ignore_target_mask,
                                               bool exact_format) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 	const auto& hw = buffer.GetRegisters();
 
 	const auto  rt_slot = (render_target_slot == UINT32_MAX ? render_target_first_bound_slot(buffer)

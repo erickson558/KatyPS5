@@ -1,11 +1,11 @@
-#ifndef KYTY_COMMON_PLATFORM_SYSTIMER_H_
-#define KYTY_COMMON_PLATFORM_SYSTIMER_H_
+#ifndef KATY_COMMON_PLATFORM_SYSTIMER_H_
+#define KATY_COMMON_PLATFORM_SYSTIMER_H_
 
 #include "common/common.h"
 
 #include <ctime>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -24,9 +24,9 @@ struct SysTimeStruct {
 };
 
 struct SysFileTimeStruct {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	FILETIME time;
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 	// Nanoseconds preserve sub-second file timestamps.
 	time_t time;
 	long   nanos;
@@ -34,7 +34,7 @@ struct SysFileTimeStruct {
 	bool is_invalid;
 };
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 
 // NOLINTNEXTLINE(google-runtime-references)
 inline void SysFileToSystemTimeUtc(const SysFileTimeStruct& f, SysTimeStruct& t) {
@@ -124,7 +124,7 @@ inline void SysQueryPerformanceCounter(uint64_t* counter) {
 	*counter = c.QuadPart;
 }
 
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 
 inline void SysFileToSystemTimeUtc(const SysFileTimeStruct& f, SysTimeStruct& t) {
 	struct tm i {};
@@ -222,4 +222,4 @@ inline void SysQueryPerformanceCounter(uint64_t* counter) {
 
 #endif
 
-#endif /* KYTY_COMMON_PLATFORM_SYSTIMER_H_ */
+#endif /* KATY_COMMON_PLATFORM_SYSTIMER_H_ */

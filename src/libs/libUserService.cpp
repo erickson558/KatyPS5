@@ -40,19 +40,19 @@ struct UserServiceGamePresets {
 
 static_assert(sizeof(UserServiceGamePresets) == 40);
 
-static KYTY_SYSV_ABI int UserServiceInitialize(const void* /*params*/) {
+static KATY_SYSV_ABI int UserServiceInitialize(const void* /*params*/) {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceInitialize2() {
+static KATY_SYSV_ABI int UserServiceInitialize2() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetInitialUser(int* user_id) {
+static KATY_SYSV_ABI int UserServiceGetInitialUser(int* user_id) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(user_id == nullptr);
@@ -62,7 +62,7 @@ static KYTY_SYSV_ABI int UserServiceGetInitialUser(int* user_id) {
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetEvent(SceUserServiceEvent* event) {
+static KATY_SYSV_ABI int UserServiceGetEvent(SceUserServiceEvent* event) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(event == nullptr);
@@ -79,7 +79,7 @@ static KYTY_SYSV_ABI int UserServiceGetEvent(SceUserServiceEvent* event) {
 	return USER_SERVICE_ERROR_NO_EVENT;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetLoginUserIdList(UserServiceLoginUserIdList* user_id_list) {
+static KATY_SYSV_ABI int UserServiceGetLoginUserIdList(UserServiceLoginUserIdList* user_id_list) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(user_id_list == nullptr);
@@ -92,18 +92,18 @@ static KYTY_SYSV_ABI int UserServiceGetLoginUserIdList(UserServiceLoginUserIdLis
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetUserName(int user_id, char* name, size_t size) {
+static KATY_SYSV_ABI int UserServiceGetUserName(int user_id, char* name, size_t size) {
 	EXIT_NOT_IMPLEMENTED(user_id != 1000);
 	EXIT_NOT_IMPLEMENTED(size < 5);
 
-	int s = snprintf(name, size, "%s", "Kyty");
+	int s = snprintf(name, size, "%s", "Katy");
 
 	EXIT_NOT_IMPLEMENTED(static_cast<size_t>(s) >= size);
 
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetUserNumber(int user_id, int32_t* number) {
+static KATY_SYSV_ABI int UserServiceGetUserNumber(int user_id, int32_t* number) {
 	PRINT_NAME();
 
 	if (number == nullptr) {
@@ -118,7 +118,7 @@ static KYTY_SYSV_ABI int UserServiceGetUserNumber(int user_id, int32_t* number) 
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetGamePresets(int user_id, UserServiceGamePresets* presets) {
+static KATY_SYSV_ABI int UserServiceGetGamePresets(int user_id, UserServiceGamePresets* presets) {
 	PRINT_NAME();
 
 	if (presets == nullptr) {
@@ -139,7 +139,7 @@ static KYTY_SYSV_ABI int UserServiceGetGamePresets(int user_id, UserServiceGameP
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetAccessibilityVibration(int user_id, int32_t* vibration) {
+static KATY_SYSV_ABI int UserServiceGetAccessibilityVibration(int user_id, int32_t* vibration) {
 	PRINT_NAME();
 
 	if (vibration == nullptr) {
@@ -154,7 +154,7 @@ static KYTY_SYSV_ABI int UserServiceGetAccessibilityVibration(int user_id, int32
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetAccessibilityTriggerEffect(int      user_id,
+static KATY_SYSV_ABI int UserServiceGetAccessibilityTriggerEffect(int      user_id,
                                                                   int32_t* trigger_effect) {
 	PRINT_NAME();
 
@@ -170,7 +170,7 @@ static KYTY_SYSV_ABI int UserServiceGetAccessibilityTriggerEffect(int      user_
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetAgeLevel(int user_id, uint32_t* age_level) {
+static KATY_SYSV_ABI int UserServiceGetAgeLevel(int user_id, uint32_t* age_level) {
 	PRINT_NAME();
 
 	if (age_level == nullptr) {
@@ -185,7 +185,7 @@ static KYTY_SYSV_ABI int UserServiceGetAgeLevel(int user_id, uint32_t* age_level
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetAccessibilityChatTranscription(int      user_id,
+static KATY_SYSV_ABI int UserServiceGetAccessibilityChatTranscription(int      user_id,
                                                                       int32_t* chat_transcription) {
 	PRINT_NAME();
 
@@ -201,7 +201,7 @@ static KYTY_SYSV_ABI int UserServiceGetAccessibilityChatTranscription(int      u
 	return OK;
 }
 
-static KYTY_SYSV_ABI int
+static KATY_SYSV_ABI int
 UserServiceGetAccessibilityPressAndHoldDelay(int user_id, int32_t* press_and_hold_delay) {
 	PRINT_NAME();
 
@@ -217,7 +217,7 @@ UserServiceGetAccessibilityPressAndHoldDelay(int user_id, int32_t* press_and_hol
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetAccessibilityZoomEnabled(int      user_id,
+static KATY_SYSV_ABI int UserServiceGetAccessibilityZoomEnabled(int      user_id,
                                                                 int32_t* zoom_enabled) {
 	PRINT_NAME();
 
@@ -233,7 +233,7 @@ static KYTY_SYSV_ABI int UserServiceGetAccessibilityZoomEnabled(int      user_id
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServiceGetAccessibilityZoomFollowFocus(int      user_id,
+static KATY_SYSV_ABI int UserServiceGetAccessibilityZoomFollowFocus(int      user_id,
                                                                     int32_t* zoom_follow_focus) {
 	PRINT_NAME();
 
@@ -249,7 +249,7 @@ static KYTY_SYSV_ABI int UserServiceGetAccessibilityZoomFollowFocus(int      use
 	return OK;
 }
 
-static KYTY_SYSV_ABI int UserServicePlatformPrivacyWs1Stub(uint64_t, uint64_t, uint64_t, uint64_t,
+static KATY_SYSV_ABI int UserServicePlatformPrivacyWs1Stub(uint64_t, uint64_t, uint64_t, uint64_t,
                                                            uint64_t, uint64_t) {
 	return OK;
 }

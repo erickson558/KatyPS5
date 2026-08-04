@@ -12,8 +12,8 @@
 #include <QStringList>
 #include <QVariant>
 
-#define KYTY_CFG_SET(n) s->setValue(#n, QVariant::fromValue(n).toString());
-#define KYTY_CFG_GET(n) n = s->value(#n).value<decltype(n)>();
+#define KATY_CFG_SET(n) s->setValue(#n, QVariant::fromValue(n).toString());
+#define KATY_CFG_GET(n) n = s->value(#n).value<decltype(n)>();
 
 template <class T>
 inline QStringList EnumToList() {
@@ -96,7 +96,7 @@ public:
 	bool                   command_buffer_dump_enabled = false;
 	QString                command_buffer_dump_folder  = "_Buffers";
 	LogDirection           printf_direction            = LogDirection::Silent;
-	QString                printf_output_file          = "_kyty.txt";
+	QString                printf_output_file          = "_katy.txt";
 	ProfilerDirection      profiler_direction          = ProfilerDirection::None;
 	bool                   renderdoc_enabled           = false;
 	QStringList            host_input_mapping;
@@ -137,52 +137,52 @@ public:
 	}
 
 	void WriteSettings(QSettings* s) const {
-		KYTY_CFG_SET(name);
-		KYTY_CFG_SET(basedir);
-		KYTY_CFG_SET(game_path);
-		KYTY_CFG_SET(custom_settings);
-		KYTY_CFG_SET(screen_resolution);
-		KYTY_CFG_SET(fullscreen_enabled);
-		KYTY_CFG_SET(vblank_frequency);
-		KYTY_CFG_SET(console_language);
-		KYTY_CFG_SET(vulkan_validation_enabled);
-		KYTY_CFG_SET(shader_validation_enabled);
-		KYTY_CFG_SET(shader_optimization_type);
-		KYTY_CFG_SET(shader_log_direction);
-		KYTY_CFG_SET(shader_log_folder);
-		KYTY_CFG_SET(command_buffer_dump_enabled);
-		KYTY_CFG_SET(command_buffer_dump_folder);
-		KYTY_CFG_SET(printf_direction);
-		KYTY_CFG_SET(printf_output_file);
-		KYTY_CFG_SET(profiler_direction);
-		KYTY_CFG_SET(renderdoc_enabled);
+		KATY_CFG_SET(name);
+		KATY_CFG_SET(basedir);
+		KATY_CFG_SET(game_path);
+		KATY_CFG_SET(custom_settings);
+		KATY_CFG_SET(screen_resolution);
+		KATY_CFG_SET(fullscreen_enabled);
+		KATY_CFG_SET(vblank_frequency);
+		KATY_CFG_SET(console_language);
+		KATY_CFG_SET(vulkan_validation_enabled);
+		KATY_CFG_SET(shader_validation_enabled);
+		KATY_CFG_SET(shader_optimization_type);
+		KATY_CFG_SET(shader_log_direction);
+		KATY_CFG_SET(shader_log_folder);
+		KATY_CFG_SET(command_buffer_dump_enabled);
+		KATY_CFG_SET(command_buffer_dump_folder);
+		KATY_CFG_SET(printf_direction);
+		KATY_CFG_SET(printf_output_file);
+		KATY_CFG_SET(profiler_direction);
+		KATY_CFG_SET(renderdoc_enabled);
 		s->setValue("host_input_mapping", host_input_mapping);
-		KYTY_CFG_SET(elf);
+		KATY_CFG_SET(elf);
 	}
 
 	void ReadSettings(QSettings* s) {
-		KYTY_CFG_GET(name);
-		KYTY_CFG_GET(basedir);
-		KYTY_CFG_GET(game_path);
-		KYTY_CFG_GET(custom_settings);
-		KYTY_CFG_GET(screen_resolution);
-		KYTY_CFG_GET(fullscreen_enabled);
+		KATY_CFG_GET(name);
+		KATY_CFG_GET(basedir);
+		KATY_CFG_GET(game_path);
+		KATY_CFG_GET(custom_settings);
+		KATY_CFG_GET(screen_resolution);
+		KATY_CFG_GET(fullscreen_enabled);
 		vblank_frequency = s->value("vblank_frequency", vblank_frequency).toInt();
 		console_language = s->value("console_language", console_language).toInt();
 		if (console_language < 0 || console_language > MAX_CONSOLE_LANGUAGE) {
 			console_language = DEFAULT_CONSOLE_LANGUAGE;
 		}
-		KYTY_CFG_GET(vulkan_validation_enabled);
-		KYTY_CFG_GET(shader_validation_enabled);
-		KYTY_CFG_GET(shader_optimization_type);
-		KYTY_CFG_GET(shader_log_direction);
-		KYTY_CFG_GET(shader_log_folder);
-		KYTY_CFG_GET(command_buffer_dump_enabled);
-		KYTY_CFG_GET(command_buffer_dump_folder);
-		KYTY_CFG_GET(printf_direction);
-		KYTY_CFG_GET(printf_output_file);
-		KYTY_CFG_GET(profiler_direction);
-		KYTY_CFG_GET(renderdoc_enabled);
+		KATY_CFG_GET(vulkan_validation_enabled);
+		KATY_CFG_GET(shader_validation_enabled);
+		KATY_CFG_GET(shader_optimization_type);
+		KATY_CFG_GET(shader_log_direction);
+		KATY_CFG_GET(shader_log_folder);
+		KATY_CFG_GET(command_buffer_dump_enabled);
+		KATY_CFG_GET(command_buffer_dump_folder);
+		KATY_CFG_GET(printf_direction);
+		KATY_CFG_GET(printf_output_file);
+		KATY_CFG_GET(profiler_direction);
+		KATY_CFG_GET(renderdoc_enabled);
 		host_input_mapping = s->value("host_input_mapping", host_input_mapping).toStringList();
 		elf                = s->value("elf", elf).toString();
 	}

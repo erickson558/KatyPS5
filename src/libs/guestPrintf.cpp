@@ -440,7 +440,7 @@ static inline unsigned int _strnlen_s(const char* str, size_t maxsize) {
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-static int kyty_printf_internal(bool sn, char* sn_s, size_t sn_n, const char* format,
+static int katy_printf_internal(bool sn, char* sn_s, size_t sn_n, const char* format,
                                 VaList* va_list) {
 	std::vector<char> buffer;
 
@@ -765,44 +765,44 @@ static int kyty_printf_internal(bool sn, char* sn_s, size_t sn_n, const char* fo
 	return static_cast<int>(idx);
 }
 
-static int kyty_vprintf(const char* format, VaList* va_list) {
-	return kyty_printf_internal(false, nullptr, 0, format, va_list);
+static int katy_vprintf(const char* format, VaList* va_list) {
+	return katy_printf_internal(false, nullptr, 0, format, va_list);
 }
 
-static int kyty_printf_ctx(VaContext* ctx) {
+static int katy_printf_ctx(VaContext* ctx) {
 	const char* format = VaArg_ptr<const char>(&ctx->va_list);
 
-	return kyty_printf_internal(false, nullptr, 0, format, &ctx->va_list);
+	return katy_printf_internal(false, nullptr, 0, format, &ctx->va_list);
 }
 
-static int kyty_snprintf_ctx(VaContext* ctx) {
+static int katy_snprintf_ctx(VaContext* ctx) {
 	char*       s      = VaArg_ptr<char>(&ctx->va_list);
 	size_t      n      = VaArg_size_t(&ctx->va_list);
 	const char* format = VaArg_ptr<const char>(&ctx->va_list);
 
-	return kyty_printf_internal(true, s, n, format, &ctx->va_list);
+	return katy_printf_internal(true, s, n, format, &ctx->va_list);
 }
 
-static int KYTY_SYSV_ABI kyty_printf_std(VA_ARGS) {
+static int KATY_SYSV_ABI katy_printf_std(VA_ARGS) {
 	VA_CONTEXT(ctx); // NOLINT(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
 
-	return kyty_printf_ctx(&ctx);
+	return katy_printf_ctx(&ctx);
 }
 
 guest_printf_std_func_t GetGuestPrintfStdFunc() {
-	return reinterpret_cast<guest_printf_std_func_t>(kyty_printf_std);
+	return reinterpret_cast<guest_printf_std_func_t>(katy_printf_std);
 }
 
 guest_printf_ctx_func_t GetGuestPrintfCtxFunc() {
-	return kyty_printf_ctx;
+	return katy_printf_ctx;
 }
 
 guest_snprintf_ctx_func_t GetGuestSnprintfCtxFunc() {
-	return kyty_snprintf_ctx;
+	return katy_snprintf_ctx;
 }
 
 guest_vprintf_func_t GetGuestVprintfFunc() {
-	return kyty_vprintf;
+	return katy_vprintf;
 }
 
 } // namespace Libs

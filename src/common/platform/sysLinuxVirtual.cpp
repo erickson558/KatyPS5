@@ -1,7 +1,7 @@
 #include "common/common.h"
 
-#if KYTY_PLATFORM != KYTY_PLATFORM_LINUX
-// #error "KYTY_PLATFORM != KYTY_PLATFORM_LINUX"
+#if KATY_PLATFORM != KATY_PLATFORM_LINUX
+// #error "KATY_PLATFORM != KATY_PLATFORM_LINUX"
 #else
 
 #include "common/assert.h"
@@ -24,8 +24,8 @@
 // IWYU pragma: no_include <bits/pthread_types.h>
 // IWYU pragma: no_include <linux/mman.h>
 
-#if defined(MAP_FIXED_NOREPLACE) && KYTY_PLATFORM == KYTY_PLATFORM_LINUX
-#define KYTY_FIXED_NOREPLACE
+#if defined(MAP_FIXED_NOREPLACE) && KATY_PLATFORM == KATY_PLATFORM_LINUX
+#define KATY_FIXED_NOREPLACE
 #endif
 
 namespace Common {
@@ -38,7 +38,7 @@ void SysVirtualInit() {
 	pthread_mutexattr_t attr {};
 
 	pthread_mutexattr_init(&attr);
-#if KYTY_PLATFORM == KYTY_PLATFORM_LINUX && !defined(__APPLE__)
+#if KATY_PLATFORM == KATY_PLATFORM_LINUX && !defined(__APPLE__)
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_FAST_NP); // glibc-only fast mutex
 #else
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_NORMAL);
@@ -84,7 +84,7 @@ static VirtualMemory::Mode get_protection_flag(int mode) {
 }
 
 // Keep automatic mappings inside the guest and GPU-addressable low window.
-#ifdef KYTY_FIXED_NOREPLACE
+#ifdef KATY_FIXED_NOREPLACE
 static constexpr uintptr_t LOW_ARENA_LIMIT = 0x000000FC00000000ULL; // libc mspace window ceiling
 static constexpr uintptr_t LOW_ARENA_FLOOR = 0x000000A000000000ULL; // 640 GiB
 static constexpr uintptr_t LOW_ARENA_GRAIN = 0x0000000000010000ULL; // 64 KiB
@@ -116,7 +116,7 @@ static void record_alloc(uintptr_t addr, size_t size) {
 	(*g_allocs)[addr] = size;
 }
 
-#ifdef KYTY_FIXED_NOREPLACE
+#ifdef KATY_FIXED_NOREPLACE
 static uintptr_t align_up_to(uintptr_t addr, uint64_t alignment) {
 	return (addr + alignment - 1) & ~(alignment - 1);
 }
@@ -128,7 +128,7 @@ static void* map_anonymous(uintptr_t addr, size_t size, int protect, int flags) 
 		return mmap(reinterpret_cast<void*>(addr), size, protect, flags, -1, 0); // NOLINT
 	}
 
-#ifdef KYTY_FIXED_NOREPLACE
+#ifdef KATY_FIXED_NOREPLACE
 	const auto step = align_up_to(size, LOW_ARENA_GRAIN);
 	for (int attempt = 0; attempt < 256; attempt++) {
 		const auto top = g_low_arena_next.fetch_sub(step, std::memory_order_relaxed);
@@ -226,7 +226,7 @@ uint64_t SysVirtualAllocAligned(uint64_t address, uint64_t size, VirtualMemory::
 #else
 			munmap(ptr, size + alignment);
 			auto aligned_addr = align_up(ret_addr, alignment);
-#ifdef KYTY_FIXED_NOREPLACE
+#ifdef KATY_FIXED_NOREPLACE
 			// NOLINTNEXTLINE
 			ptr = mmap(reinterpret_cast<void*>(aligned_addr), size, protect,
 			           MAP_FIXED_NOREPLACE | MAP_PRIVATE | MAP_ANON, -1, 0);
@@ -314,7 +314,7 @@ bool SysVirtualAllocFixed(uint64_t address, uint64_t size, VirtualMemory::Mode m
 	auto addr    = static_cast<uintptr_t>(address);
 	int  protect = get_protection_flag(mode);
 
-#ifdef KYTY_FIXED_NOREPLACE
+#ifdef KATY_FIXED_NOREPLACE
 	// NOLINTNEXTLINE
 	void* ptr = mmap(reinterpret_cast<void*>(addr), size, protect,
 	                 MAP_FIXED_NOREPLACE | MAP_PRIVATE | MAP_ANON, -1, 0);
@@ -407,7 +407,7 @@ uint64_t SysVirtualReserveAligned(uint64_t address, uint64_t size, uint64_t alig
 #else
 			munmap(ptr, size + alignment);
 			auto aligned_addr = align_up(ret_addr, alignment);
-#ifdef KYTY_FIXED_NOREPLACE
+#ifdef KATY_FIXED_NOREPLACE
 			// NOLINTNEXTLINE
 			ptr = mmap(reinterpret_cast<void*>(aligned_addr), size, PROT_NONE,
 			           MAP_FIXED_NOREPLACE | MAP_PRIVATE | MAP_ANON | MAP_NORESERVE, -1, 0);
@@ -442,7 +442,7 @@ bool SysVirtualReserveFixed(uint64_t address, uint64_t size) {
 
 	auto addr = static_cast<uintptr_t>(address);
 
-#ifdef KYTY_FIXED_NOREPLACE
+#ifdef KATY_FIXED_NOREPLACE
 	// NOLINTNEXTLINE
 	void* ptr = mmap(reinterpret_cast<void*>(addr), size, PROT_NONE,
 	                 MAP_FIXED_NOREPLACE | MAP_PRIVATE | MAP_ANON | MAP_NORESERVE, -1, 0);

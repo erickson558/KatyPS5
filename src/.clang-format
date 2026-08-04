@@ -80,7 +80,7 @@ StatementAttributeLikeMacros:
   - Q_EMIT
 IncludeBlocks:   Regroup
 IncludeCategories:
-  - Regex:           '^"(Kyty)/'
+  - Regex:           '^"(Katy)/'
     Priority:        1
     SortPriority:    0
     CaseSensitive:   false

@@ -25,7 +25,7 @@ public:
 	Psf() = default;
 	virtual ~Psf();
 
-	KYTY_CLASS_NO_COPY(Psf);
+	KATY_CLASS_NO_COPY(Psf);
 
 	void Open(const std::filesystem::path& file_name);
 	void OpenChunkDefs(const std::filesystem::path& file_name);
@@ -70,7 +70,7 @@ public:
 	PlayGo() = default;
 	virtual ~PlayGo();
 
-	KYTY_CLASS_NO_COPY(PlayGo);
+	KATY_CLASS_NO_COPY(PlayGo);
 
 	void Open(const std::filesystem::path& file_name);
 	void OpenChunkDefs(const std::filesystem::path& file_name);

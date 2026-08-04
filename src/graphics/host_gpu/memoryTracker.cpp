@@ -15,7 +15,7 @@ MemoryTracker::MemoryTracker(PageManager& page_manager): m_page_manager(page_man
 
 MemoryTracker::~MemoryTracker() = default;
 
-#if KYTY_BUILD == KYTY_BUILD_DEBUG
+#if KATY_BUILD == KATY_BUILD_DEBUG
 void MemoryTracker::ValidateGpuDirtyPages(const RangeSet& dirty, uint64_t vaddr, uint64_t size,
                                           const char* operation) const noexcept {
 	if (vaddr == 0 || size == 0 || size > UINT64_MAX - vaddr ||

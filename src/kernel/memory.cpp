@@ -22,7 +22,7 @@
 #include <mutex>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -39,7 +39,7 @@
 #ifndef MEM_COALESCE_PLACEHOLDERS
 #define MEM_COALESCE_PLACEHOLDERS 0x00000001
 #endif
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 #include <cerrno>
 #include <fcntl.h>
 #include <sys/mman.h>
@@ -165,7 +165,7 @@ static bool VirtualRangesOverlap(uint64_t left_start, uint64_t left_size, uint64
 	return left_start < right_end && right_start < left_end;
 }
 
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 static uint32_t g_test_backing_store_unmaps_before_failure = UINT32_MAX;
 #endif
 
@@ -647,7 +647,7 @@ private:
 	Common::Mutex      m_mutex;
 };
 
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 static uint32_t g_test_physical_memory_unmaps_before_failure = UINT32_MAX;
 static bool     g_test_fail_next_fixed_reserve_range_add     = false;
 #endif
@@ -675,7 +675,7 @@ public:
 	}
 	virtual ~PhysicalMemory() = default;
 
-	KYTY_CLASS_NO_COPY(PhysicalMemory);
+	KATY_CLASS_NO_COPY(PhysicalMemory);
 
 	static constexpr uint64_t TotalSize() { return static_cast<uint64_t>(13824) * 1024 * 1024; }
 	static uint64_t           Size() {
@@ -742,7 +742,7 @@ public:
 	}
 	virtual ~FlexibleMemory() = default;
 
-	KYTY_CLASS_NO_COPY(FlexibleMemory);
+	KATY_CLASS_NO_COPY(FlexibleMemory);
 
 	static uint64_t Size() { return g_flexible_memory_size; }
 	uint64_t        Available();
@@ -934,7 +934,7 @@ static bool IsInPrtAperture(uint64_t address) {
 }
 
 static bool SelfTestSub64SharedPlaceholderAlias() {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	constexpr uint64_t PageSize    = 0x4000;
 	const auto         granularity = g_guest_address_space->GetGranularity();
 	if (granularity < PageSize * 2u) {
@@ -957,7 +957,7 @@ static bool SelfTestSub64SharedPlaceholderAlias() {
 	if (g_guest_address_space->MapBacking(alias, PageSize, PageSize, VirtualMemory::Mode::ReadWrite,
 	                                      &failure_reason)) {
 		auto* ptr = reinterpret_cast<uint64_t*>(alias);
-		*ptr      = 0x4b59545953553634ull; // "KYTYSU64"
+		*ptr      = 0x4b59545953553634ull; // "KATYSU64"
 		ok        = (*ptr == 0x4b59545953553634ull);
 		std::memset(ptr, 0, PageSize);
 
@@ -976,7 +976,7 @@ static bool SelfTestSub64SharedPlaceholderAlias() {
 
 static bool ReplaceFixedRangeWithReserved(uint64_t start, uint64_t size);
 
-KYTY_SUBSYSTEM_INIT(Memory) {
+KATY_SUBSYSTEM_INIT(Memory) {
 	g_flexible_memory_size_frozen = true;
 	VirtualMemory::Init();
 	g_guest_address_space = std::make_unique<GuestAddressSpace>(PhysicalMemory::TotalSize());
@@ -988,9 +988,9 @@ KYTY_SUBSYSTEM_INIT(Memory) {
 	EXIT_IF(!SelfTestSub64SharedPlaceholderAlias());
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Memory) {}
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Memory) {}
 
-KYTY_SUBSYSTEM_DESTROY(Memory) {
+KATY_SUBSYSTEM_DESTROY(Memory) {
 	g_pooled_memory.reset();
 	g_flexible_memory.reset();
 	g_physical_memory.reset();
@@ -1395,7 +1395,7 @@ bool PhysicalMemory::GetAllocatedSpan(uint64_t phys_addr, size_t len,
 
 bool PhysicalMemory::Unmap(uint64_t vaddr, uint64_t size, GpuAccessMode* gpu_mode,
                            uint64_t* host_vaddr_to_release) {
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 	if (g_test_physical_memory_unmaps_before_failure == 0) {
 		g_test_physical_memory_unmaps_before_failure = UINT32_MAX;
 		return false;
@@ -2166,7 +2166,7 @@ static bool UnmapPooledBackingTransactional(const std::vector<PooledMemory::Mapp
 	return true;
 }
 
-int32_t KYTY_SYSV_ABI KernelMapNamedFlexibleMemory(void** addr_in_out, size_t len, int prot,
+int32_t KATY_SYSV_ABI KernelMapNamedFlexibleMemory(void** addr_in_out, size_t len, int prot,
                                                    int flags, const char* name) {
 	PRINT_NAME();
 
@@ -2306,11 +2306,11 @@ int32_t KYTY_SYSV_ABI KernelMapNamedFlexibleMemory(void** addr_in_out, size_t le
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelMapFlexibleMemory(void** addr_in_out, size_t len, int prot, int flags) {
+int KATY_SYSV_ABI KernelMapFlexibleMemory(void** addr_in_out, size_t len, int prot, int flags) {
 	return KernelMapNamedFlexibleMemory(addr_in_out, len, prot, flags, "");
 }
 
-int KYTY_SYSV_ABI KernelSetPrtAperture(int index, void* addr, size_t len) {
+int KATY_SYSV_ABI KernelSetPrtAperture(int index, void* addr, size_t len) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -2354,7 +2354,7 @@ int KYTY_SYSV_ABI KernelSetPrtAperture(int index, void* addr, size_t len) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelGetPrtAperture(int index, void** addr, size_t* len) {
+int KATY_SYSV_ABI KernelGetPrtAperture(int index, void** addr, size_t* len) {
 	PRINT_NAME();
 
 	LOGF("\t index = %d\n"
@@ -2388,7 +2388,7 @@ int KYTY_SYSV_ABI KernelGetPrtAperture(int index, void** addr, size_t* len) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelSetVirtualRangeName(const void* addr, uint64_t len, const char* name) {
+int KATY_SYSV_ABI KernelSetVirtualRangeName(const void* addr, uint64_t len, const char* name) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -2497,7 +2497,7 @@ static int UnmapMemoryRange(uint64_t vaddr, size_t len) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelMunmap(uint64_t vaddr, size_t len) {
+int KATY_SYSV_ABI KernelMunmap(uint64_t vaddr, size_t len) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -2517,13 +2517,13 @@ int KYTY_SYSV_ABI KernelMunmap(uint64_t vaddr, size_t len) {
 	return UnmapMemoryRange(vaddr, len);
 }
 
-size_t KYTY_SYSV_ABI KernelGetDirectMemorySize() {
+size_t KATY_SYSV_ABI KernelGetDirectMemorySize() {
 	PRINT_NAME();
 
 	return PhysicalMemory::Size();
 }
 
-int KYTY_SYSV_ABI KernelAvailableDirectMemorySize(int64_t search_start, int64_t search_end,
+int KATY_SYSV_ABI KernelAvailableDirectMemorySize(int64_t search_start, int64_t search_end,
                                                   size_t alignment, int64_t* phys_addr_out,
                                                   size_t* size_out) {
 	PRINT_NAME();
@@ -2572,7 +2572,7 @@ int KYTY_SYSV_ABI KernelAvailableDirectMemorySize(int64_t search_start, int64_t 
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelGetPageTableStats(int* cpu_total, int* cpu_available, int* gpu_total,
+int KATY_SYSV_ABI KernelGetPageTableStats(int* cpu_total, int* cpu_available, int* gpu_total,
                                           int* gpu_available) {
 	PRINT_NAME();
 
@@ -2606,7 +2606,7 @@ int KYTY_SYSV_ABI KernelGetPageTableStats(int* cpu_total, int* cpu_available, in
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelDirectMemoryQuery(int64_t offset, int flags, void* info, size_t info_size) {
+int KATY_SYSV_ABI KernelDirectMemoryQuery(int64_t offset, int flags, void* info, size_t info_size) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -2682,7 +2682,7 @@ int KYTY_SYSV_ABI KernelDirectMemoryQuery(int64_t offset, int flags, void* info,
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAllocateDirectMemory(int64_t search_start, int64_t search_end, size_t len,
+int KATY_SYSV_ABI KernelAllocateDirectMemory(int64_t search_start, int64_t search_end, size_t len,
                                              size_t alignment, int memory_type,
                                              int64_t* phys_addr_out) {
 	PRINT_NAME();
@@ -2716,7 +2716,7 @@ int KYTY_SYSV_ABI KernelAllocateDirectMemory(int64_t search_start, int64_t searc
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAllocateMainDirectMemory(size_t len, size_t alignment, int memory_type,
+int KATY_SYSV_ABI KernelAllocateMainDirectMemory(size_t len, size_t alignment, int memory_type,
                                                  int64_t* phys_addr_out) {
 	PRINT_NAME();
 
@@ -2828,7 +2828,7 @@ static int ValidateDirectReleaseRange(int64_t start, size_t len) {
 	           : OK;
 }
 
-int KYTY_SYSV_ABI KernelReleaseDirectMemory(int64_t start, size_t len) {
+int KATY_SYSV_ABI KernelReleaseDirectMemory(int64_t start, size_t len) {
 	PRINT_NAME();
 
 	LOGF("\t start = 0x%016" PRIx64 "\n"
@@ -2845,7 +2845,7 @@ int KYTY_SYSV_ABI KernelReleaseDirectMemory(int64_t start, size_t len) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelCheckedReleaseDirectMemory(int64_t start, size_t len) {
+int KATY_SYSV_ABI KernelCheckedReleaseDirectMemory(int64_t start, size_t len) {
 	PRINT_NAME();
 
 	LOGF("\t start = 0x%016" PRIx64 "\n"
@@ -2861,7 +2861,7 @@ int KYTY_SYSV_ABI KernelCheckedReleaseDirectMemory(int64_t start, size_t len) {
 	return result == KERNEL_ERROR_EACCES ? KERNEL_ERROR_ENOENT : result;
 }
 
-int KYTY_SYSV_ABI KernelMapDirectMemory(void** addr, size_t len, int prot, int flags,
+int KATY_SYSV_ABI KernelMapDirectMemory(void** addr, size_t len, int prot, int flags,
                                         int64_t direct_memory_start, size_t alignment) {
 	PRINT_NAME();
 
@@ -3039,7 +3039,7 @@ int KYTY_SYSV_ABI KernelMapDirectMemory(void** addr, size_t len, int prot, int f
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelMapDirectMemory2(void** addr, size_t len, int type, int prot, int flags,
+int KATY_SYSV_ABI KernelMapDirectMemory2(void** addr, size_t len, int type, int prot, int flags,
                                          int64_t direct_memory_start, size_t alignment) {
 	PRINT_NAME();
 
@@ -3057,7 +3057,7 @@ int KYTY_SYSV_ABI KernelMapDirectMemory2(void** addr, size_t len, int type, int 
 	return ret;
 }
 
-int KYTY_SYSV_ABI KernelMapNamedDirectMemory(void** addr, size_t len, int prot, int flags,
+int KATY_SYSV_ABI KernelMapNamedDirectMemory(void** addr, size_t len, int prot, int flags,
                                              int64_t direct_memory_start, size_t alignment,
                                              const char* name) {
 	PRINT_NAME();
@@ -3083,13 +3083,13 @@ int KYTY_SYSV_ABI KernelMapNamedDirectMemory(void** addr, size_t len, int prot, 
 	return ret;
 }
 
-int KYTY_SYSV_ABI KernelIsAddressSanitizerEnabled() {
+int KATY_SYSV_ABI KernelIsAddressSanitizerEnabled() {
 	PRINT_NAME();
 
 	return 0;
 }
 
-int KYTY_SYSV_ABI KernelQueryMemoryProtection(void* addr, void** start, void** end, int* prot) {
+int KATY_SYSV_ABI KernelQueryMemoryProtection(void* addr, void** start, void** end, int* prot) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -3273,7 +3273,7 @@ static bool ReplaceFixedRangeWithReserved(uint64_t start, uint64_t size) {
 	}
 
 	bool range_added = false;
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 	if (g_test_fail_next_fixed_reserve_range_add) {
 		g_test_fail_next_fixed_reserve_range_add = false;
 	} else
@@ -3314,7 +3314,7 @@ static bool ReplaceFixedRangeWithReserved(uint64_t start, uint64_t size) {
 	return true;
 }
 
-int KYTY_SYSV_ABI KernelReserveVirtualRange(void** addr, size_t len, int flags, size_t alignment) {
+int KATY_SYSV_ABI KernelReserveVirtualRange(void** addr, size_t len, int flags, size_t alignment) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -3376,7 +3376,7 @@ int KYTY_SYSV_ABI KernelReserveVirtualRange(void** addr, size_t len, int flags, 
 	return OK;
 }
 
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 void TestFailNextPhysicalMemoryUnmap() {
 	TestFailPhysicalMemoryUnmapAfter(0);
 }
@@ -3428,7 +3428,7 @@ bool KernelHandleReservedRangeAccessViolation(uint64_t vaddr) {
 	EXIT("AMM virtual-memory unmap is unsupported: addr=0x%016" PRIx64 "\n", vaddr);
 }
 
-int KYTY_SYSV_ABI KernelVirtualQuery(const void* addr, int flags, VirtualQueryInfo* info,
+int KATY_SYSV_ABI KernelVirtualQuery(const void* addr, int flags, VirtualQueryInfo* info,
                                      uint64_t info_size) {
 	PRINT_NAME();
 
@@ -3482,7 +3482,7 @@ int KYTY_SYSV_ABI KernelVirtualQuery(const void* addr, int flags, VirtualQueryIn
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelIsStack(void* addr, void** start, void** end) {
+int KATY_SYSV_ABI KernelIsStack(void* addr, void** start, void** end) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -3518,7 +3518,7 @@ int KYTY_SYSV_ABI KernelIsStack(void* addr, void** start, void** end) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelAvailableFlexibleMemorySize(size_t* size) {
+int KATY_SYSV_ABI KernelAvailableFlexibleMemorySize(size_t* size) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -3534,7 +3534,7 @@ int KYTY_SYSV_ABI KernelAvailableFlexibleMemorySize(size_t* size) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelConfiguredFlexibleMemorySize(size_t* size) {
+int KATY_SYSV_ABI KernelConfiguredFlexibleMemorySize(size_t* size) {
 	PRINT_NAME();
 
 	if (size == nullptr) {
@@ -3675,7 +3675,7 @@ bool FreeGuestMemory(uint64_t vaddr, uint64_t size) {
 	return FreeGuestMemoryOwner(vaddr, mapped_size);
 }
 
-int KYTY_SYSV_ABI KernelMprotect(const void* addr, size_t len, int prot) {
+int KATY_SYSV_ABI KernelMprotect(const void* addr, size_t len, int prot) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -3737,7 +3737,7 @@ int KYTY_SYSV_ABI KernelMprotect(const void* addr, size_t len, int prot) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelMtypeprotect(const void* addr, size_t len, int type, int prot) {
+int KATY_SYSV_ABI KernelMtypeprotect(const void* addr, size_t len, int type, int prot) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -3752,7 +3752,7 @@ int KYTY_SYSV_ABI KernelMtypeprotect(const void* addr, size_t len, int type, int
 	return KernelMprotect(addr, len, prot);
 }
 
-int KYTY_SYSV_ABI KernelBatchMap2(KernelBatchMapEntry* entries, int num_entries,
+int KATY_SYSV_ABI KernelBatchMap2(KernelBatchMapEntry* entries, int num_entries,
                                   int* num_entries_out, int flags) {
 	PRINT_NAME();
 
@@ -3832,7 +3832,7 @@ int KYTY_SYSV_ABI KernelBatchMap2(KernelBatchMapEntry* entries, int num_entries,
 	return (processed == num_entries ? OK : KERNEL_ERROR_EINVAL);
 }
 
-int KYTY_SYSV_ABI KernelBatchMap(KernelBatchMapEntry* entries, int num_entries,
+int KATY_SYSV_ABI KernelBatchMap(KernelBatchMapEntry* entries, int num_entries,
                                  int* num_entries_out) {
 	constexpr int GUEST_MAP_FIXED = 0x10;
 	return KernelBatchMap2(entries, num_entries, num_entries_out, GUEST_MAP_FIXED);
@@ -3857,7 +3857,7 @@ static void MemoryPoolSubtractCommitted(uint64_t len) {
 	}
 }
 
-int KYTY_SYSV_ABI KernelMemoryPoolExpand(int64_t search_start, int64_t search_end, size_t len,
+int KATY_SYSV_ABI KernelMemoryPoolExpand(int64_t search_start, int64_t search_end, size_t len,
                                          size_t alignment, int64_t* phys_addr_out) {
 	PRINT_NAME();
 
@@ -3895,7 +3895,7 @@ int KYTY_SYSV_ABI KernelMemoryPoolExpand(int64_t search_start, int64_t search_en
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelMemoryPoolReserve(void* addr_in, size_t len, size_t alignment, int flags,
+int KATY_SYSV_ABI KernelMemoryPoolReserve(void* addr_in, size_t len, size_t alignment, int flags,
                                           void** addr_out) {
 	PRINT_NAME();
 
@@ -3946,7 +3946,7 @@ int KYTY_SYSV_ABI KernelMemoryPoolReserve(void* addr_in, size_t len, size_t alig
 	return ret;
 }
 
-int KYTY_SYSV_ABI KernelMemoryPoolCommit(void* addr, size_t len, int type, int prot, int flags) {
+int KATY_SYSV_ABI KernelMemoryPoolCommit(void* addr, size_t len, int type, int prot, int flags) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -4082,7 +4082,7 @@ static int DecommitMemoryPoolRange(uint64_t vaddr, size_t len) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI KernelMemoryPoolDecommit(void* addr, size_t len, int flags) {
+int KATY_SYSV_ABI KernelMemoryPoolDecommit(void* addr, size_t len, int flags) {
 	PRINT_NAME();
 
 	std::lock_guard<std::recursive_mutex> memory_operation_lock(g_memory_operation_mutex);
@@ -4123,7 +4123,7 @@ int KYTY_SYSV_ABI KernelMemoryPoolDecommit(void* addr, size_t len, int flags) {
 	return DecommitMemoryPoolRange(vaddr, len);
 }
 
-int KYTY_SYSV_ABI KernelMemoryPoolBatch(const KernelMemoryPoolBatchEntry* entries, int num_entries,
+int KATY_SYSV_ABI KernelMemoryPoolBatch(const KernelMemoryPoolBatchEntry* entries, int num_entries,
                                         int* num_entries_out, int flags) {
 	PRINT_NAME();
 
@@ -4179,7 +4179,7 @@ int KYTY_SYSV_ABI KernelMemoryPoolBatch(const KernelMemoryPoolBatchEntry* entrie
 	return result;
 }
 
-int KYTY_SYSV_ABI KernelMemoryPoolGetBlockStats(KernelMemoryPoolBlockStats* output,
+int KATY_SYSV_ABI KernelMemoryPoolGetBlockStats(KernelMemoryPoolBlockStats* output,
                                                 size_t                      output_size) {
 	PRINT_NAME();
 

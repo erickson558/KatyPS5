@@ -43,7 +43,7 @@ public:
 	BufferCache(GraphicContext& graphics, CommandScheduler& scheduler, PageManager& page_manager,
 	            TextureCache& texture_cache, ResourceMutex& resource_mutex);
 	~BufferCache();
-	KYTY_CLASS_NO_COPY(BufferCache);
+	KATY_CLASS_NO_COPY(BufferCache);
 
 	void                        InvalidateMemory(uint64_t vaddr, uint64_t size);
 	void                        ReadMemory(uint64_t vaddr, uint64_t size, bool is_write = false);

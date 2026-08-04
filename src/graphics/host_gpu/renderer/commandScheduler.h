@@ -35,7 +35,7 @@ public:
 
 	CommandScheduler(RenderContext& context, GraphicContext& graphics);
 	~CommandScheduler();
-	KYTY_CLASS_NO_COPY(CommandScheduler);
+	KATY_CLASS_NO_COPY(CommandScheduler);
 
 	void           Begin(HW::Context& registers, HW::UserConfig& user_config, HW::Shader& shaders);
 	void           BeginRendering(const RenderState& state);
@@ -69,7 +69,7 @@ private:
 	public:
 		CommandPool() = default;
 		~CommandPool();
-		KYTY_CLASS_NO_COPY(CommandPool);
+		KATY_CLASS_NO_COPY(CommandPool);
 
 		CommandSlot* Allocate(GraphicContext& graphics);
 

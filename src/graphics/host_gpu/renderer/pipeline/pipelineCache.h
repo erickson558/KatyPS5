@@ -102,7 +102,7 @@ public:
 		EXIT_NOT_IMPLEMENTED(!Common::Thread::IsMainThread());
 	}
 	~PipelineCache();
-	KYTY_CLASS_NO_COPY(PipelineCache);
+	KATY_CLASS_NO_COPY(PipelineCache);
 
 	struct Pipeline {
 		vk::PipelineLayout pipeline_layout = nullptr;

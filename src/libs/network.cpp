@@ -96,12 +96,12 @@ public:
 		uint32_t m_type = static_cast<uint32_t>(Type::Invalid);
 	};
 
-	using HttpsCallback = KYTY_SYSV_ABI int (*)(int, unsigned int, void* const*, int, void*);
+	using HttpsCallback = KATY_SYSV_ABI int (*)(int, unsigned int, void* const*, int, void*);
 
 	Network()          = default;
 	virtual ~Network() = default;
 
-	KYTY_CLASS_NO_COPY(Network);
+	KATY_CLASS_NO_COPY(Network);
 
 	int  PoolCreate(const char* name, int size);
 	bool PoolDestroy(int memid);
@@ -237,15 +237,15 @@ private:
 
 static Network* g_net = nullptr;
 
-KYTY_SUBSYSTEM_INIT(Network) {
+KATY_SUBSYSTEM_INIT(Network) {
 	EXIT_IF(g_net != nullptr);
 
 	g_net = new Network;
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Network) {}
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Network) {}
 
-KYTY_SUBSYSTEM_DESTROY(Network) {}
+KATY_SUBSYSTEM_DESTROY(Network) {}
 
 int Network::PoolCreate(const char* name, int size) {
 	Common::LockGuard lock(m_mutex);
@@ -1077,7 +1077,7 @@ static bool GetSocketBackend(int guest_fd, NativeSocket* out) {
 	return true;
 }
 
-bool KYTY_SYSV_ABI IsSocket(int s) {
+bool KATY_SYSV_ABI IsSocket(int s) {
 	if (s < 0 || s >= SOCKET_FD_MAX) {
 		return false;
 	}
@@ -1144,7 +1144,7 @@ static void GuestFdSet(void* fds, int fd) {
 	words[fd / 64] |= (uint64_t {1} << (fd % 64));
 }
 
-int KYTY_SYSV_ABI NetInit() {
+int KATY_SYSV_ABI NetInit() {
 	PRINT_NAME();
 
 	EnsureSocketBackend();
@@ -1152,13 +1152,13 @@ int KYTY_SYSV_ABI NetInit() {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetTerm() {
+int KATY_SYSV_ABI NetTerm() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetPoolCreate(const char* name, int size, int flags) {
+int KATY_SYSV_ABI NetPoolCreate(const char* name, int size, int flags) {
 	PRINT_NAME();
 
 	LOGF("\t name = %s\n"
@@ -1180,7 +1180,7 @@ int KYTY_SYSV_ABI NetPoolCreate(const char* name, int size, int flags) {
 	return id;
 }
 
-int KYTY_SYSV_ABI NetPoolDestroy(int memid) {
+int KATY_SYSV_ABI NetPoolDestroy(int memid) {
 	PRINT_NAME();
 
 	EXIT_IF(g_net == nullptr);
@@ -1192,7 +1192,7 @@ int KYTY_SYSV_ABI NetPoolDestroy(int memid) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetResolverCreate(const char* name, int memid, int flags) {
+int KATY_SYSV_ABI NetResolverCreate(const char* name, int memid, int flags) {
 	PRINT_NAME();
 
 	LOGF("\t name  = %s\n"
@@ -1214,7 +1214,7 @@ int KYTY_SYSV_ABI NetResolverCreate(const char* name, int memid, int flags) {
 	return id;
 }
 
-int KYTY_SYSV_ABI NetResolverStartNtoa(int rid, const char* hostname, void* addr, int timeout,
+int KATY_SYSV_ABI NetResolverStartNtoa(int rid, const char* hostname, void* addr, int timeout,
                                        int retry, int flags) {
 	PRINT_NAME();
 
@@ -1276,7 +1276,7 @@ int KYTY_SYSV_ABI NetResolverStartNtoa(int rid, const char* hostname, void* addr
 #endif
 }
 
-int KYTY_SYSV_ABI NetInetPton(int af, const char* src, void* dst) {
+int KATY_SYSV_ABI NetInetPton(int af, const char* src, void* dst) {
 	PRINT_NAME();
 
 	if (src == nullptr || dst == nullptr) {
@@ -1298,7 +1298,7 @@ int KYTY_SYSV_ABI NetInetPton(int af, const char* src, void* dst) {
 	return result < 0 ? NET_ERROR_EINVAL : result;
 }
 
-const char* KYTY_SYSV_ABI NetInetNtop(int af, const void* src, char* dst, uint32_t size) {
+const char* KATY_SYSV_ABI NetInetNtop(int af, const void* src, char* dst, uint32_t size) {
 	PRINT_NAME();
 
 	if (src == nullptr || dst == nullptr || size == 0) {
@@ -1323,7 +1323,7 @@ const char* KYTY_SYSV_ABI NetInetNtop(int af, const void* src, char* dst, uint32
 	return dst;
 }
 
-int KYTY_SYSV_ABI NetEtherNtostr(const NetEtherAddr* n, char* str, size_t len) {
+int KATY_SYSV_ABI NetEtherNtostr(const NetEtherAddr* n, char* str, size_t len) {
 	PRINT_NAME();
 
 	NetEtherAddr zero {};
@@ -1338,7 +1338,7 @@ int KYTY_SYSV_ABI NetEtherNtostr(const NetEtherAddr* n, char* str, size_t len) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetGetMacAddress(NetEtherAddr* addr, int flags) {
+int KATY_SYSV_ABI NetGetMacAddress(NetEtherAddr* addr, int flags) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(addr == nullptr);
@@ -1349,7 +1349,7 @@ int KYTY_SYSV_ABI NetGetMacAddress(NetEtherAddr* addr, int flags) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetGetSockInfo(int s, void* info, int n, int flags) {
+int KATY_SYSV_ABI NetGetSockInfo(int s, void* info, int n, int flags) {
 	PRINT_NAME();
 
 	LOGF("\t s     = %d\n"
@@ -1361,7 +1361,7 @@ int KYTY_SYSV_ABI NetGetSockInfo(int s, void* info, int n, int flags) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI EpollCreate(const char* name, int flags) {
+int KATY_SYSV_ABI EpollCreate(const char* name, int flags) {
 	if (name == nullptr || flags != 0) {
 		return SetPosixSocketError(Posix::POSIX_EINVAL);
 	}
@@ -1380,7 +1380,7 @@ int KYTY_SYSV_ABI EpollCreate(const char* name, int flags) {
 	return SetPosixSocketError(Posix::POSIX_EMFILE);
 }
 
-int KYTY_SYSV_ABI EpollControl(int eid, int op, int id, const NetEpollEvent* event) {
+int KATY_SYSV_ABI EpollControl(int eid, int op, int id, const NetEpollEvent* event) {
 	constexpr int EPOLL_CTL_ADD = 1;
 	constexpr int EPOLL_CTL_MOD = 2;
 	constexpr int EPOLL_CTL_DEL = 3;
@@ -1432,7 +1432,7 @@ int KYTY_SYSV_ABI EpollControl(int eid, int op, int id, const NetEpollEvent* eve
 	return 0;
 }
 
-int KYTY_SYSV_ABI EpollWait(int eid, NetEpollEvent* events, int maxevents, int timeout) {
+int KATY_SYSV_ABI EpollWait(int eid, NetEpollEvent* events, int maxevents, int timeout) {
 	if (events == nullptr) {
 		return SetPosixSocketError(Posix::POSIX_EFAULT);
 	}
@@ -1555,7 +1555,7 @@ int KYTY_SYSV_ABI EpollWait(int eid, NetEpollEvent* events, int maxevents, int t
 #endif
 }
 
-int KYTY_SYSV_ABI EpollDestroy(int eid) {
+int KATY_SYSV_ABI EpollDestroy(int eid) {
 	std::lock_guard lock(g_epoll_mutex);
 	auto*           slot = GetEpollSlot(eid);
 	if (slot == nullptr) {
@@ -1569,7 +1569,7 @@ int KYTY_SYSV_ABI EpollDestroy(int eid) {
 	return 0;
 }
 
-int KYTY_SYSV_ABI SocketClose(int s) {
+int KATY_SYSV_ABI SocketClose(int s) {
 	PRINT_NAME();
 
 	LOGF("\t s = %d\n", s);
@@ -1591,7 +1591,7 @@ int KYTY_SYSV_ABI SocketClose(int s) {
 #endif
 }
 
-int KYTY_SYSV_ABI Socket(int family, int type, int protocol) {
+int KATY_SYSV_ABI Socket(int family, int type, int protocol) {
 	PRINT_NAME();
 
 	LOGF("\t family   = %d\n"
@@ -1630,7 +1630,7 @@ int KYTY_SYSV_ABI Socket(int family, int type, int protocol) {
 #endif
 }
 
-int KYTY_SYSV_ABI Bind(int s, const void* addr, uint32_t addrlen) {
+int KATY_SYSV_ABI Bind(int s, const void* addr, uint32_t addrlen) {
 	PRINT_NAME();
 
 	LOGF("\t s       = %d\n"
@@ -1663,7 +1663,7 @@ int KYTY_SYSV_ABI Bind(int s, const void* addr, uint32_t addrlen) {
 #endif
 }
 
-int KYTY_SYSV_ABI Connect(int s, const void* addr, uint32_t addrlen) {
+int KATY_SYSV_ABI Connect(int s, const void* addr, uint32_t addrlen) {
 	PRINT_NAME();
 
 	LOGF("\t s       = %d\n"
@@ -1696,7 +1696,7 @@ int KYTY_SYSV_ABI Connect(int s, const void* addr, uint32_t addrlen) {
 #endif
 }
 
-int KYTY_SYSV_ABI Listen(int s, int backlog) {
+int KATY_SYSV_ABI Listen(int s, int backlog) {
 	PRINT_NAME();
 
 	LOGF("\t s       = %d\n"
@@ -1721,7 +1721,7 @@ int KYTY_SYSV_ABI Listen(int s, int backlog) {
 #endif
 }
 
-int KYTY_SYSV_ABI Accept(int s, void* addr, uint32_t* addrlen) {
+int KATY_SYSV_ABI Accept(int s, void* addr, uint32_t* addrlen) {
 	PRINT_NAME();
 
 	LOGF("\t s       = %d\n"
@@ -1770,7 +1770,7 @@ int KYTY_SYSV_ABI Accept(int s, void* addr, uint32_t* addrlen) {
 #endif
 }
 
-int KYTY_SYSV_ABI Shutdown(int s, int how) {
+int KATY_SYSV_ABI Shutdown(int s, int how) {
 	PRINT_NAME();
 
 	LOGF("\t s   = %d\n"
@@ -1800,7 +1800,7 @@ int KYTY_SYSV_ABI Shutdown(int s, int how) {
 #endif
 }
 
-int KYTY_SYSV_ABI Getsockname(int s, void* addr, uint32_t* addrlen) {
+int KATY_SYSV_ABI Getsockname(int s, void* addr, uint32_t* addrlen) {
 	PRINT_NAME();
 
 	LOGF("\t s       = %d\n"
@@ -1830,7 +1830,7 @@ int KYTY_SYSV_ABI Getsockname(int s, void* addr, uint32_t* addrlen) {
 #endif
 }
 
-int KYTY_SYSV_ABI Getsockopt(int s, int level, int optname, void* optval, uint32_t* optlen) {
+int KATY_SYSV_ABI Getsockopt(int s, int level, int optname, void* optval, uint32_t* optlen) {
 	PRINT_NAME();
 
 	LOGF("\t s       = %d\n"
@@ -1859,7 +1859,7 @@ int KYTY_SYSV_ABI Getsockopt(int s, int level, int optname, void* optval, uint32
 #endif
 }
 
-int KYTY_SYSV_ABI Setsockopt(int s, int level, int optname, const void* optval, uint32_t optlen) {
+int KATY_SYSV_ABI Setsockopt(int s, int level, int optname, const void* optval, uint32_t optlen) {
 	PRINT_NAME();
 
 	LOGF("\t s       = %d\n"
@@ -1897,11 +1897,11 @@ int KYTY_SYSV_ABI Setsockopt(int s, int level, int optname, const void* optval, 
 #endif
 }
 
-int64_t KYTY_SYSV_ABI Send(int s, const void* buf, uint64_t len, int flags) {
+int64_t KATY_SYSV_ABI Send(int s, const void* buf, uint64_t len, int flags) {
 	return Sendto(s, buf, len, flags, nullptr, 0);
 }
 
-int64_t KYTY_SYSV_ABI Sendto(int s, const void* buf, uint64_t len, int flags, const void* addr,
+int64_t KATY_SYSV_ABI Sendto(int s, const void* buf, uint64_t len, int flags, const void* addr,
                              uint32_t addrlen) {
 	PRINT_NAME();
 
@@ -1950,11 +1950,11 @@ int64_t KYTY_SYSV_ABI Sendto(int s, const void* buf, uint64_t len, int flags, co
 #endif
 }
 
-int64_t KYTY_SYSV_ABI Recv(int s, void* buf, uint64_t len, int flags) {
+int64_t KATY_SYSV_ABI Recv(int s, void* buf, uint64_t len, int flags) {
 	return Recvfrom(s, buf, len, flags, nullptr, nullptr);
 }
 
-int64_t KYTY_SYSV_ABI Recvfrom(int s, void* buf, uint64_t len, int flags, void* addr,
+int64_t KATY_SYSV_ABI Recvfrom(int s, void* buf, uint64_t len, int flags, void* addr,
                                uint32_t* addrlen) {
 	PRINT_NAME();
 
@@ -2009,7 +2009,7 @@ int64_t KYTY_SYSV_ABI Recvfrom(int s, void* buf, uint64_t len, int flags, void* 
 #endif
 }
 
-int KYTY_SYSV_ABI Select(int nfds, void* readfds, void* writefds, void* exceptfds,
+int KATY_SYSV_ABI Select(int nfds, void* readfds, void* writefds, void* exceptfds,
                          const void* timeout) {
 	PRINT_NAME();
 
@@ -2152,7 +2152,7 @@ struct SslCaCerts {
 	void*    pool          = nullptr;
 };
 
-int KYTY_SYSV_ABI SslInit(uint64_t pool_size) {
+int KATY_SYSV_ABI SslInit(uint64_t pool_size) {
 	PRINT_NAME();
 
 	LOGF("\t size = %" PRIu64 "\n", pool_size);
@@ -2170,7 +2170,7 @@ int KYTY_SYSV_ABI SslInit(uint64_t pool_size) {
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI SslTerm(int ssl_ctx_id) {
+int KATY_SYSV_ABI SslTerm(int ssl_ctx_id) {
 	PRINT_NAME();
 
 	EXIT_IF(g_net == nullptr);
@@ -2182,7 +2182,7 @@ int KYTY_SYSV_ABI SslTerm(int ssl_ctx_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI SslGetCaCerts(int ssl_ctx_id, void* ca_certs) {
+int KATY_SYSV_ABI SslGetCaCerts(int ssl_ctx_id, void* ca_certs) {
 	PRINT_NAME();
 
 	LOGF("\t ssl_ctx_id = %d\n", ssl_ctx_id);
@@ -2205,7 +2205,7 @@ int KYTY_SYSV_ABI SslGetCaCerts(int ssl_ctx_id, void* ca_certs) {
 	return SSL_ERROR_NOT_FOUND;
 }
 
-int KYTY_SYSV_ABI SslFreeCaCerts(int ssl_ctx_id, void* ca_certs) {
+int KATY_SYSV_ABI SslFreeCaCerts(int ssl_ctx_id, void* ca_certs) {
 	PRINT_NAME();
 
 	LOGF("\t ssl_ctx_id = %d\n", ssl_ctx_id);
@@ -2261,7 +2261,7 @@ static const char* HttpMethodToString(int method) {
 	}
 }
 
-int KYTY_SYSV_ABI HttpInit(int memid, int ssl_ctx_id, uint64_t pool_size) {
+int KATY_SYSV_ABI HttpInit(int memid, int ssl_ctx_id, uint64_t pool_size) {
 	PRINT_NAME();
 
 	LOGF("\t memid      = %d\n"
@@ -2282,7 +2282,7 @@ int KYTY_SYSV_ABI HttpInit(int memid, int ssl_ctx_id, uint64_t pool_size) {
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI HttpTerm(int http_ctx_id) {
+int KATY_SYSV_ABI HttpTerm(int http_ctx_id) {
 	PRINT_NAME();
 
 	EXIT_IF(g_net == nullptr);
@@ -2294,7 +2294,7 @@ int KYTY_SYSV_ABI HttpTerm(int http_ctx_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpCreateTemplate(int http_ctx_id, const char* user_agent, int http_ver,
+int KATY_SYSV_ABI HttpCreateTemplate(int http_ctx_id, const char* user_agent, int http_ver,
                                      int is_auto_proxy_conf) {
 	PRINT_NAME();
 
@@ -2316,7 +2316,7 @@ int KYTY_SYSV_ABI HttpCreateTemplate(int http_ctx_id, const char* user_agent, in
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI HttpDeleteTemplate(int tmpl_id) {
+int KATY_SYSV_ABI HttpDeleteTemplate(int tmpl_id) {
 	PRINT_NAME();
 
 	EXIT_IF(g_net == nullptr);
@@ -2328,7 +2328,7 @@ int KYTY_SYSV_ABI HttpDeleteTemplate(int tmpl_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetNonblock(int id, int enable) {
+int KATY_SYSV_ABI HttpSetNonblock(int id, int enable) {
 	PRINT_NAME();
 
 	LOGF("\t id     = %d\n"
@@ -2342,7 +2342,7 @@ int KYTY_SYSV_ABI HttpSetNonblock(int id, int enable) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpsSetSslCallback(int id, HttpsCallback cbfunc, void* user_arg) {
+int KATY_SYSV_ABI HttpsSetSslCallback(int id, HttpsCallback cbfunc, void* user_arg) {
 	PRINT_NAME();
 
 	LOGF("\t id     = %d\n", id);
@@ -2354,7 +2354,7 @@ int KYTY_SYSV_ABI HttpsSetSslCallback(int id, HttpsCallback cbfunc, void* user_a
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpsSetMinSslVersion(int id, uint32_t ssl_version) {
+int KATY_SYSV_ABI HttpsSetMinSslVersion(int id, uint32_t ssl_version) {
 	PRINT_NAME();
 
 	LOGF("\t id          = %d\n"
@@ -2368,7 +2368,7 @@ int KYTY_SYSV_ABI HttpsSetMinSslVersion(int id, uint32_t ssl_version) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpsDisableOption(int id, uint32_t ssl_flags) {
+int KATY_SYSV_ABI HttpsDisableOption(int id, uint32_t ssl_flags) {
 	PRINT_NAME();
 
 	LOGF("\t id        = %d\n"
@@ -2382,7 +2382,7 @@ int KYTY_SYSV_ABI HttpsDisableOption(int id, uint32_t ssl_flags) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetResolveTimeOut(int id, uint32_t usec) {
+int KATY_SYSV_ABI HttpSetResolveTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n"
@@ -2396,7 +2396,7 @@ int KYTY_SYSV_ABI HttpSetResolveTimeOut(int id, uint32_t usec) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetResolveRetry(int id, int32_t retry) {
+int KATY_SYSV_ABI HttpSetResolveRetry(int id, int32_t retry) {
 	PRINT_NAME();
 
 	LOGF("\t id    = %d\n"
@@ -2410,7 +2410,7 @@ int KYTY_SYSV_ABI HttpSetResolveRetry(int id, int32_t retry) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetConnectTimeOut(int id, uint32_t usec) {
+int KATY_SYSV_ABI HttpSetConnectTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n"
@@ -2424,7 +2424,7 @@ int KYTY_SYSV_ABI HttpSetConnectTimeOut(int id, uint32_t usec) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetSendTimeOut(int id, uint32_t usec) {
+int KATY_SYSV_ABI HttpSetSendTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n"
@@ -2438,7 +2438,7 @@ int KYTY_SYSV_ABI HttpSetSendTimeOut(int id, uint32_t usec) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetRecvTimeOut(int id, uint32_t usec) {
+int KATY_SYSV_ABI HttpSetRecvTimeOut(int id, uint32_t usec) {
 	PRINT_NAME();
 
 	LOGF("\t id   = %d\n"
@@ -2452,7 +2452,7 @@ int KYTY_SYSV_ABI HttpSetRecvTimeOut(int id, uint32_t usec) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetAutoRedirect(int id, int enable) {
+int KATY_SYSV_ABI HttpSetAutoRedirect(int id, int enable) {
 	PRINT_NAME();
 
 	LOGF("\t id     = %d\n"
@@ -2466,7 +2466,7 @@ int KYTY_SYSV_ABI HttpSetAutoRedirect(int id, int enable) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetAuthEnabled(int id, int enable) {
+int KATY_SYSV_ABI HttpSetAuthEnabled(int id, int enable) {
 	PRINT_NAME();
 
 	LOGF("\t id     = %d\n"
@@ -2480,7 +2480,7 @@ int KYTY_SYSV_ABI HttpSetAuthEnabled(int id, int enable) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpAddRequestHeader(int id, const char* name, const char* value, uint32_t mode) {
+int KATY_SYSV_ABI HttpAddRequestHeader(int id, const char* name, const char* value, uint32_t mode) {
 	PRINT_NAME();
 
 	LOGF("\t id    = %d\n"
@@ -2498,7 +2498,7 @@ int KYTY_SYSV_ABI HttpAddRequestHeader(int id, const char* name, const char* val
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpCreateEpoll(int http_ctx_id, HttpEpollHandle* eh) {
+int KATY_SYSV_ABI HttpCreateEpoll(int http_ctx_id, HttpEpollHandle* eh) {
 	PRINT_NAME();
 
 	LOGF("\t http_ctx_id = %d\n", http_ctx_id);
@@ -2516,7 +2516,7 @@ int KYTY_SYSV_ABI HttpCreateEpoll(int http_ctx_id, HttpEpollHandle* eh) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpDestroyEpoll(int http_ctx_id, HttpEpollHandle eh) {
+int KATY_SYSV_ABI HttpDestroyEpoll(int http_ctx_id, HttpEpollHandle eh) {
 	PRINT_NAME();
 
 	LOGF("\t http_ctx_id = %d\n", http_ctx_id);
@@ -2532,7 +2532,7 @@ int KYTY_SYSV_ABI HttpDestroyEpoll(int http_ctx_id, HttpEpollHandle eh) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetEpoll(int id, HttpEpollHandle eh, void* user_arg) {
+int KATY_SYSV_ABI HttpSetEpoll(int id, HttpEpollHandle eh, void* user_arg) {
 	PRINT_NAME();
 
 	LOGF("\t id = %d\n", id);
@@ -2547,7 +2547,7 @@ int KYTY_SYSV_ABI HttpSetEpoll(int id, HttpEpollHandle eh, void* user_arg) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpUnsetEpoll(int id) {
+int KATY_SYSV_ABI HttpUnsetEpoll(int id) {
 	PRINT_NAME();
 
 	LOGF("\t id = %d\n", id);
@@ -2557,7 +2557,7 @@ int KYTY_SYSV_ABI HttpUnsetEpoll(int id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSendRequest(int request_id, const void* /*post_data*/, size_t /*size*/) {
+int KATY_SYSV_ABI HttpSendRequest(int request_id, const void* /*post_data*/, size_t /*size*/) {
 	PRINT_NAME();
 
 	LOGF("\t request_id = %d\n", request_id);
@@ -2571,7 +2571,7 @@ int KYTY_SYSV_ABI HttpSendRequest(int request_id, const void* /*post_data*/, siz
 	return HTTP_ERROR_TIMEOUT;
 }
 
-int KYTY_SYSV_ABI HttpAbortRequest(int request_id) {
+int KATY_SYSV_ABI HttpAbortRequest(int request_id) {
 	PRINT_NAME();
 
 	LOGF("\t request_id = %d\n", request_id);
@@ -2585,7 +2585,7 @@ int KYTY_SYSV_ABI HttpAbortRequest(int request_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpWaitRequest(HttpEpollHandle eh, HttpNBEvent* nbev, int maxevents,
+int KATY_SYSV_ABI HttpWaitRequest(HttpEpollHandle eh, HttpNBEvent* nbev, int maxevents,
                                   int timeout) {
 	PRINT_NAME();
 
@@ -2604,7 +2604,7 @@ int KYTY_SYSV_ABI HttpWaitRequest(HttpEpollHandle eh, HttpNBEvent* nbev, int max
 	return 0;
 }
 
-int KYTY_SYSV_ABI HttpGetStatusCode(int request_id, int* status_code) {
+int KATY_SYSV_ABI HttpGetStatusCode(int request_id, int* status_code) {
 	PRINT_NAME();
 
 	LOGF("\t request_id  = %d\n"
@@ -2628,7 +2628,7 @@ int KYTY_SYSV_ABI HttpGetStatusCode(int request_id, int* status_code) {
 	return send_result;
 }
 
-int KYTY_SYSV_ABI HttpGetAllResponseHeaders(int request_id, char** header, size_t* header_size) {
+int KATY_SYSV_ABI HttpGetAllResponseHeaders(int request_id, char** header, size_t* header_size) {
 	PRINT_NAME();
 
 	LOGF("\t request_id  = %d\n"
@@ -2659,7 +2659,7 @@ int KYTY_SYSV_ABI HttpGetAllResponseHeaders(int request_id, char** header, size_
 	return send_result;
 }
 
-int KYTY_SYSV_ABI HttpGetResponseContentLength(int request_id, int* result,
+int KATY_SYSV_ABI HttpGetResponseContentLength(int request_id, int* result,
                                                uint64_t* content_length) {
 	PRINT_NAME();
 
@@ -2688,7 +2688,7 @@ int KYTY_SYSV_ABI HttpGetResponseContentLength(int request_id, int* result,
 	return send_result;
 }
 
-int KYTY_SYSV_ABI HttpCreateConnection(int tmpl_id, const char* server_name, const char* scheme,
+int KATY_SYSV_ABI HttpCreateConnection(int tmpl_id, const char* server_name, const char* scheme,
                                        uint16_t port, int enable_keep_alive) {
 	PRINT_NAME();
 
@@ -2715,7 +2715,7 @@ int KYTY_SYSV_ABI HttpCreateConnection(int tmpl_id, const char* server_name, con
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI HttpCreateConnectionWithURL(int tmpl_id, const char* url, int enable_keep_alive) {
+int KATY_SYSV_ABI HttpCreateConnectionWithURL(int tmpl_id, const char* url, int enable_keep_alive) {
 	PRINT_NAME();
 
 	LOGF("\t tmpl_id           = %d\n"
@@ -2738,7 +2738,7 @@ int KYTY_SYSV_ABI HttpCreateConnectionWithURL(int tmpl_id, const char* url, int 
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI HttpDeleteConnection(int conn_id) {
+int KATY_SYSV_ABI HttpDeleteConnection(int conn_id) {
 	PRINT_NAME();
 
 	LOGF("\t conn_id = %d\n", conn_id);
@@ -2752,7 +2752,7 @@ int KYTY_SYSV_ABI HttpDeleteConnection(int conn_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpCreateRequest(int conn_id, int method, const char* path,
+int KATY_SYSV_ABI HttpCreateRequest(int conn_id, int method, const char* path,
                                     uint64_t content_length) {
 	PRINT_NAME();
 
@@ -2782,7 +2782,7 @@ int KYTY_SYSV_ABI HttpCreateRequest(int conn_id, int method, const char* path,
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI HttpCreateRequestWithURL2(int conn_id, const char* method, const char* url,
+int KATY_SYSV_ABI HttpCreateRequestWithURL2(int conn_id, const char* method, const char* url,
                                             uint64_t content_length) {
 	PRINT_NAME();
 
@@ -2810,7 +2810,7 @@ int KYTY_SYSV_ABI HttpCreateRequestWithURL2(int conn_id, const char* method, con
 	return id.ToInt();
 }
 
-int KYTY_SYSV_ABI HttpDeleteRequest(int req_id) {
+int KATY_SYSV_ABI HttpDeleteRequest(int req_id) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -2824,7 +2824,7 @@ int KYTY_SYSV_ABI HttpDeleteRequest(int req_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI HttpSetRequestContentLength(int request_id, uint64_t content_length) {
+int KATY_SYSV_ABI HttpSetRequestContentLength(int request_id, uint64_t content_length) {
 	PRINT_NAME();
 
 	LOGF("\t request_id     = %d\n"
@@ -3055,7 +3055,7 @@ static bool NetCtlConnected() {
 	return g_net_ctl_connected.load();
 }
 
-int KYTY_SYSV_ABI NetCtlInit() {
+int KATY_SYSV_ABI NetCtlInit() {
 	PRINT_NAME();
 
 	// g_net_ctl_connected = HostNetworkConnected();
@@ -3067,7 +3067,7 @@ int KYTY_SYSV_ABI NetCtlInit() {
 	return OK;
 }
 
-void KYTY_SYSV_ABI NetCtlTerm() {
+void KATY_SYSV_ABI NetCtlTerm() {
 	PRINT_NAME();
 
 	Common::LockGuard lock(g_net_ctl_callbacks_mutex);
@@ -3077,7 +3077,7 @@ void KYTY_SYSV_ABI NetCtlTerm() {
 	}
 }
 
-int KYTY_SYSV_ABI NetCtlGetNatInfo(NetCtlNatInfo* nat_info) {
+int KATY_SYSV_ABI NetCtlGetNatInfo(NetCtlNatInfo* nat_info) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(nat_info == nullptr);
@@ -3090,7 +3090,7 @@ int KYTY_SYSV_ABI NetCtlGetNatInfo(NetCtlNatInfo* nat_info) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetCtlCheckCallback() {
+int KATY_SYSV_ABI NetCtlCheckCallback() {
 	PRINT_NAME();
 
 	Common::LockGuard lock(g_net_ctl_callbacks_mutex);
@@ -3105,7 +3105,7 @@ int KYTY_SYSV_ABI NetCtlCheckCallback() {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetCtlGetState(int* state) {
+int KATY_SYSV_ABI NetCtlGetState(int* state) {
 	PRINT_NAME();
 
 	if (state == nullptr) {
@@ -3117,7 +3117,7 @@ int KYTY_SYSV_ABI NetCtlGetState(int* state) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetCtlGetStateV6(int* state) {
+int KATY_SYSV_ABI NetCtlGetStateV6(int* state) {
 	PRINT_NAME();
 
 	if (state == nullptr) {
@@ -3129,7 +3129,7 @@ int KYTY_SYSV_ABI NetCtlGetStateV6(int* state) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetCtlRegisterCallback(NetCtlCallback func, void* arg, int* cid) {
+int KATY_SYSV_ABI NetCtlRegisterCallback(NetCtlCallback func, void* arg, int* cid) {
 	PRINT_NAME();
 
 	if (func == nullptr || cid == nullptr) {
@@ -3151,7 +3151,7 @@ int KYTY_SYSV_ABI NetCtlRegisterCallback(NetCtlCallback func, void* arg, int* ci
 	return NET_CTL_ERROR_CALLBACK_MAX;
 }
 
-int KYTY_SYSV_ABI NetCtlUnregisterCallback(int cid) {
+int KATY_SYSV_ABI NetCtlUnregisterCallback(int cid) {
 	PRINT_NAME();
 
 	if (cid < 0 || cid >= NET_CTL_CALLBACK_MAX) {
@@ -3171,7 +3171,7 @@ int KYTY_SYSV_ABI NetCtlUnregisterCallback(int cid) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetCtlGetResult(int event_type, int* error_code) {
+int KATY_SYSV_ABI NetCtlGetResult(int event_type, int* error_code) {
 	PRINT_NAME();
 
 	if (error_code == nullptr) {
@@ -3190,7 +3190,7 @@ int KYTY_SYSV_ABI NetCtlGetResult(int event_type, int* error_code) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NetCtlGetInfo(int code, NetCtlInfo* info) {
+int KATY_SYSV_ABI NetCtlGetInfo(int code, NetCtlInfo* info) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(info == nullptr);
@@ -3390,13 +3390,13 @@ static int np_complete_signed_out_locked(NpRequest* request) {
 	return (request->async ? OK : np_error_signed_out);
 }
 
-int KYTY_SYSV_ABI NpCheckCallback() {
+int KATY_SYSV_ABI NpCheckCallback() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpSetNpTitleId(const NpTitleId* title_id, const NpTitleSecret* title_secret) {
+int KATY_SYSV_ABI NpSetNpTitleId(const NpTitleId* title_id, const NpTitleSecret* title_secret) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(title_id == nullptr);
@@ -3409,7 +3409,7 @@ int KYTY_SYSV_ABI NpSetNpTitleId(const NpTitleId* title_id, const NpTitleSecret*
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpSetContentRestriction(const NpContentRestriction* restriction) {
+int KATY_SYSV_ABI NpSetContentRestriction(const NpContentRestriction* restriction) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(restriction == nullptr);
@@ -3429,48 +3429,48 @@ int KYTY_SYSV_ABI NpSetContentRestriction(const NpContentRestriction* restrictio
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpRegisterStateCallback(void* /*callback*/, void* /*userdata*/) {
+int KATY_SYSV_ABI NpRegisterStateCallback(void* /*callback*/, void* /*userdata*/) {
 	PRINT_NAME();
 
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpUnregisterStateCallback() {
+int KATY_SYSV_ABI NpUnregisterStateCallback() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-void KYTY_SYSV_ABI NpRegisterGamePresenceCallback(void* /*callback*/, void* /*userdata*/) {
+void KATY_SYSV_ABI NpRegisterGamePresenceCallback(void* /*callback*/, void* /*userdata*/) {
 	PRINT_NAME();
 }
 
-int KYTY_SYSV_ABI NpRegisterPlusEventCallback(void* /*callback*/, void* /*userdata*/) {
-	PRINT_NAME();
-
-	return OK;
-}
-
-int KYTY_SYSV_ABI NpRegisterPremiumEventCallback(void* /*callback*/, void* /*userdata*/) {
+int KATY_SYSV_ABI NpRegisterPlusEventCallback(void* /*callback*/, void* /*userdata*/) {
 	PRINT_NAME();
 
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpRegisterNpReachabilityStateCallback(void* /*callback*/, void* /*userdata*/) {
+int KATY_SYSV_ABI NpRegisterPremiumEventCallback(void* /*callback*/, void* /*userdata*/) {
 	PRINT_NAME();
 
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpGetNpId(int user_id, NpId* np_id) {
+int KATY_SYSV_ABI NpRegisterNpReachabilityStateCallback(void* /*callback*/, void* /*userdata*/) {
+	PRINT_NAME();
+
+	return OK;
+}
+
+int KATY_SYSV_ABI NpGetNpId(int user_id, NpId* np_id) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n", user_id);
 
 	EXIT_NOT_IMPLEMENTED(np_id == nullptr);
 
-	// int s = snprintf(np_id->handle.data, 16, "Kyty");
+	// int s = snprintf(np_id->handle.data, 16, "Katy");
 	// EXIT_NOT_IMPLEMENTED(s >= 16);
 	// np_id->handle.term = 0;
 	std::memset(np_id, 0, sizeof(*np_id));
@@ -3479,14 +3479,14 @@ int KYTY_SYSV_ABI NpGetNpId(int user_id, NpId* np_id) {
 	return np_error_signed_out;
 }
 
-int KYTY_SYSV_ABI NpGetOnlineId(int user_id, NpOnlineId* online_id) {
+int KATY_SYSV_ABI NpGetOnlineId(int user_id, NpOnlineId* online_id) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n", user_id);
 
 	EXIT_NOT_IMPLEMENTED(online_id == nullptr);
 
-	// int s = snprintf(online_id->data, 16, "Kyty");
+	// int s = snprintf(online_id->data, 16, "Katy");
 	// EXIT_NOT_IMPLEMENTED(s >= 16);
 	// online_id->term = 0;
 	std::memset(online_id, 0, sizeof(*online_id));
@@ -3495,7 +3495,7 @@ int KYTY_SYSV_ABI NpGetOnlineId(int user_id, NpOnlineId* online_id) {
 	return np_error_signed_out;
 }
 
-int KYTY_SYSV_ABI NpGetAccountIdA(int user_id, uint64_t* account_id) {
+int KATY_SYSV_ABI NpGetAccountIdA(int user_id, uint64_t* account_id) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n", user_id);
@@ -3509,7 +3509,7 @@ int KYTY_SYSV_ABI NpGetAccountIdA(int user_id, uint64_t* account_id) {
 	return np_error_signed_out;
 }
 
-int KYTY_SYSV_ABI NpGetAccountCountryA(int user_id, void* country_code) {
+int KATY_SYSV_ABI NpGetAccountCountryA(int user_id, void* country_code) {
 	PRINT_NAME();
 
 	LOGF("\t user_id = %d\n", user_id);
@@ -3525,7 +3525,7 @@ int KYTY_SYSV_ABI NpGetAccountCountryA(int user_id, void* country_code) {
 	return np_error_signed_out;
 }
 
-int KYTY_SYSV_ABI NpGetAccountAge(int req_id, int user_id, uint8_t* age) {
+int KATY_SYSV_ABI NpGetAccountAge(int req_id, int user_id, uint8_t* age) {
 	PRINT_NAME();
 
 	LOGF("\t req_id  = %d\n", req_id);
@@ -3543,7 +3543,7 @@ int KYTY_SYSV_ABI NpGetAccountAge(int req_id, int user_id, uint8_t* age) {
 	return np_error_signed_out;
 }
 
-int KYTY_SYSV_ABI NpCreateRequest() {
+int KATY_SYSV_ABI NpCreateRequest() {
 	PRINT_NAME();
 
 	const auto req_id = np_create_request(false);
@@ -3553,7 +3553,7 @@ int KYTY_SYSV_ABI NpCreateRequest() {
 	return req_id;
 }
 
-int KYTY_SYSV_ABI NpCreateAsyncRequest(const NpCreateAsyncRequestParameter* param) {
+int KATY_SYSV_ABI NpCreateAsyncRequest(const NpCreateAsyncRequestParameter* param) {
 	PRINT_NAME();
 
 	if (param == nullptr) {
@@ -3576,7 +3576,7 @@ int KYTY_SYSV_ABI NpCreateAsyncRequest(const NpCreateAsyncRequestParameter* para
 	return req_id;
 }
 
-int KYTY_SYSV_ABI NpDeleteRequest(int req_id) {
+int KATY_SYSV_ABI NpDeleteRequest(int req_id) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -3595,7 +3595,7 @@ int KYTY_SYSV_ABI NpDeleteRequest(int req_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpAbortRequest(int req_id) {
+int KATY_SYSV_ABI NpAbortRequest(int req_id) {
 	PRINT_NAME();
 
 	LOGF("\t req_id = %d\n", req_id);
@@ -3613,7 +3613,7 @@ int KYTY_SYSV_ABI NpAbortRequest(int req_id) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpCheckNpAvailability(int req_id, const char* user, void* result) {
+int KATY_SYSV_ABI NpCheckNpAvailability(int req_id, const char* user, void* result) {
 	PRINT_NAME();
 
 	// EXIT_NOT_IMPLEMENTED(req_id <= 0);
@@ -3643,7 +3643,7 @@ int KYTY_SYSV_ABI NpCheckNpAvailability(int req_id, const char* user, void* resu
 	return np_complete_signed_out_locked(request);
 }
 
-int KYTY_SYSV_ABI NpCheckNpReachability(int req_id, int user_id) {
+int KATY_SYSV_ABI NpCheckNpReachability(int req_id, int user_id) {
 	PRINT_NAME();
 
 	// EXIT_NOT_IMPLEMENTED(req_id <= 0);
@@ -3666,7 +3666,7 @@ int KYTY_SYSV_ABI NpCheckNpReachability(int req_id, int user_id) {
 	return np_complete_signed_out_locked(request);
 }
 
-int KYTY_SYSV_ABI NpPollAsync(int req_id, int* result) {
+int KATY_SYSV_ABI NpPollAsync(int req_id, int* result) {
 	PRINT_NAME();
 
 	if (result == nullptr) {
@@ -3692,7 +3692,7 @@ int KYTY_SYSV_ABI NpPollAsync(int req_id, int* result) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpCheckPremium(int req_id, const NpCheckPremiumParameter* param,
+int KATY_SYSV_ABI NpCheckPremium(int req_id, const NpCheckPremiumParameter* param,
                                  NpCheckPremiumResult* result) {
 	PRINT_NAME();
 
@@ -3739,7 +3739,7 @@ int KYTY_SYSV_ABI NpCheckPremium(int req_id, const NpCheckPremiumParameter* para
 	return np_complete_signed_out_locked(request);
 }
 
-int KYTY_SYSV_ABI NpGetState(int user_id, uint32_t* state) {
+int KATY_SYSV_ABI NpGetState(int user_id, uint32_t* state) {
 	PRINT_NAME();
 
 	EXIT_NOT_IMPLEMENTED(state == nullptr);
@@ -3751,7 +3751,7 @@ int KYTY_SYSV_ABI NpGetState(int user_id, uint32_t* state) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpGetNpReachabilityState(int user_id, uint32_t* state) {
+int KATY_SYSV_ABI NpGetNpReachabilityState(int user_id, uint32_t* state) {
 	PRINT_NAME();
 
 	if (state == nullptr) {
@@ -3766,7 +3766,7 @@ int KYTY_SYSV_ABI NpGetNpReachabilityState(int user_id, uint32_t* state) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI NpHasSignedUp(int user_id, bool* has_signed_up) {
+int KATY_SYSV_ABI NpHasSignedUp(int user_id, bool* has_signed_up) {
 	PRINT_NAME();
 
 	if (has_signed_up == nullptr) {

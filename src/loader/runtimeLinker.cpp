@@ -31,7 +31,7 @@
 #include <memory>
 #include <vector>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -41,7 +41,7 @@
 #if defined(__APPLE__)
 #include <mach/mach.h>
 #include <mach/mach_vm.h>
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 #include <sys/uio.h>
 #include <unistd.h>
 #endif
@@ -97,9 +97,9 @@ struct EntryParams {
 
 #pragma pack()
 
-using atexit_func_t = KYTY_SYSV_ABI void (*)();
-using entry_func_t  = KYTY_SYSV_ABI void (*)(EntryParams* params, atexit_func_t atexit_func);
-using module_ini_fini_func_t = KYTY_SYSV_ABI int (*)(size_t args, const void* argp,
+using atexit_func_t = KATY_SYSV_ABI void (*)();
+using entry_func_t  = KATY_SYSV_ABI void (*)(EntryParams* params, atexit_func_t atexit_func);
+using module_ini_fini_func_t = KATY_SYSV_ABI int (*)(size_t args, const void* argp,
                                                      module_func_t func);
 
 enum class BindType { Unknown, Local, Global, Weak };
@@ -138,7 +138,7 @@ static std::vector<uint64_t>            g_unresolved_stub_thunk_pages;
 static uint64_t                         g_unresolved_stub_thunk_offset = 0;
 static constexpr uint64_t               UNRESOLVED_STUB_PAGE_SIZE      = 4096;
 
-static KYTY_SYSV_ABI uint64_t ResolveImportStubWithId(uint64_t record_id);
+static KATY_SYSV_ABI uint64_t ResolveImportStubWithId(uint64_t record_id);
 
 static bool PatchGuestMemory64(uint64_t vaddr, uint64_t value) {
 	auto* ptr     = reinterpret_cast<uint64_t*>(vaddr);
@@ -297,7 +297,7 @@ static uint64_t RegisterStubbedImport(uint32_t index, const Program* program,
 	return thunk;
 }
 
-static KYTY_SYSV_ABI uint64_t ResolveImportStubWithId(uint64_t record_id) {
+static KATY_SYSV_ABI uint64_t ResolveImportStubWithId(uint64_t record_id) {
 	if (record_id < g_stubbed_imports.size()) {
 		auto& record = g_stubbed_imports[record_id];
 		auto  nid    = record.name;
@@ -354,7 +354,7 @@ static Program*              g_tls_main_program        = nullptr;
 static thread_local Program* g_tls_cached_main_program = nullptr;
 static thread_local uint8_t* g_tls_cached_main_tcb     = nullptr;
 
-static KYTY_SYSV_ABI void RunEntry(uint64_t addr, EntryParams* params, atexit_func_t atexit_func,
+static KATY_SYSV_ABI void RunEntry(uint64_t addr, EntryParams* params, atexit_func_t atexit_func,
                                    void* stack_top) {
 #if defined(__x86_64__) || defined(_M_X64)
 	auto* func = reinterpret_cast<entry_func_t>(addr);
@@ -397,7 +397,7 @@ static KYTY_SYSV_ABI void RunEntry(uint64_t addr, EntryParams* params, atexit_fu
 		    : "cc", "memory", "rax", "rcx", "rdx", "r8", "r9", "r10", "r11", "xmm0", "xmm1", "xmm2",
 		      "xmm3", "xmm4", "xmm5", "xmm6", "xmm7", "xmm8", "xmm9", "xmm10", "xmm11", "xmm12",
 		      "xmm13", "xmm14", "xmm15");
-#elif KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#elif KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		// Windows stack probes use the TEB stack limits during the guest stack switch.
 		// bounds, which describe the host stack and are invalid while RSP is in guest memory.
 		register entry_func_t func_reg asm("rbx")     = func;
@@ -456,7 +456,7 @@ static KYTY_SYSV_ABI void RunEntry(uint64_t addr, EntryParams* params, atexit_fu
 	register uintptr_t    guest_rbp_reg asm("r14") = reinterpret_cast<uintptr_t>(guest_root_frame);
 #endif
 
-#if defined(__APPLE__) || KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if defined(__APPLE__) || KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	asm volatile("pushq %%r12\n\t"
 	             "pushq %%r13\n\t"
 	             "movq %%rbp, %%r12\n\t"
@@ -495,17 +495,17 @@ static KYTY_SYSV_ABI void RunEntry(uint64_t addr, EntryParams* params, atexit_fu
 #endif
 }
 
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 struct MainEntryStackTestState {
 	bool      called = false;
 	uintptr_t rsp    = 0;
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	uintptr_t teb_stack_base  = UINTPTR_MAX;
 	uintptr_t teb_stack_limit = UINTPTR_MAX;
 #endif
 };
 
-static KYTY_SYSV_ABI void TestMainEntryStackCallback(EntryParams* params,
+static KATY_SYSV_ABI void TestMainEntryStackCallback(EntryParams* params,
                                                      atexit_func_t /*atexit_func*/) {
 	auto* state = reinterpret_cast<MainEntryStackTestState*>(const_cast<char*>(params->argv[0]));
 	asm volatile("pushq %%r15\n\t"
@@ -516,7 +516,7 @@ static KYTY_SYSV_ABI void TestMainEntryStackCallback(EntryParams* params,
 	             :
 	             : "memory");
 	asm volatile("movq %%rsp, %0" : "=r"(state->rsp) : : "memory");
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	asm volatile("movq %%gs:0x08, %0\n\t"
 	             "movq %%gs:0x10, %1\n\t"
 	             : "=r"(state->teb_stack_base), "=r"(state->teb_stack_limit)
@@ -540,7 +540,7 @@ bool TestMainEntryUsesGuestStack() {
 	std::memset(reinterpret_cast<void*>(stack_base), 0xcd, stack_size);
 	auto* root_frame = reinterpret_cast<const uintptr_t*>(stack_base + stack_size) - 2;
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	uintptr_t original_teb_stack_base  = 0;
 	uintptr_t original_teb_stack_limit = 0;
 	asm volatile("movq %%gs:0x08, %0\n\t"
@@ -553,7 +553,7 @@ bool TestMainEntryUsesGuestStack() {
 	RunEntry(reinterpret_cast<uint64_t>(TestMainEntryStackCallback), &params, nullptr,
 	         reinterpret_cast<void*>(stack_base + stack_size));
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	uintptr_t restored_teb_stack_base  = 0;
 	uintptr_t restored_teb_stack_limit = 0;
 	asm volatile("movq %%gs:0x08, %0\n\t"
@@ -594,7 +594,7 @@ bool TestModuleRelocationUsesWritableHostMapping() {
 	const bool after_ok = Libs::LibKernel::Memory::KernelVirtualQuery(
 	                          reinterpret_cast<const void*>(base), 0, &after, sizeof(after)) == 0;
 	const bool value_ok = *reinterpret_cast<const uint64_t*>(base) == value;
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	MEMORY_BASIC_INFORMATION mbi {};
 	const bool               host_mode_ok =
 	    VirtualQuery(reinterpret_cast<const void*>(base), &mbi, sizeof(mbi)) != 0 &&
@@ -676,7 +676,7 @@ struct FrameS {
 	uintptr_t ret_addr;
 };
 
-static void KYTY_SYSV_ABI StackwalkX86(uint64_t rbp, void** stack, int* depth, uintptr_t stack_addr,
+static void KATY_SYSV_ABI StackwalkX86(uint64_t rbp, void** stack, int* depth, uintptr_t stack_addr,
                                        size_t stack_size, uintptr_t code_addr, size_t code_size) {
 	auto* frame = reinterpret_cast<FrameS*>(rbp);
 
@@ -701,7 +701,7 @@ static void KYTY_SYSV_ABI StackwalkX86(uint64_t rbp, void** stack, int* depth, u
 	*depth = i;
 }
 
-static void KYTY_SYSV_ABI SysStackWalkX86(uint64_t rbp, uint64_t rsp, void** stack, int* depth) {
+static void KATY_SYSV_ABI SysStackWalkX86(uint64_t rbp, uint64_t rsp, void** stack, int* depth) {
 	if (rsp == 0 || rbp < rsp) {
 		*depth = 0;
 		return;
@@ -711,7 +711,7 @@ static void KYTY_SYSV_ABI SysStackWalkX86(uint64_t rbp, uint64_t rsp, void** sta
 	             g_desired_base_addr - (SYSTEM_RESERVED + CODE_BASE_OFFSET));
 }
 
-void KYTY_SYSV_ABI SysStackWalkX86(uint64_t rbp, void** stack, int* depth) {
+void KATY_SYSV_ABI SysStackWalkX86(uint64_t rbp, void** stack, int* depth) {
 	SysStackWalkX86(rbp, rbp, stack, depth);
 }
 
@@ -726,7 +726,7 @@ static bool IsReadableRange(uint64_t addr, uint64_t size) {
 		return false;
 	}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	uint64_t current = addr;
 	while (current < end) {
 		MEMORY_BASIC_INFORMATION mbi {};
@@ -759,7 +759,7 @@ static bool IsReadableRange(uint64_t addr, uint64_t size) {
 		}
 		current = region_addr + region_size;
 	}
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 	const auto page_size = static_cast<uint64_t>(sysconf(_SC_PAGESIZE));
 	if (page_size == 0) {
 		return false;
@@ -789,7 +789,7 @@ static bool IsReadableRange(uint64_t addr, uint64_t size) {
 }
 
 static bool IsDumpableRange(uint64_t addr, uint64_t size) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#if KATY_PLATFORM == KATY_PLATFORM_LINUX
 	return IsReadableRange(addr, size);
 #else
 	(void)size;
@@ -797,7 +797,7 @@ static bool IsDumpableRange(uint64_t addr, uint64_t size) {
 #endif
 }
 
-static bool KytyExceptionHandler(const Common::HostException::ExceptionInfo& exception_info) {
+static bool KatyExceptionHandler(const Common::HostException::ExceptionInfo& exception_info) {
 	const auto* info = &exception_info;
 
 	if (info->type == Common::HostException::ExceptionType::IllegalInstruction &&
@@ -830,8 +830,8 @@ static bool KytyExceptionHandler(const Common::HostException::ExceptionInfo& exc
 		}
 	}
 
-	LOGF("kyty_exception_handler: %016" PRIx64 "\n", info->exception_address);
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+	LOGF("katy_exception_handler: %016" PRIx64 "\n", info->exception_address);
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	HMODULE owner_module = nullptr;
 	if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
 	                           GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
@@ -850,7 +850,7 @@ static bool KytyExceptionHandler(const Common::HostException::ExceptionInfo& exc
 	}
 #endif
 	if (info->exception_address != 0) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		MEMORY_BASIC_INFORMATION mem_info = {};
 		auto* dump_ptr = reinterpret_cast<const uint8_t*>(info->exception_address - 32);
 		if (VirtualQuery(dump_ptr, &mem_info, sizeof(mem_info)) != 0 &&
@@ -917,7 +917,7 @@ static bool KytyExceptionHandler(const Common::HostException::ExceptionInfo& exc
 			return;
 		}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		MEMORY_BASIC_INFORMATION mbi {};
 		auto* dump_ptr = reinterpret_cast<const uint8_t*>(addr >= 16 ? addr - 16 : addr);
 		if (VirtualQuery(dump_ptr, &mbi, sizeof(mbi)) == 0 || mbi.State != MEM_COMMIT ||
@@ -984,7 +984,7 @@ static bool KytyExceptionHandler(const Common::HostException::ExceptionInfo& exc
 				return;
 			}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 			MEMORY_BASIC_INFORMATION mbi {};
 			if (VirtualQuery(reinterpret_cast<const void*>(addr), &mbi, sizeof(mbi)) == 0 ||
 			    mbi.State != MEM_COMMIT || (mbi.Protect & (PAGE_NOACCESS | PAGE_GUARD)) != 0) {
@@ -1086,7 +1086,7 @@ static void GetDynPtr(Elf64* elf, T* out, Elf64_Sxword tag) {
 	}
 }
 
-static void KYTY_SYSV_ABI ProgramExitHandler() {
+static void KATY_SYSV_ABI ProgramExitHandler() {
 	Common::Singleton<RuntimeLinker>::Instance()->StopAllModules();
 
 	LOGF("exit!!!\n");
@@ -1122,16 +1122,16 @@ static void GetDynLibs(Elf64* elf, T* out, const char* names, Elf64_Sxword tag) 
 }
 
 static RelocationInfo GetRelocationInfo(Elf64_Rela* r, Program* program) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
-	// KYTY_PROFILER_BLOCK("1");
+	// KATY_PROFILER_BLOCK("1");
 
 	RelocationInfo ret;
 	// SymbolRecord   sr {};
 
-	// KYTY_PROFILER_END_BLOCK;
+	// KATY_PROFILER_END_BLOCK;
 
-	// KYTY_PROFILER_BLOCK("2");
+	// KATY_PROFILER_BLOCK("2");
 
 	auto         type    = r->GetType();
 	auto         symbol  = r->GetSymbol();
@@ -1142,9 +1142,9 @@ static RelocationInfo GetRelocationInfo(Elf64_Rela* r, Program* program) {
 	ret.vaddr            = ret.base_vaddr + r->r_offset;
 	ret.bind_self        = false;
 
-	// KYTY_PROFILER_END_BLOCK;
+	// KATY_PROFILER_END_BLOCK;
 
-	// KYTY_PROFILER_BLOCK("3");
+	// KATY_PROFILER_BLOCK("3");
 
 	switch (type) {
 		case R_X86_64_GLOB_DAT:
@@ -1194,14 +1194,14 @@ static RelocationInfo GetRelocationInfo(Elf64_Rela* r, Program* program) {
 		default: EXIT("unknown type: %d\n", (int)type);
 	}
 
-	// KYTY_PROFILER_END_BLOCK;
+	// KATY_PROFILER_END_BLOCK;
 
 	return ret;
 }
 
 static void RelocateRecord(uint32_t index, Elf64_Rela* r, Program* program, bool jmprela_table,
                            bool imports_only, std::vector<std::string>* unresolved) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	auto ri = GetRelocationInfo(r, program);
 
@@ -1214,7 +1214,7 @@ static void RelocateRecord(uint32_t index, Elf64_Rela* r, Program* program, bool
 	bool                  stubbed_import = false;
 	bool                  stubbed_func   = false;
 
-	// KYTY_PROFILER_BLOCK("patch");
+	// KATY_PROFILER_BLOCK("patch");
 
 	if (ri.resolved) {
 		patched = PatchGuestMemory64(ri.vaddr, ri.value);
@@ -1263,7 +1263,7 @@ static void RelocateRecord(uint32_t index, Elf64_Rela* r, Program* program, bool
 		}
 	}
 
-	// KYTY_PROFILER_END_BLOCK;
+	// KATY_PROFILER_END_BLOCK;
 
 	if (patched && stubbed_import) {
 		const auto thunk = RegisterStubbedImport(index, program, ri);
@@ -1295,7 +1295,7 @@ static void RelocateRecord(uint32_t index, Elf64_Rela* r, Program* program, bool
 static void RelocateRecords(Elf64_Rela* records, uint64_t size, Program* program,
                             bool jmprela_table, bool imports_only,
                             std::vector<std::string>* unresolved) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	uint32_t index = 0;
 	for (auto* r = records;
@@ -1304,12 +1304,12 @@ static void RelocateRecords(Elf64_Rela* records, uint64_t size, Program* program
 	}
 }
 
-__attribute__((naked)) static KYTY_SYSV_ABI void RelocateHandlerReturnStub() {
+__attribute__((naked)) static KATY_SYSV_ABI void RelocateHandlerReturnStub() {
 	asm volatile("addq $8, %rsp\n\t"
 	             "retq\n");
 }
 
-static KYTY_SYSV_ABI uint64_t RelocateHandler(RelocateHandlerStack s) {
+static KATY_SYSV_ABI uint64_t RelocateHandler(RelocateHandlerStack s) {
 	auto*       stack     = s.stack;
 	auto*       program   = reinterpret_cast<Program*>(stack[-1]);
 	auto        rel_index = stack[0];
@@ -1330,7 +1330,7 @@ static KYTY_SYSV_ABI uint64_t RelocateHandler(RelocateHandlerStack s) {
 	return 0;
 }
 
-static KYTY_MS_ABI uint8_t* TlsMainGetAddr() {
+static KATY_MS_ABI uint8_t* TlsMainGetAddr() {
 	EXIT_IF(g_tls_main_program == nullptr);
 
 	if (g_tls_cached_main_program == g_tls_main_program && g_tls_cached_main_tcb != nullptr) {
@@ -1449,7 +1449,7 @@ uint64_t RuntimeLinker::GetProcParam() {
 }
 
 void RuntimeLinker::DbgDump(const std::string& folder) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_NOT_IMPLEMENTED(!Common::Thread::IsMainThread());
 
@@ -1546,7 +1546,7 @@ RuntimeLinker::~RuntimeLinker() {
 }
 
 Program* RuntimeLinker::LoadProgram(const std::filesystem::path& elf_name) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	Common::LockGuard lock(m_mutex);
 
@@ -1619,12 +1619,12 @@ void RuntimeLinker::SaveProgram(Program* program, const std::filesystem::path& e
 }
 
 void RuntimeLinker::Execute(const std::filesystem::path& game_patch) {
-	KYTY_PROFILER_THREAD("Thread_Main");
+	KATY_PROFILER_THREAD("Thread_Main");
 
 	Libs::LibKernel::PthreadInitSelfForMainThread();
 	auto* main_stack_top = Libs::LibKernel::PthreadCreateMainGuestStack();
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	// Guest code has no Windows stack probes and may jump over the guard page. Module
 	// initializers execute on the host stack too, so grow it before calling any guest code.
 	size_t expanded_size = 0;
@@ -1651,7 +1651,7 @@ void RuntimeLinker::Execute(const std::filesystem::path& game_patch) {
 		    (reinterpret_cast<uintptr_t>(main_stack_top) - 0x100u) & ~static_cast<uintptr_t>(0x0f));
 		std::memset(params, 0, sizeof(EntryParams));
 		params->argc    = 1;
-		params->argv[0] = "KytyEmu";
+		params->argv[0] = "KatyEmu";
 
 		LOGF("stack_addr = %" PRIx64 "\n", reinterpret_cast<uint64_t>(params));
 
@@ -1690,7 +1690,7 @@ void RuntimeLinker::Clear() {
 
 void RuntimeLinker::Resolve(const std::string& name, SymbolType type, Program* program,
                             SymbolRecord* out_info, bool* bind_self) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	Common::LockGuard lock(m_mutex);
 
@@ -1786,7 +1786,7 @@ void RuntimeLinker::Resolve(const std::string& name, SymbolType type, Program* p
 
 bool RuntimeLinker::ResolveLoadedSymbolByNid(const std::string& nid, SymbolType type,
                                              SymbolRecord* out_info) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	Common::LockGuard lock(m_mutex);
 
@@ -2176,7 +2176,7 @@ static uint64_t CalcBaseSize(const Elf64_Ehdr* ehdr, const Elf64_Phdr* phdr) {
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void RuntimeLinker::LoadProgramToMemory(Program* program) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_IF(program == nullptr || program->base_vaddr != 0 || program->base_size != 0 ||
 	        program->elf == nullptr);
@@ -2223,7 +2223,7 @@ void RuntimeLinker::LoadProgramToMemory(Program* program) {
 		LOGF("tls_handler_size       = 0x%016" PRIx64 "\n", tls_handler_size);
 	}
 
-	if (!Common::HostException::InstallHandler(KytyExceptionHandler)) {
+	if (!Common::HostException::InstallHandler(KatyExceptionHandler)) {
 		EXIT("Failed to install the required vectored exception handler\n");
 	}
 
@@ -2322,7 +2322,7 @@ void RuntimeLinker::DeleteProgram(Program* p) {
 }
 
 void RuntimeLinker::ParseProgramDynamicInfo(Program* program) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_IF(program == nullptr);
 	EXIT_IF(program->elf == nullptr);
@@ -2434,7 +2434,7 @@ void RuntimeLinker::ParseProgramDynamicInfo(Program* program) {
 }
 
 static void InstallRelocateHandler(Program* program) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	uint64_t pltgot_vaddr = program->dynamic_info->pltgot_vaddr + program->base_vaddr;
 	uint64_t pltgot_size  = static_cast<uint64_t>(3) * 8;
@@ -2471,7 +2471,7 @@ static void InstallRelocateHandler(Program* program) {
 }
 
 void RuntimeLinker::Relocate(Program* program) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_IF(program == nullptr);
 
@@ -2572,7 +2572,7 @@ const LibraryId* RuntimeLinker::FindLibrary(const Program& program, const std::s
 }
 
 void RuntimeLinker::CreateSymbolDatabase(Program* program) {
-	KYTY_PROFILER_FUNCTION();
+	KATY_PROFILER_FUNCTION();
 
 	EXIT_IF(program == nullptr);
 	EXIT_IF(program->export_symbols != nullptr);

@@ -10,12 +10,12 @@
 
 namespace Common {
 
-KYTY_SUBSYSTEM_INIT(Common) {
+KATY_SUBSYSTEM_INIT(Common) {
 	VirtualMemory::Init();
 }
 
-KYTY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Common) {}
+KATY_SUBSYSTEM_UNEXPECTED_SHUTDOWN(Common) {}
 
-KYTY_SUBSYSTEM_DESTROY(Common) {}
+KATY_SUBSYSTEM_DESTROY(Common) {}
 
 } // namespace Common

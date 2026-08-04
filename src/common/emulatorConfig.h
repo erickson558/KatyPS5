@@ -1,5 +1,5 @@
-#ifndef KYTY_COMMON_EMULATOR_CONFIG_H_
-#define KYTY_COMMON_EMULATOR_CONFIG_H_
+#ifndef KATY_COMMON_EMULATOR_CONFIG_H_
+#define KATY_COMMON_EMULATOR_CONFIG_H_
 
 #include "common/common.h"
 #include "common/subsystems.h"
@@ -10,7 +10,7 @@
 
 namespace Config {
 
-KYTY_SUBSYSTEM_DEFINE(Config);
+KATY_SUBSYSTEM_DEFINE(Config);
 
 enum class ShaderOptimizationType { None, Size, Performance };
 
@@ -40,7 +40,7 @@ struct ConfigOptions {
 	std::filesystem::path  command_buffer_dump_folder  = "_Buffers";
 	bool                   graphics_debug_dump_enabled = false;
 	OutputDirection        printf_direction            = OutputDirection::Console;
-	std::filesystem::path  printf_output_file          = "_kyty.txt";
+	std::filesystem::path  printf_output_file          = "_katy.txt";
 	ProfilerDirection      profiler_direction          = ProfilerDirection::None;
 	bool                   spirv_debug_printf_enabled  = false;
 	bool                   renderdoc_enabled           = false;
@@ -81,4 +81,4 @@ const Keymap& GetKeymap();
 
 } // namespace Config
 
-#endif /* KYTY_COMMON_EMULATOR_CONFIG_H_ */
+#endif /* KATY_COMMON_EMULATOR_CONFIG_H_ */

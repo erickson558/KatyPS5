@@ -16,9 +16,9 @@ void DebugStack::Trace(DebugStack* stack) {
 }
 
 std::string Debug::GetCompiler() {
-#if KYTY_COMPILER == KYTY_COMPILER_CLANG
+#if KATY_COMPILER == KATY_COMPILER_CLANG
 	return "clang";
-#elif KYTY_COMPILER == KYTY_COMPILER_GCC
+#elif KATY_COMPILER == KATY_COMPILER_GCC
 	return "gcc";
 #else
 	return "????";
@@ -26,11 +26,11 @@ std::string Debug::GetCompiler() {
 }
 
 std::string Debug::GetLinker() {
-#if KYTY_LINKER == KYTY_LINKER_LD
+#if KATY_LINKER == KATY_LINKER_LD
 	return "ld";
-#elif KYTY_LINKER == KYTY_LINKER_LLD
+#elif KATY_LINKER == KATY_LINKER_LLD
 	return "lld";
-#elif KYTY_LINKER == KYTY_LINKER_LLD_LINK
+#elif KATY_LINKER == KATY_LINKER_LLD_LINK
 	return "lld_link";
 #else
 	return "??";

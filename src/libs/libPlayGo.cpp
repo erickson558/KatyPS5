@@ -88,7 +88,7 @@ static void set_optional_chunk(int32_t type, PlayGoOptionalChunk* option) {
 	                                                         : PLAYGO_SCENARIO_MASK_ALL);
 }
 
-int KYTY_SYSV_ABI PlayGoInitialize(const PlayGoInitParams* init) {
+int KATY_SYSV_ABI PlayGoInitialize(const PlayGoInitParams* init) {
 	PRINT_NAME();
 
 	if (init == nullptr || init->buf_addr == nullptr) {
@@ -106,13 +106,13 @@ int KYTY_SYSV_ABI PlayGoInitialize(const PlayGoInitParams* init) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoTerminate() {
+int KATY_SYSV_ABI PlayGoTerminate() {
 	PRINT_NAME();
 
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoOpen(int* out_handle, const void* param) {
+int KATY_SYSV_ABI PlayGoOpen(int* out_handle, const void* param) {
 	PRINT_NAME();
 
 	if (out_handle == nullptr) {
@@ -129,7 +129,7 @@ int KYTY_SYSV_ABI PlayGoOpen(int* out_handle, const void* param) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoClose(int handle) {
+int KATY_SYSV_ABI PlayGoClose(int handle) {
 	PRINT_NAME();
 
 	if (auto ret = validate_handle(handle); ret != OK) {
@@ -139,7 +139,7 @@ int KYTY_SYSV_ABI PlayGoClose(int handle) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetLocus(int handle, const uint16_t* chunk_ids, uint32_t number_of_entries,
+int KATY_SYSV_ABI PlayGoGetLocus(int handle, const uint16_t* chunk_ids, uint32_t number_of_entries,
                                  int8_t* out_loci) {
 	PRINT_NAME();
 
@@ -169,7 +169,7 @@ int KYTY_SYSV_ABI PlayGoGetLocus(int handle, const uint16_t* chunk_ids, uint32_t
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetInstallSpeed(int handle, int32_t* out_speed) {
+int KATY_SYSV_ABI PlayGoGetInstallSpeed(int handle, int32_t* out_speed) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n", handle);
@@ -186,7 +186,7 @@ int KYTY_SYSV_ABI PlayGoGetInstallSpeed(int handle, int32_t* out_speed) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoSetInstallSpeed(int handle, int32_t speed) {
+int KATY_SYSV_ABI PlayGoSetInstallSpeed(int handle, int32_t speed) {
 	PRINT_NAME();
 
 	LOGF("\t handle = %d\n"
@@ -203,7 +203,7 @@ int KYTY_SYSV_ABI PlayGoSetInstallSpeed(int handle, int32_t speed) {
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetChunkId(int handle, uint16_t* out_chunk_id_list,
+int KATY_SYSV_ABI PlayGoGetChunkId(int handle, uint16_t* out_chunk_id_list,
                                    uint32_t number_of_entries, uint32_t* out_entries) {
 	PRINT_NAME();
 
@@ -234,7 +234,7 @@ int KYTY_SYSV_ABI PlayGoGetChunkId(int handle, uint16_t* out_chunk_id_list,
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetToDoList(int handle, PlayGoToDo* out_todo_list,
+int KATY_SYSV_ABI PlayGoGetToDoList(int handle, PlayGoToDo* out_todo_list,
                                     uint32_t number_of_entries, uint32_t* out_entries) {
 	PRINT_NAME();
 
@@ -259,7 +259,7 @@ int KYTY_SYSV_ABI PlayGoGetToDoList(int handle, PlayGoToDo* out_todo_list,
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoSetToDoList(int handle, const PlayGoToDo* todo_list,
+int KATY_SYSV_ABI PlayGoSetToDoList(int handle, const PlayGoToDo* todo_list,
                                     uint32_t number_of_entries) {
 	PRINT_NAME();
 
@@ -289,7 +289,7 @@ int KYTY_SYSV_ABI PlayGoSetToDoList(int handle, const PlayGoToDo* todo_list,
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoPrefetch(int handle, const uint16_t* chunk_ids, uint32_t number_of_entries,
+int KATY_SYSV_ABI PlayGoPrefetch(int handle, const uint16_t* chunk_ids, uint32_t number_of_entries,
                                  int8_t minimum_locus) {
 	PRINT_NAME();
 
@@ -320,7 +320,7 @@ int KYTY_SYSV_ABI PlayGoPrefetch(int handle, const uint16_t* chunk_ids, uint32_t
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetEta(int handle, const uint16_t* chunk_ids, uint32_t number_of_entries,
+int KATY_SYSV_ABI PlayGoGetEta(int handle, const uint16_t* chunk_ids, uint32_t number_of_entries,
                                int64_t* out_eta) {
 	PRINT_NAME();
 
@@ -343,7 +343,7 @@ int KYTY_SYSV_ABI PlayGoGetEta(int handle, const uint16_t* chunk_ids, uint32_t n
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetLanguageMask(int handle, uint64_t* out_language_mask) {
+int KATY_SYSV_ABI PlayGoGetLanguageMask(int handle, uint64_t* out_language_mask) {
 	PRINT_NAME();
 
 	if (auto ret = validate_handle(handle); ret != OK) {
@@ -358,7 +358,7 @@ int KYTY_SYSV_ABI PlayGoGetLanguageMask(int handle, uint64_t* out_language_mask)
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetProgress(int handle, const uint16_t* chunk_ids,
+int KATY_SYSV_ABI PlayGoGetProgress(int handle, const uint16_t* chunk_ids,
                                     uint32_t number_of_entries, PlayGoProgress* out_progress) {
 	PRINT_NAME();
 
@@ -383,7 +383,7 @@ int KYTY_SYSV_ABI PlayGoGetProgress(int handle, const uint16_t* chunk_ids,
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetOptionalChunk(int handle, int32_t type, PlayGoOptionalChunk* option) {
+int KATY_SYSV_ABI PlayGoGetOptionalChunk(int handle, int32_t type, PlayGoOptionalChunk* option) {
 	PRINT_NAME();
 
 	if (auto ret = validate_handle(handle); ret != OK) {
@@ -401,7 +401,7 @@ int KYTY_SYSV_ABI PlayGoGetOptionalChunk(int handle, int32_t type, PlayGoOptiona
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoPrefetchOptionalChunk(int handle, int32_t type,
+int KATY_SYSV_ABI PlayGoPrefetchOptionalChunk(int handle, int32_t type,
                                               const PlayGoOptionalChunk* option) {
 	PRINT_NAME();
 
@@ -418,14 +418,14 @@ int KYTY_SYSV_ABI PlayGoPrefetchOptionalChunk(int handle, int32_t type,
 	return OK;
 }
 
-int KYTY_SYSV_ABI PlayGoGetInstallChunkId(int handle, uint16_t* out_chunk_id_list,
+int KATY_SYSV_ABI PlayGoGetInstallChunkId(int handle, uint16_t* out_chunk_id_list,
                                           uint32_t number_of_entries, uint32_t* out_entries) {
 	PRINT_NAME();
 
 	return PlayGoGetChunkId(handle, out_chunk_id_list, number_of_entries, out_entries);
 }
 
-int KYTY_SYSV_ABI PlayGoGetSupportedOptionalChunk(int handle, int32_t type,
+int KATY_SYSV_ABI PlayGoGetSupportedOptionalChunk(int handle, int32_t type,
                                                   PlayGoOptionalChunk* option) {
 	PRINT_NAME();
 

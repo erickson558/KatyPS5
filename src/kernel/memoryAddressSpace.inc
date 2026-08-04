@@ -36,7 +36,7 @@ public:
 	};
 
 	explicit GuestBackingStore(uint64_t size): m_size(size) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		m_handle = CreateFileMappingA(INVALID_HANDLE_VALUE, nullptr, PAGE_EXECUTE_READWRITE,
 		                              static_cast<DWORD>(m_size >> 32u),
 		                              static_cast<DWORD>(m_size & 0xffffffffu), nullptr);
@@ -55,11 +55,11 @@ public:
 			CloseHandle(m_handle);
 			m_handle = nullptr;
 		}
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 #if defined(__APPLE__)
 		{
 			char shm_name[64];
-			snprintf(shm_name, sizeof(shm_name), "/kyty-dm-%d-%llx", static_cast<int>(getpid()),
+			snprintf(shm_name, sizeof(shm_name), "/katy-dm-%d-%llx", static_cast<int>(getpid()),
 			         static_cast<unsigned long long>(reinterpret_cast<uintptr_t>(this)));
 			m_fd = shm_open(shm_name, O_RDWR | O_CREAT | O_EXCL, 0600);
 			if (m_fd >= 0) {
@@ -67,7 +67,7 @@ public:
 			}
 		}
 #else
-		m_fd = static_cast<int>(syscall(SYS_memfd_create, "KytyDirectMemory", 0));
+		m_fd = static_cast<int>(syscall(SYS_memfd_create, "KatyDirectMemory", 0));
 #endif
 		if (m_fd < 0) {
 			LOGF_COLOR(Log::Color::Red, "\t direct-memory backing: shared fd creation failed: %d\n",
@@ -93,7 +93,7 @@ public:
 	}
 
 	~GuestBackingStore() {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		for (const auto& [_, entry]: m_maps) {
 			UnmapViewPreservePlaceholder(reinterpret_cast<void*>(entry.vaddr), entry.size);
 		}
@@ -104,7 +104,7 @@ public:
 		if (m_handle != nullptr) {
 			CloseHandle(m_handle);
 		}
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 		for (const auto& [_, entry]: m_maps) {
 			EXIT_IF(
 			    !UnmapViewPreservePlaceholder(reinterpret_cast<void*>(entry.vaddr), entry.size));
@@ -119,7 +119,7 @@ public:
 #endif
 	}
 
-	KYTY_CLASS_NO_COPY(GuestBackingStore);
+	KATY_CLASS_NO_COPY(GuestBackingStore);
 
 	static const char* GetFailureReasonName(FailureReason reason) {
 		switch (reason) {
@@ -136,9 +136,9 @@ public:
 	}
 
 	[[nodiscard]] bool IsAvailable() const {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		return m_handle != nullptr && m_backing_base != nullptr;
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 		return m_fd >= 0 && m_backing_base != nullptr;
 #else
 		return false;
@@ -190,7 +190,7 @@ public:
 			return false;
 		}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		void* mapped = ReplacePlaceholderView(vaddr, size, backing_offset, mode, failure_reason);
 		if (mapped == nullptr || reinterpret_cast<uint64_t>(mapped) != vaddr) {
 			if (mapped != nullptr) {
@@ -271,7 +271,7 @@ public:
 	}
 
 	bool UnmapOne(uint64_t vaddr, uint64_t size, bool* placeholder_preserved = nullptr) {
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 		if (g_test_backing_store_unmaps_before_failure == 0) {
 			g_test_backing_store_unmaps_before_failure = UINT32_MAX;
 			return false;
@@ -318,7 +318,7 @@ public:
 		const uint64_t old_end    = old.vaddr + old.size;
 		const uint64_t right_size = old_end - right_addr;
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		if (UnmapViewPreservePlaceholder(reinterpret_cast<void*>(old.vaddr), old.size)) {
 			bool ok = true;
 			if (left_size != 0 && left_size != old.size) {
@@ -492,7 +492,7 @@ private:
 		}
 	}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	static DWORD GetProtect(VirtualMemory::Mode mode) {
 		switch (mode) {
 			case VirtualMemory::Mode::Read: return PAGE_READONLY;
@@ -548,7 +548,7 @@ private:
 	}
 
 	HANDLE m_handle = nullptr;
-#elif KYTY_PLATFORM == KYTY_PLATFORM_LINUX
+#elif KATY_PLATFORM == KATY_PLATFORM_LINUX
 	[[nodiscard]] static uint64_t GetMappableTestSize() { return 0x4000; }
 
 	static int GetProtect(VirtualMemory::Mode mode) {
@@ -595,7 +595,7 @@ private:
 class GuestAddressSpace {
 public:
 	explicit GuestAddressSpace(uint64_t backing_size) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		SYSTEM_INFO info {};
 		GetSystemInfo(&info);
 		m_granularity = info.dwAllocationGranularity;
@@ -608,7 +608,7 @@ public:
 	~GuestAddressSpace() {
 		delete m_backing;
 		m_backing = nullptr;
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		for (const auto& [start, size]: m_owned) {
 			const auto end     = start + size;
 			auto       current = start;
@@ -636,7 +636,7 @@ public:
 #endif
 	}
 
-	KYTY_CLASS_NO_COPY(GuestAddressSpace);
+	KATY_CLASS_NO_COPY(GuestAddressSpace);
 
 	[[nodiscard]] uint64_t GetGranularity() const { return m_granularity; }
 	[[nodiscard]] uint64_t GetBackingBase() const { return m_backing->GetBackingBase(); }
@@ -766,7 +766,7 @@ public:
 		return FindContaining(vaddr, size) != m_free.end();
 	}
 
-#if defined(KYTY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
+#if defined(KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS)
 	bool TestContainsFree(uint64_t vaddr, uint64_t size) {
 		std::lock_guard lock(m_mutex);
 		return FindContaining(vaddr, size) != m_free.end();
@@ -787,7 +787,7 @@ public:
 		                           ? VirtualMemory::Mode::ExecuteReadWrite
 		                           : VirtualMemory::Mode::ReadWrite;
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		auto* ptr = VirtualAlloc2(GetCurrentProcess(), reinterpret_cast<void*>(vaddr), size,
 		                          MEM_RESERVE | MEM_COMMIT | MEM_REPLACE_PLACEHOLDER,
 		                          GetProtect(host_mode), nullptr, 0);
@@ -827,7 +827,7 @@ public:
 			regions.emplace_back(current, part_end - current);
 			current = part_end;
 		}
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		for (const auto& [region_vaddr, region_size]: regions) {
 			EXIT_IF(VirtualFree(reinterpret_cast<void*>(region_vaddr), region_size,
 			                    MEM_RELEASE | MEM_PRESERVE_PLACEHOLDER) == 0);
@@ -855,7 +855,7 @@ public:
 		}
 
 		auto* ptr = reinterpret_cast<uint64_t*>(addr);
-		*ptr      = 0x4b59545950484f4cull; // "KYTYPHOL"
+		*ptr      = 0x4b59545950484f4cull; // "KATYPHOL"
 
 		if (!ReleaseCommitted(addr, PageSize())) {
 			LOGF_COLOR(Log::Color::Red,
@@ -997,7 +997,7 @@ private:
 		return true;
 	}
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	static DWORD GetProtect(VirtualMemory::Mode mode) {
 		switch (mode) {
 			case VirtualMemory::Mode::Read: return PAGE_READONLY;
@@ -1014,7 +1014,7 @@ private:
 #endif
 
 	void ReserveGuestRegions() {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		constexpr uint64_t MinimumRegionSize = 0x1000000;
 		const auto         process           = GetCurrentProcess();
 		const auto         guest_end         = HOST_USER_MAX + 1u;
@@ -1059,7 +1059,7 @@ private:
 		    {HOST_USER_MIN, HOST_USER_MAX + 1u},
 		}};
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_LINUX && !defined(__APPLE__)
+#if KATY_PLATFORM == KATY_PLATFORM_LINUX && !defined(__APPLE__)
 		std::vector<std::pair<uint64_t, uint64_t>> occupied;
 		FILE*                                      maps = fopen("/proc/self/maps", "r");
 		EXIT_IF(maps == nullptr);
@@ -1084,7 +1084,7 @@ private:
 
 			const auto size = end - start;
 			int        flags = MAP_PRIVATE | MAP_ANON | MAP_NORESERVE;
-#if defined(KYTY_LINKED_GUEST_ADDRESS_SPACE)
+#if defined(KATY_LINKED_GUEST_ADDRESS_SPACE)
 			flags |= MAP_FIXED;
 #elif defined(MAP_FIXED_NOREPLACE)
 			flags |= MAP_FIXED_NOREPLACE;
@@ -1130,7 +1130,7 @@ private:
 #else
 		for (const auto& [start, end]: regions) {
 			int flags = MAP_PRIVATE | MAP_ANON | MAP_NORESERVE;
-#if defined(KYTY_LINKED_GUEST_ADDRESS_SPACE)
+#if defined(KATY_LINKED_GUEST_ADDRESS_SPACE)
 			flags |= MAP_FIXED;
 #elif defined(MAP_FIXED_NOREPLACE)
 			flags |= MAP_FIXED_NOREPLACE;
@@ -1185,7 +1185,7 @@ private:
 
 		if (base != vaddr) {
 			const auto left_size = vaddr - base;
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 			if (VirtualFree(reinterpret_cast<void*>(base), left_size,
 			                MEM_RELEASE | MEM_PRESERVE_PLACEHOLDER) == 0) {
 				LOGF_COLOR(Log::Color::Red,
@@ -1201,7 +1201,7 @@ private:
 		}
 
 		if (it->second != size) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 			if (VirtualFree(reinterpret_cast<void*>(it->first), size,
 			                MEM_RELEASE | MEM_PRESERVE_PLACEHOLDER) == 0) {
 				LOGF_COLOR(Log::Color::Red,
@@ -1251,7 +1251,7 @@ private:
 		}
 
 		if (base != it->first || end != it->first + it->second) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 			if (VirtualFree(reinterpret_cast<void*>(base), end - base,
 			                MEM_RELEASE | MEM_COALESCE_PLACEHOLDERS) != 0) {
 				m_free.erase(first, last);
@@ -1265,7 +1265,7 @@ private:
 	}
 
 	void RestorePlaceholder(uint64_t vaddr, uint64_t size) {
-#if KYTY_PLATFORM != KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM != KATY_PLATFORM_WINDOWS
 		// The address remains owned for the process lifetime; MAP_FIXED only replaces one of our
 		// mappings and never acquires a new guest address.
 		void* ptr = mmap(reinterpret_cast<void*>(vaddr), size, PROT_NONE,

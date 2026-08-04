@@ -9,7 +9,7 @@
 #include <mutex>
 #include <utility>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
@@ -50,7 +50,7 @@ public:
 
 private:
 	static uint32_t CurrentThread() noexcept {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 		return GetCurrentThreadId();
 #elif defined(__APPLE__)
 		// mach thread port is a nonzero per-thread id (0 is the "no owner" sentinel).
@@ -81,7 +81,7 @@ public:
 		m_readable.Fill();
 	}
 
-	KYTY_CLASS_NO_COPY(RegionManager);
+	KATY_CLASS_NO_COPY(RegionManager);
 
 	[[nodiscard]] uint64_t GetCpuAddr() const { return m_cpu_addr; }
 	template <DirtySource source>

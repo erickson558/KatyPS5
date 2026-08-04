@@ -4,7 +4,7 @@
 
 #include <cstring>
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 #include <windows.h> // IWYU pragma: keep
 #elif !defined(__APPLE__)
 #include <sched.h>
@@ -400,7 +400,7 @@ static bool ExecuteShaNiInsn(const ShaNiInsn& insn, const XmmWords& src2, const 
 	}
 }
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 
 static void LoadXmmWordsWin(const M128A* xmm, XmmWords& out) {
 	out.w[0] = static_cast<uint32_t>(xmm->Low);
@@ -416,7 +416,7 @@ static void StoreXmmWordsWin(M128A* xmm, const XmmWords& in) {
 
 #endif
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 
 static M128A* GetContextXmm(PCONTEXT context, uint8_t index) {
 	if (context == nullptr || index >= 16) {
@@ -771,7 +771,7 @@ static bool TryEmulateMonitorxMwaitx(ucontext_t* context) {
 #endif
 
 bool TryEmulate(void* native_context) {
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS
 	auto* context = static_cast<PCONTEXT>(native_context);
 	return TryEmulateMonitorxMwaitx(context) || TryEmulateSse4a(context) ||
 	       TryEmulateShaNi(context);

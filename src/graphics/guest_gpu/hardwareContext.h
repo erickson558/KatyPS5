@@ -675,7 +675,7 @@ public:
 	Context()  = default;
 	~Context() = default;
 
-	KYTY_CLASS_DEFAULT_COPY(Context);
+	KATY_CLASS_DEFAULT_COPY(Context);
 
 	void Reset() { *this = Context(); }
 
@@ -987,7 +987,7 @@ public:
 	UserConfig()  = default;
 	~UserConfig() = default;
 
-	KYTY_CLASS_DEFAULT_COPY(UserConfig);
+	KATY_CLASS_DEFAULT_COPY(UserConfig);
 
 	void Reset() { *this = UserConfig(); }
 
@@ -1025,7 +1025,7 @@ public:
 	Shader()  = default;
 	~Shader() = default;
 
-	KYTY_CLASS_DEFAULT_COPY(Shader);
+	KATY_CLASS_DEFAULT_COPY(Shader);
 
 	void Reset() { *this = Shader(); }
 

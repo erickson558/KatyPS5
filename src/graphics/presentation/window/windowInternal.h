@@ -36,7 +36,7 @@ struct WindowLoopState {
 struct WindowContext {
 	WindowContext();
 	~WindowContext();
-	KYTY_CLASS_NO_COPY(WindowContext);
+	KATY_CLASS_NO_COPY(WindowContext);
 
 	[[nodiscard]] static vk::PhysicalDeviceVulkan13Features RequiredVulkan13Features() noexcept;
 	void                                                    CreateVulkan();

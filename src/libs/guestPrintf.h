@@ -9,7 +9,7 @@ namespace Libs {
 struct VaContext;
 struct VaList;
 
-using guest_printf_std_func_t = KYTY_FORMAT_PRINTF(1, 2) KYTY_SYSV_ABI
+using guest_printf_std_func_t = KATY_FORMAT_PRINTF(1, 2) KATY_SYSV_ABI
     int (*)(const char* str, ...);
 using guest_printf_ctx_func_t   = int (*)(VaContext* c);
 using guest_snprintf_ctx_func_t = int (*)(VaContext* c);

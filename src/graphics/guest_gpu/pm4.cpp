@@ -126,7 +126,7 @@ void DumpPm4PacketStream(Common::File* file, uint32_t* cmd_buffer, uint32_t star
 			case PacketType::Type3: {
 				const bool    sh_gx = (cmd_id & 0x2u) == 0;
 				const uint8_t op    = ((cmd_id >> 8u) & 0xffu);
-				const auto    r     = KYTY_PM4_R(cmd_id);
+				const auto    r     = KATY_PM4_R(cmd_id);
 				len                 = ((cmd_id >> 16u) & 0x3fffu) + 1;
 
 				EXIT_NOT_IMPLEMENTED(len >= dw);

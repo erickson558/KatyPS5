@@ -11,8 +11,8 @@
 
 namespace Common {
 
-#if KYTY_PLATFORM == KYTY_PLATFORM_WINDOWS && KYTY_BUILD == KYTY_BUILD_DEBUG &&                    \
-    KYTY_COMPILER == KYTY_COMPILER_CLANG
+#if KATY_PLATFORM == KATY_PLATFORM_WINDOWS && KATY_BUILD == KATY_BUILD_DEBUG &&                    \
+    KATY_COMPILER == KATY_COMPILER_CLANG
 constexpr int PRINT_STACK_FROM = 4;
 #else
 constexpr int PRINT_STACK_FROM = 2;

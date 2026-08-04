@@ -16,7 +16,7 @@ class Gpu final {
 public:
 	explicit Gpu(RenderContext& renderer);
 	~Gpu();
-	KYTY_CLASS_NO_COPY(Gpu);
+	KATY_CLASS_NO_COPY(Gpu);
 
 	void               Shutdown();
 	[[nodiscard]] bool IsStopping();
