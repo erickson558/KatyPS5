@@ -437,6 +437,7 @@ int KATY_SYSV_ABI KernelOpen(const char* path, int flags, uint16_t mode) {
 	                             : g_mount_points->GetRealFilename(file->name));
 
 	if (trunc && rw_mode == Common::File::Mode::Read) {
+		g_files->DeleteDescriptor(descriptor);
 		return KERNEL_ERROR_EACCES;
 	}
 
@@ -803,7 +804,7 @@ int64_t KATY_SYSV_ABI KernelLseek(int d, int64_t offset, int whence) {
 		return KERNEL_ERROR_ESPIPE;
 	}
 
-	file->mutex.Lock();
+	Common::LockGuard lock(file->mutex);
 
 	bool is_invalid = file->f.IsInvalid();
 
@@ -827,8 +828,6 @@ int64_t KATY_SYSV_ABI KernelLseek(int d, int64_t offset, int whence) {
 	auto pos = static_cast<int64_t>(file->f.Tell());
 
 	EXIT_IF(pos != offset);
-
-	file->mutex.Unlock();
 
 	if (is_invalid) {
 		LOGF("\tfile is invalid\n");

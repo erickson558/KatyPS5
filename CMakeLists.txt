@@ -120,7 +120,7 @@ if (KATY_LINKER STREQUAL LD AND NOT LINUX)
 	set(KATY_LD_OPTIONS "-Wl,--image-base=0x100000000000")
 endif()
 
-project(Katy${KATY_PROJECT_NAME}${CMAKE_BUILD_TYPE}${KATY_COMPILER} VERSION 0.3.1)
+project(Katy${KATY_PROJECT_NAME}${CMAKE_BUILD_TYPE}${KATY_COMPILER} VERSION 0.3.2)
 
 include_directories(
 	${KATY_THIRD_PARTY_DIR}/gtest/include
@@ -436,6 +436,14 @@ add_executable(audio_out2_port_tests EXCLUDE_FROM_ALL
 target_link_libraries(audio_out2_port_tests common fmt::fmt)
 target_include_directories(audio_out2_port_tests PRIVATE ${inc_headers})
 
+# The timing regression includes production audio.cpp with deterministic SDL queues and clock.
+add_executable(audio_out_timing_tests EXCLUDE_FROM_ALL
+	"${KATY_TESTS_DIR}/AudioOutTimingTests.cpp"
+	"${KATY_SOURCE_DIR}/loader/timer.cpp"
+)
+target_link_libraries(audio_out_timing_tests common fmt::fmt)
+target_include_directories(audio_out_timing_tests PRIVATE ${inc_headers})
+
 add_executable(event_queue_lifetime_tests EXCLUDE_FROM_ALL
 	"${KATY_TESTS_DIR}/EventQueueLifetimeTests.cpp"
 	"${KATY_SOURCE_DIR}/kernel/eventQueue.cpp"
@@ -474,6 +482,7 @@ target_sources(shader_recompiler_compute_tests PRIVATE
 	"${gpu_test_ms_depth_header}")
 
 add_katy_full_emulator_test(virtual_memory_allocation_tests "${KATY_TESTS_DIR}/VirtualMemoryAllocationTests.cpp")
+add_katy_full_emulator_test(kernel_file_system_tests "${KATY_TESTS_DIR}/KernelFileSystemTests.cpp")
 target_compile_definitions(virtual_memory_allocation_tests PRIVATE
 	KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS=1)
 
@@ -497,7 +506,11 @@ if(BUILD_TESTING)
 	add_test(NAME resource_tracking COMMAND $<TARGET_FILE:resource_tracking_tests>)
 	add_test(NAME resource_mutex COMMAND $<TARGET_FILE:resource_mutex_tests>)
 	add_test(NAME event_queue_lifetime COMMAND $<TARGET_FILE:event_queue_lifetime_tests>)
+	add_test(NAME kernel_file_system COMMAND $<TARGET_FILE:kernel_file_system_tests>)
 	add_test(NAME audio_out2_port COMMAND $<TARGET_FILE:audio_out2_port_tests>)
+	add_test(NAME audio_out_timing COMMAND $<TARGET_FILE:audio_out_timing_tests>)
+	# Turn deadlocks into bounded failures, including the cross-thread invalid-seek regression.
+	set_tests_properties(event_queue_lifetime kernel_file_system audio_out2_port audio_out_timing PROPERTIES TIMEOUT 60)
 	add_test(NAME shader_recompiler_compute COMMAND $<TARGET_FILE:shader_recompiler_compute_tests>)
 	add_test(NAME virtual_memory_allocation
 		COMMAND $<TARGET_FILE:virtual_memory_allocation_tests>)
@@ -543,6 +556,9 @@ if(BUILD_TESTING)
 		resource_tracking_tests
 		resource_mutex_tests
 		event_queue_lifetime_tests
+		kernel_file_system_tests
+		audio_out2_port_tests
+		audio_out_timing_tests
 		shader_recompiler_compute_tests
 		virtual_memory_allocation_tests
 	)
@@ -603,6 +619,9 @@ if(APPLE)
 endif()
 
 install(TARGETS katy_emulator DESTINATION .)
+# Keep the project license and historical attribution beside distributed binaries.
+install(FILES "${PROJECT_SOURCE_DIR}/LICENSE" DESTINATION .)
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/LICENSES" DESTINATION .)
 if(KATY_BUILD_LAUNCHER)
 	add_subdirectory("${KATY_SOURCE_DIR}/launcher" "${CMAKE_CURRENT_BINARY_DIR}/launcher")
 endif()

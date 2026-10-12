@@ -4,6 +4,40 @@ All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning is `vX.Y.Z`
 (see `specs/CONSTITUTION.md` §3 for what bumps what).
 
+## [0.3.2] - 2026-10-12
+
+### Fixed
+- File operations release the file mutex after a rejected negative seek, preventing subsequent
+  operations from another thread from hanging (upstream `b9aa0dc3`).
+- Rejected read-only truncation opens release their descriptor instead of leaking slots and memory
+  (upstream `0f3674f5`).
+- Games importing `sceKernelFtruncate` resolve the existing native implementation instead of an
+  unresolved import (upstream `048fe9f4`).
+- Persistent user events are returned once per wait, allowing following events to be delivered
+  while preserving queued payload order (upstream `afbb322b`).
+- The launcher fetches compatibility reports from upstream's current endpoint; the old release
+  download returns HTTP 404 (upstream `0bbe3011`). Download limits and timeouts are retained.
+- Synchronous AudioOut2 PCM submissions use the real output device's clock, avoiding duplicate
+  pacing and underruns; asynchronous submissions and contexts without device-backed PCM retain
+  queue limits. Mixed speaker/vibration batches use the speaker's clock (upstream `f380d69b`).
+- Output batches require device-backed PCM before using the device clock; an empty speaker
+  submission alongside vibration retains the fallback wait instead of returning unpaced.
+
+### Added
+- Filesystem regression tests for seek lock release, descriptor reuse and native truncation imports.
+- Audio/event regression coverage adapted from upstream, including vibration-only queue limits.
+- A documented comparison and dependency-aware roadmap in `docs/upstream-review-2026-10-12.md`.
+
+### Changed
+- `katy_tests` includes the AudioOut2 test it previously omitted.
+- Windows, Linux and macOS CI build/run filesystem and event queue tests alongside existing audio
+  and virtual-memory checks. Relevant tests have a 60-second timeout to expose deadlocks.
+- Audio timing tests exercise production scheduling with deterministic SDL2 queues, including
+  empty-device PCM, mixed speaker/vibration output and fallback pacing.
+- Installed packages include the project license and preserved historical license notices.
+
+This is a local candidate version. Compiler/runtime validation and release publication are pending.
+
 ## [0.3.1] - 2026-08-04
 
 ### Changed

@@ -21,11 +21,10 @@
 
 namespace {
 
-constexpr char  FILE_NAME[] = "compatibility_db.json";
-constexpr char  URL[] =
-    "https://github.com/Nmzik/KytyPS5/releases/download/compat-db/compatibility_db.json";
-constexpr int   RETRY_COUNT    = 3;
-constexpr int   RETRY_DELAY_MS = 750;
+constexpr char FILE_NAME[]    = "compatibility_db.json";
+constexpr char URL[]          = "https://kytyps5.github.io/data/compatibility.json";
+constexpr int  RETRY_COUNT    = 3;
+constexpr int  RETRY_DELAY_MS = 750;
 // The compatibility DB is a small JSON document; a third-party-hosted response this large
 // is either broken or compromised, so abort rather than buffering it all into memory.
 constexpr qint64 MAX_RESPONSE_BYTES = 5 * 1024 * 1024;

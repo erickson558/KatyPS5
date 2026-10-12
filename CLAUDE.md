@@ -42,7 +42,8 @@ real external/historical things, not our own branding:
 - `LICENSES/Kyty-MIT.txt` — historical license notice for the original Kyty project.
 - The README credit line to `InoriRus/Kyty` and `shadps4-emu/shadPS4`.
 - The compatibility-database URL in `src/launcher/src/compatibilityDatabase.cpp`
-  (`Nmzik/KytyPS5` releases) — a third-party resource; renaming the string breaks the download.
+  (`https://kytyps5.github.io/data/compatibility.json`) — an upstream resource; do not rebrand its
+  hostname. The former `Nmzik/KytyPS5` release URL returned HTTP 404 and was replaced in 0.3.2.
 
 ## Working conventions
 
