@@ -10,6 +10,7 @@
 - [x] Revisión humana/autorización para publicar y corregir hallazgos de agentes/CI (2026-10-12).
 - [x] Revisar con agentes y cubrir el reloj de audio cuando falta PCM.
 - [ ] Compilar y ejecutar pruebas en GitHub Actions.
+- [ ] Corregir el fallo observado de invalidación antes del renderer y repetir CI.
 - [ ] Integrar y etiquetar solamente después de CI satisfactoria.
 
 ## Validación local realizada

@@ -38,6 +38,15 @@ las traducciones y las opciones actuales, y preparar pruebas de regresión en CI
   Se incluyen los archivos existentes junto a los binarios para conservar sus
   avisos y atribución en los artefactos. Riesgo limitado al contenido del paquete;
   no modifica ni cambia las licencias ni la ejecución.
+- Fallo comprobado en CI macOS `38322431144`: las lecturas de archivos en la
+  regresión abortan en `memory.cpp:75`, porque `InvalidateMemory` exige un gestor
+  GPU aunque el buffer sea de CPU y todavía no exista renderer. MemorySubsystem
+  no instala ese gestor; lo instala el renderer. Se omite la invalidación cuando
+  no hay recursos GPU, igual que MapGpuRange/UnmapGpuRange/HandleGpuFault.
+  Impacto: permite I/O de CPU antes de instalar el renderer. Riesgo acotado: con
+  recursos instalados sigue invalidando las cachés por la misma ruta; sin recursos
+  no hay cachés GPU que invalidar. Las lecturas reales de la prueba FS cubren el
+  caso sin renderer y se conserva la suite de memoria virtual.
 
 ## Risk / impact
 Código compartido Windows/Linux/macOS. Riesgo principal: cambiar el ritmo del

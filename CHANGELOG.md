@@ -22,6 +22,8 @@ All notable changes to this project are documented here. Format loosely follows
   queue limits. Mixed speaker/vibration batches use the speaker's clock (upstream `f380d69b`).
 - Output batches require device-backed PCM before using the device clock; an empty speaker
   submission alongside vibration retains the fallback wait instead of returning unpaced.
+- CPU file reads before renderer initialization no longer abort while trying to invalidate
+  nonexistent GPU resources; invalidation is unchanged once a GPU resource manager is installed.
 
 ### Added
 - Filesystem regression tests for seek lock release, descriptor reuse and native truncation imports.
