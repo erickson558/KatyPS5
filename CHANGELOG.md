@@ -37,6 +37,8 @@ All notable changes to this project are documented here. Format loosely follows
 - Audio timing tests exercise production scheduling with deterministic SDL2 queues, including
   empty-device PCM, mixed speaker/vibration output and fallback pacing.
 - Installed packages include the project license and preserved historical license notices.
+- Documentation-only pushes skip binary rebuilds/releases and CodeQL; code and build changes,
+  pull requests, manual runs and scheduled analysis keep their validation triggers.
 
 This is a local candidate version. Compiler/runtime validation and release publication are pending.
 

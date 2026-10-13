@@ -47,6 +47,14 @@ las traducciones y las opciones actuales, y preparar pruebas de regresión en CI
   recursos instalados sigue invalidando las cachés por la misma ruta; sin recursos
   no hay cachés GPU que invalidar. Las lecturas reales de la prueba FS cubren el
   caso sin renderer y se conserva la suite de memoria virtual.
+- Cierre SDD: los pushes que solo actualizan docs, specs, CHANGELOG o CLAUDE
+  actualmente reconstruyen tres plataformas y crean otra release fechada sin
+  cambiar el programa. Se excluyen esos cuatro grupos de los triggers push de
+  build/CodeQL. PR, dispatch y schedule conservan sus triggers. Código, tests,
+  CMake/workflows, assets, dependencias y licencias siguen activando CI. Riesgo:
+  omitir compilación de documentación; esos archivos no se usan para construir
+  el emulador. Se valida YAML/lista exacta de exclusiones y la publicación de
+  código en main verifica el trigger positivo.
 
 ## Risk / impact
 Código compartido Windows/Linux/macOS. Riesgo principal: cambiar el ritmo del

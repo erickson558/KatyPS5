@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [ main, master ]
+    # SDD audit updates do not change binaries or warrant another dated release.
+    paths-ignore: [ 'docs/**', 'specs/**', 'CHANGELOG.md', 'CLAUDE.md' ]
   pull_request:
 
 env:
