@@ -120,7 +120,7 @@ if (KATY_LINKER STREQUAL LD AND NOT LINUX)
 	set(KATY_LD_OPTIONS "-Wl,--image-base=0x100000000000")
 endif()
 
-project(Katy${KATY_PROJECT_NAME}${CMAKE_BUILD_TYPE}${KATY_COMPILER} VERSION 0.3.2)
+project(Katy${KATY_PROJECT_NAME}${CMAKE_BUILD_TYPE}${KATY_COMPILER} VERSION 0.4.0)
 
 include_directories(
 	${KATY_THIRD_PARTY_DIR}/gtest/include
@@ -483,6 +483,21 @@ target_sources(shader_recompiler_compute_tests PRIVATE
 
 add_katy_full_emulator_test(virtual_memory_allocation_tests "${KATY_TESTS_DIR}/VirtualMemoryAllocationTests.cpp")
 add_katy_full_emulator_test(kernel_file_system_tests "${KATY_TESTS_DIR}/KernelFileSystemTests.cpp")
+# Include the production SaveData translation unit in the test to use its exact guest ABI.
+set(save_memory_emulator_src ${katy_emulator_src})
+list(REMOVE_ITEM katy_emulator_src "${KATY_SOURCE_DIR}/libs/libSaveData.cpp")
+add_katy_full_emulator_test(save_data_memory_tests "${KATY_TESTS_DIR}/SaveDataMemoryTests.cpp")
+set(katy_emulator_src ${save_memory_emulator_src})
+# Only the save-memory boundary handles host allocation/filesystem exceptions.
+if(KATY_CLANG_CL)
+	set(save_memory_exception_option /EHsc)
+else()
+	set(save_memory_exception_option -fexceptions)
+endif()
+set_property(SOURCE "${KATY_SOURCE_DIR}/libs/libSaveData.cpp"
+	"${KATY_SOURCE_DIR}/libs/saveDataMemoryStore.cpp"
+	"${KATY_TESTS_DIR}/SaveDataMemoryTests.cpp"
+	APPEND PROPERTY COMPILE_OPTIONS ${save_memory_exception_option})
 target_compile_definitions(virtual_memory_allocation_tests PRIVATE
 	KATY_VIRTUAL_MEMORY_ALLOCATION_TESTS=1)
 
@@ -507,6 +522,19 @@ if(BUILD_TESTING)
 	add_test(NAME resource_mutex COMMAND $<TARGET_FILE:resource_mutex_tests>)
 	add_test(NAME event_queue_lifetime COMMAND $<TARGET_FILE:event_queue_lifetime_tests>)
 	add_test(NAME kernel_file_system COMMAND $<TARGET_FILE:kernel_file_system_tests>)
+	add_test(NAME save_data_memory COMMAND $<TARGET_FILE:save_data_memory_tests>)
+	set(save_memory_fixture_dir "${CMAKE_CURRENT_BINARY_DIR}/save-memory-regression")
+	add_test(NAME save_data_memory_write
+		COMMAND $<TARGET_FILE:save_data_memory_tests> --write "${save_memory_fixture_dir}")
+	add_test(NAME save_data_memory_restart
+		COMMAND $<TARGET_FILE:save_data_memory_tests> --read "${save_memory_fixture_dir}")
+	add_test(NAME save_data_memory_cleanup
+		COMMAND $<TARGET_FILE:save_data_memory_tests> --cleanup "${save_memory_fixture_dir}")
+	set_tests_properties(save_data_memory_write PROPERTIES FIXTURES_SETUP save_memory_restart)
+	set_tests_properties(save_data_memory_restart PROPERTIES FIXTURES_REQUIRED save_memory_restart)
+	set_tests_properties(save_data_memory_cleanup PROPERTIES FIXTURES_CLEANUP save_memory_restart)
+	set_tests_properties(save_data_memory save_data_memory_write save_data_memory_restart
+		save_data_memory_cleanup PROPERTIES TIMEOUT 60)
 	add_test(NAME audio_out2_port COMMAND $<TARGET_FILE:audio_out2_port_tests>)
 	add_test(NAME audio_out_timing COMMAND $<TARGET_FILE:audio_out_timing_tests>)
 	# Turn deadlocks into bounded failures, including the cross-thread invalid-seek regression.
@@ -557,6 +585,7 @@ if(BUILD_TESTING)
 		resource_mutex_tests
 		event_queue_lifetime_tests
 		kernel_file_system_tests
+		save_data_memory_tests
 		audio_out2_port_tests
 		audio_out_timing_tests
 		shader_recompiler_compute_tests

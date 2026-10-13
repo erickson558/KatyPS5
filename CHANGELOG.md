@@ -4,6 +4,24 @@ All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning is `vX.Y.Z`
 (see `specs/CONSTITUTION.md` §3 for what bumps what).
 
+## [0.4.0] - 2026-10-13
+
+### Added
+- SaveDataMemory2 persists progress and metadata across emulator restarts, separated by title,
+  user and slot. Each complete update is written atomically with a backup of the previous state.
+- Existing raw memory.dat/param.bin files in the same user/slot directory can be imported without
+  altering the originals. Classic mounted-save paths are preserved.
+- Save-memory regression tests exercise restart in separate processes, isolation, metadata,
+  backups, imported/corrupt files and failed writes on Windows, Linux and macOS.
+
+### Security
+- Save-memory requests validate offsets and sizes without overflowing or expanding read buffers.
+  Invalid batches leave both memory and saved files unchanged. Setup allocations are bounded.
+
+### Fixed
+- Save-memory sync writes its slot and reports the write status, including completion events.
+- Active memory slots are protected against conflicting mount/delete operations.
+
 ## [0.3.2] - 2026-10-13
 
 ### Fixed
