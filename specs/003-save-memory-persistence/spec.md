@@ -1,7 +1,7 @@
 # Spec 003: Guardados de memoria persistentes y acotados
 
 ## Status
-In Progress
+Done
 
 ## Context
 El propietario aprobó implementar persistencia y validación de guardados, con
@@ -57,3 +57,13 @@ escriban simultáneamente el mismo slot. No se instala toolchain local.
 Minor: 0.3.2 -> 0.4.0. Añade persistencia sin cambiar CLI/configuración ni
 formatos de guardados clásicos. Compilación y CodeQL de rama antes de integrar;
 artefactos oficiales de main antes de publicar v0.4.0.
+
+## Resultado — 2026-10-13
+
+Integrado en main `fff02fc596b7c0e3541d6b741eb89faf32847de6`, compilación
+oficial y CodeQL satisfactorios. Windows 9/9, Linux 11/11 y macOS 9/9 CTest.
+[v0.4.0 publicada](https://github.com/erickson558/KatyPS5/releases/tag/v0.4.0)
+con tag anotado en ese SHA y los tres paquetes oficiales, hashes/licencias
+verificados. Windows ejecutó --help localmente con salida 0 y versión/git
+correctos. No se probaron juegos ni se midieron FPS. El cierre documental
+posterior no modifica fuentes ni binarios. Evidencia completa en plan.md.

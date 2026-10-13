@@ -52,6 +52,13 @@ la misma versión de un juego funcione en este fork.
 
 Estas son propuestas de implementación, no cambios ya incorporados.
 
+Actualización 2026-10-13: la persistencia y validación de **SaveDataMemory2**
+se incorporó en [v0.4.0](https://github.com/erickson558/KatyPS5/releases/tag/v0.4.0),
+con separación por juego/usuario/slot, snapshots atómicos, respaldo e importación
+de archivos de memoria en la misma ruta. Los guardados clásicos conservan sus
+rutas. Ver [uso y recuperación](save-memory.md) y [SDD 003](../specs/003-save-memory-persistence/spec.md).
+Las demás propuestas de este apartado siguen pendientes.
+
 | Prioridad | Mejora | Evidencia upstream | Qué revisar antes de incorporarla |
 | --- | --- | --- | --- |
 | 1 | Guardados persistentes `SaveDataMemory2`. | [cfbaee07](https://github.com/KytyPS5/KytyPS5/commit/cfbaee07f0befa1a16b9c27528e9517742e135fb), con regresiones y una corrección de progreso de Astro Bot. | Compatibilidad con guardados previos, separación por usuario y reinicios. No copiar cambios de rutas sin probar migración/conservación. |

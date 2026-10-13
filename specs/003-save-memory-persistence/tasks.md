@@ -7,6 +7,6 @@
 - [x] Registrar suite CMake/CI y versión/changelog.
 - [x] Revisar diff y validación local con agentes.
 - [x] Compilar/probar rama Windows/Linux/macOS y CodeQL.
-- [ ] Integrar main y verificar compilación oficial.
-- [ ] Publicar v0.4.0 y verificar paquetes.
-- [ ] Cerrar SDD y publicar resultados.
+- [x] Integrar main y verificar compilación oficial.
+- [x] Publicar v0.4.0 y verificar paquetes.
+- [x] Cerrar SDD y publicar resultados.
