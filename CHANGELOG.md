@@ -4,7 +4,7 @@ All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning is `vX.Y.Z`
 (see `specs/CONSTITUTION.md` §3 for what bumps what).
 
-## [0.3.2] - 2026-10-12
+## [0.3.2] - 2026-10-13
 
 ### Fixed
 - File operations release the file mutex after a rejected negative seek, preventing subsequent

@@ -11,6 +11,7 @@
 - [x] Revisar con agentes y cubrir el reloj de audio cuando falta PCM.
 - [x] Compilar y ejecutar pruebas en GitHub Actions: Windows 5/5, Linux 7/7, macOS 5/5.
 - [x] Corregir el fallo observado de invalidación antes del renderer y repetir CI.
+- [x] CodeQL del commit corregido satisfactorio (38324030155).
 - [ ] Integrar y etiquetar solamente después de CI satisfactoria.
 
 ## Validación local realizada
@@ -41,9 +42,13 @@ de publicación se actualizará con commits y enlaces de ejecuciones reales.
   terminó satisfactoriamente: Windows 5/5, Linux 7/7 y macOS 5/5 suites, install y
   artefactos verificados. CodeQL del primer commit también terminó correctamente;
   [38324030155](https://github.com/erickson558/KatyPS5/actions/runs/38324030155)
-  analiza el commit corregido.
+  terminó correctamente para el commit corregido.
 - `64bdedcd` solo cambia triggers de CI/documentación; agente de CI verificó las
   exclusiones documentales. El código ejecutable sigue siendo el de `b8eb8d59`.
 - Agentes: revisión de código/audio, CI/plataformas y publicación/licencias.
 - Skills utilizadas: `debug-fix-release`, `github-publish`, `code-annotator` y
   revisión de las instrucciones de `security-hardening` para CodeQL existente.
+
+Windows local: el paquete CI de `b8eb8d59` ejecutó `katy_emulator --help` con
+salida 0 y versión 0.3.2. LICENSE y LICENSES/Kyty-MIT.txt coinciden por SHA256
+con los originales. Preview local: `_Build/preview-b8eb8d59/windows`.
