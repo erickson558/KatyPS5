@@ -12,7 +12,7 @@
 - [x] Compilar y ejecutar pruebas en GitHub Actions: Windows 5/5, Linux 7/7, macOS 5/5.
 - [x] Corregir el fallo observado de invalidación antes del renderer y repetir CI.
 - [x] CodeQL del commit corregido satisfactorio (38324030155).
-- [ ] Integrar y etiquetar solamente después de CI satisfactoria.
+- [x] Integrar por fast-forward en main, compilar oficialmente y publicar v0.3.2 tras CI satisfactoria.
 
 ## Validación local realizada
 
@@ -52,3 +52,20 @@ de publicación se actualizará con commits y enlaces de ejecuciones reales.
 Windows local: el paquete CI de `b8eb8d59` ejecutó `katy_emulator --help` con
 salida 0 y versión 0.3.2. LICENSE y LICENSES/Kyty-MIT.txt coinciden por SHA256
 con los originales. Preview local: `_Build/preview-b8eb8d59/windows`.
+
+## Publicación final — 2026-10-13
+
+- Rama integrada por fast-forward; `main` sigue `origin/main` en vez de upstream.
+- Código publicado: `bc5211aac2fe2d81a4abe777488b464f080f1576`.
+- [Build/Release oficial 38391264080](https://github.com/erickson558/KatyPS5/actions/runs/38391264080):
+  éxito, Windows 5/5, Linux 7/7, macOS 5/5 e instalación/artefactos correctos.
+- [CodeQL main 38391264142](https://github.com/erickson558/KatyPS5/actions/runs/38391264142): éxito.
+- Tag anotado y [release v0.3.2](https://github.com/erickson558/KatyPS5/releases/tag/v0.3.2):
+  tres paquetes oficiales, hashes SHA256 iguales a los assets de la ejecución
+  exacta de main y avisos LICENSE/LICENSES verificados en cada plataforma.
+- Binario oficial Windows descargado y ejecutado en este equipo con `--help`:
+  salida 0, versión 0.3.2, git bc5211a. Ubicación: `_Build/releases/v0.3.2/windows`.
+- Notas y manifest SHA256 locales: `_Build/releases/v0.3.2`.
+- Publicación realizada con cuenta `erickson558`; actor de ejecución confirmado.
+- SDD cerrado; sin cambios del formato de guardados/configuración ni nuevas dependencias.
+  No se midieron FPS ni se probaron juegos reales.

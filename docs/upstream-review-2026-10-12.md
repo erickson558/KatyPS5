@@ -82,16 +82,16 @@ la versión anterior en el mismo equipo.
   Las pruebas de audio usan dispositivos y reloj simulados.
   Se necesita además una prueba con audio real y juegos antes de afirmar mejoras
   de sonido o compatibilidad observadas.
-- Versión: **0.3.2**. Publicación autorizada por el propietario el 2026-10-12;
-  los resultados de CI y release se registrarán antes de cerrar la especificación.
+- Versión: **0.3.2**, [publicada](https://github.com/erickson558/KatyPS5/releases/tag/v0.3.2)
+  el 2026-10-13. Publicación autorizada por el propietario el 2026-10-12.
 - La revisión humana del diff es obligatoria antes de push según
   [`specs/CONSTITUTION.md`](../specs/CONSTITUTION.md), §8.
 
-Después de esa revisión, publicar esta rama y ejecutar **Build and Release KatyPS5**
+Se publicó la rama y se ejecutó **Build and Release KatyPS5**
 con `workflow_dispatch` sobre ella. El workflow solo recibe push automático de
 `main`/`master`; un push de esta rama sin PR/dispatch no dispara la compilación.
 El dispatch no publica release porque la publicación requiere un evento push
-en la rama canónica. Integrar solamente después de builds/tests satisfactorios.
+en la rama canónica. Se integró por fast-forward después de builds/tests y CodeQL satisfactorios.
 
 Comprobación reproducible con el toolchain:
 
@@ -145,3 +145,26 @@ anterior cuando están instaladas. La segunda ejecución aprobó las 17 suites.
 Las actualizaciones de docs/specs/CHANGELOG/CLAUDE no disparan otra compilación
 ni release por push. PR, dispatch y análisis programados siguen disponibles;
 fuentes, tests, recursos, licencias, dependencias y workflows sí activan CI.
+
+## Cierre de publicación — 2026-10-13
+
+Implementación integrada en main `bc5211aa`,
+[compilación oficial](https://github.com/erickson558/KatyPS5/actions/runs/38391264080)
+y [CodeQL](https://github.com/erickson558/KatyPS5/actions/runs/38391264142)
+satisfactorios. Las 17 suites también aprobaron en los builds oficiales.
+[Release v0.3.2](https://github.com/erickson558/KatyPS5/releases/tag/v0.3.2)
+publicada con tag anotado en ese SHA y los tres paquetes de esa ejecución exacta.
+Los hashes SHA256 publicados coinciden con los descargados; los avisos de licencia
+están incluidos y coinciden con los originales (normalizando fin de línea).
+
+El ejecutable oficial Windows abrió con `--help`, salida 0, versión 0.3.2 y git
+bc5211a en este equipo. Launcher local:
+`_Build/releases/v0.3.2/windows/launcher.exe`. El paquete previo de rama se mantiene
+en `_Build/preview-b8eb8d59/windows` para comparación. No se han probado juegos
+ni medido rendimiento gráfico. Las propuestas de próximos backports siguen pendientes.
+
+Comandos finales: `git merge --ff-only` integró la rama; `git push origin main`
+activó compilación oficial; `git tag -a v0.3.2` y `git push origin v0.3.2` publicaron
+la etiqueta; `gh release create ... --verify-tag --notes-file ...` publicó los
+assets verificados. El código de esta release es inmutable; este cierre SDD se
+registra en un commit documental posterior que no modifica fuentes ni binarios.

@@ -1,7 +1,7 @@
 # Spec 002: Backport de compatibilidad y estabilidad
 
 ## Status
-In Progress
+Done
 
 ## Context
 El usuario pidió comparar KytyPS5 con KatyPS5 y aplicar mejoras, priorizando
@@ -71,4 +71,6 @@ y compilación, conservando este registro SDD.
 
 ## Version impact
 Patch: 0.3.1 -> 0.3.2. Se corrigen implementaciones e imports existentes.
-La etiqueta/release se pospone hasta revisión humana y CI satisfactoria.
+Etiqueta anotada y release [v0.3.2](https://github.com/erickson558/KatyPS5/releases/tag/v0.3.2)
+publicadas en `bc5211aac2fe2d81a4abe777488b464f080f1576` después de CI satisfactoria.
+Cierre: 2026-10-13. Los commits posteriores de auditoría solo actualizan documentación.
