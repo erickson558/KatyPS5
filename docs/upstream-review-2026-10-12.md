@@ -76,8 +76,10 @@ la versión anterior en el mismo equipo.
   respondió HTTP 404. Esto prueba el endpoint y su esquema, no la ejecución Qt.
 - La validación local cubre formato C++, YAML, estructura/referencias CMake,
   selección de tests por CI, sincronización de versión y limpieza del diff.
-- **Pendiente:** compilar el emulador y ejecutar regresiones; no hay toolchain
-  local completo. Las pruebas de audio usan dispositivos y reloj simulados.
+- Compilación y regresiones completas en CI:
+  [38324027422](https://github.com/erickson558/KatyPS5/actions/runs/38324027422),
+  código `b8eb8d59`: Windows 5/5, Linux 7/7, macOS 5/5 suites y tres artefactos.
+  Las pruebas de audio usan dispositivos y reloj simulados.
   Se necesita además una prueba con audio real y juegos antes de afirmar mejoras
   de sonido o compatibilidad observadas.
 - Versión: **0.3.2**. Publicación autorizada por el propietario el 2026-10-12;
@@ -131,3 +133,15 @@ HTTP descritas arriba. El formateador se instaló únicamente bajo `_Build`.
   Se añadieron sus reglas sin modificar los avisos originales. El workflow
   existente crea tags fechados; la publicación semver v0.3.2 usará artefactos
   oficiales de la ejecución satisfactoria del commit integrado en main.
+
+## Fallo detectado y corregido por CI
+
+La primera ejecución compiló en las tres plataformas, pero las lecturas de
+`KernelFileSystemTests` abortaron en `GetGpuResources`: `KernelRead` invalida
+memoria aun sin renderer. Inicializar MemorySubsystem no instala ese gestor.
+`b8eb8d59` omite la invalidación si no existen cachés GPU, conservando la ruta
+anterior cuando están instaladas. La segunda ejecución aprobó las 17 suites.
+
+Las actualizaciones de docs/specs/CHANGELOG/CLAUDE no disparan otra compilación
+ni release por push. PR, dispatch y análisis programados siguen disponibles;
+fuentes, tests, recursos, licencias, dependencias y workflows sí activan CI.

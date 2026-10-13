@@ -40,7 +40,8 @@ All notable changes to this project are documented here. Format loosely follows
 - Documentation-only pushes skip binary rebuilds/releases and CodeQL; code and build changes,
   pull requests, manual runs and scheduled analysis keep their validation triggers.
 
-This is a local candidate version. Compiler/runtime validation and release publication are pending.
+The implementation was compiled and regression-tested on Windows, Linux and macOS in GitHub
+Actions (17 passing suites). Release packages are produced from successful main builds.
 
 ## [0.3.1] - 2026-08-04
 
