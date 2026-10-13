@@ -8,7 +8,8 @@ _SaveData/<TITLE_ID>/sce_sdmemory<slot>/<user_id>/memory.bin
 
 El slot 0 usa `sce_sdmemory`, sin sufijo; slots 1–3 usan su número.
 La raíz es relativa al directorio de trabajo del emulador, igual que los
-guardados existentes. Cada llamada Set satisfactoria ya está escrita: no
+guardados existentes. `_SaveData/` está excluida de Git para mantener el progreso
+local fuera del repositorio. Cada llamada Set satisfactoria ya está escrita: no
 depende de cerrar el juego correctamente ni de una llamada posterior a Sync.
 Setup puede cargar un snapshot y ampliar su memoria con ceros; una petición
 más pequeña se rechaza para evitar perder su cola en la siguiente escritura.

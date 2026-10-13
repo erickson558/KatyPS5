@@ -4,4 +4,6 @@
 build/
 _Build/vscode-clang/
 _Build/
+# Local progress and recovery copies belong to the user, outside source control.
+_SaveData/
 cmake-build-debug/

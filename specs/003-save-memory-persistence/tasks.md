@@ -6,7 +6,7 @@
 - [x] Añadir regresiones de persistencia, aislamiento y fallos.
 - [x] Registrar suite CMake/CI y versión/changelog.
 - [x] Revisar diff y validación local con agentes.
-- [ ] Compilar/probar rama Windows/Linux/macOS y CodeQL.
+- [x] Compilar/probar rama Windows/Linux/macOS y CodeQL.
 - [ ] Integrar main y verificar compilación oficial.
 - [ ] Publicar v0.4.0 y verificar paquetes.
 - [ ] Cerrar SDD y publicar resultados.
