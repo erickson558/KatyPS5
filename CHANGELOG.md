@@ -4,6 +4,31 @@ All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning is `vX.Y.Z`
 (see `specs/CONSTITUTION.md` §3 for what bumps what).
 
+## [0.4.1] - 2026-11-14
+
+### Added
+- Comprehensive documentation suite for users and developers:
+  - **QUICKSTART.md**: 5-minute setup guide for new users (Windows/Linux/macOS setup, running emulator, reporting issues)
+  - **docs/ARCHITECTURE.md**: Developer guide with codebase tour, pipeline diagrams, common tasks, and debugging tips
+  - **docs/INDEX.md**: Documentation index with navigation guide and "how to find what you're looking for" sections
+  - **docs/TESTING.md**: Testing via GitHub Actions CI, debugging strategies, performance testing, and pre-commit checklist
+  - **docs/TECH-DEBT.md**: Technical debt tracker with 11 TODOs categorized by priority (Critical/Medium/Low), effort estimates, and fix templates
+  - **ROADMAP.md**: 4-phase improvement strategy aligned with upstream synchronization (Phase 1: SDL2→SDL3 critical path, phases 2-4 detailed with task checklists)
+- Code comments clarifying CMakeLists.txt build configuration rationale
+- Enhanced README.md with Documentation section table linking to all key resources
+
+### Documentation Quality
+- All new documentation follows project conventions (CONSTITUTION.md §7 Spec-Driven Development principles)
+- Upstream gap analysis preserved (1,870-commit diff, 5-phase sync strategy documented)
+- Technical debt visibility improved (11 code issues tracked with priority matrix)
+- Onboarding dramatically improved (new users have clear QUICKSTART path)
+
+### Process Improvements
+- Project roadmap now visible and phase-ordered (prevents random work, ensures sequential dependencies)
+- Technical debt categorized for contributor prioritization
+- Testing guide explains CI-first approach (no local toolchain environment)
+- Contributing guide emphasizes CONSTITUTION.md §1 (never break existing functionality)
+
 ## [0.4.0] - 2026-10-13
 
 ### Added
