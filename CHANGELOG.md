@@ -4,6 +4,33 @@ All notable changes to this project are documented here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning is `vX.Y.Z`
 (see `specs/CONSTITUTION.md` §3 for what bumps what).
 
+## [0.4.2] - 2026-11-14
+
+### Added
+- **docs/GAME-LOADING.md**: Comprehensive game loading guide for users
+  - Explains accepted game formats (PS5 game directory with eboot.bin, ELF files)
+  - Solutions for common errors (paths with spaces, "command not recognized")
+  - Windows batch script templates for easier game launching
+  - Full command-line reference with practical examples
+  - Troubleshooting checklist
+
+### Fixed
+- Improved `katy_emulator --help` output with clearer documentation
+  - Explains game input requirement and accepted formats
+  - Clarifies path quoting requirement for paths with spaces
+  - Includes practical command-line examples
+  - Better structured help text for discoverability
+
+### Documentation
+- Updated QUICKSTART.md with GUI and command-line game launching sections
+- Referenced docs/GAME-LOADING.md from QUICKSTART, README, and docs/INDEX.md
+- Enhanced documentation cross-referencing for better navigation
+
+### Impact
+- Users with spaces in game paths can now understand the solution (quote the path)
+- Clear documentation of what game files KatyPS5 accepts
+- Improved help messages reduce friction for command-line users
+
 ## [0.4.1] - 2026-11-14
 
 ### Added
