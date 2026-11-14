@@ -82,6 +82,10 @@ graphical glitches, low compatibility, and poor performance.
 
 <p align="center"><em>And many more...</em></p>
 
+## Getting Started
+
+👉 **New to KatyPS5?** Start with [**QUICKSTART.md**](QUICKSTART.md) for setup and first steps (5 min read).
+
 ## Contributing
 
 **See [`CONTRIBUTING.md`](CONTRIBUTING.md)** for the complete contribution guide.
