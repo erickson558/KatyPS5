@@ -22,6 +22,7 @@ compatibility is limited and behavior may change significantly between builds.
 
 - 🚀 **[Getting Started](#current-status--getting-started)** — What works, what doesn't, and how to use it
 - 📚 **[Building](#building)** — Complete setup for Windows, Linux, and macOS
+- 📖 **[Documentation](#documentation)** — Complete guide to all docs
 - 🤝 **[Contributing](#contributing)** — How to report bugs and submit code
 - 👨‍💻 **[Developer Information](#developer-information)** — Key codebase areas and architecture
 - 📄 **[License](#license)** — GPL-2.0 terms and credits
@@ -85,6 +86,23 @@ graphical glitches, low compatibility, and poor performance.
 ## Getting Started
 
 👉 **New to KatyPS5?** Start with [**QUICKSTART.md**](QUICKSTART.md) for setup and first steps (5 min read).
+
+## Documentation
+
+Complete documentation for users and developers:
+
+| Document | Purpose | Time |
+|----------|---------|------|
+| **[QUICKSTART.md](QUICKSTART.md)** | Setup, first steps, FAQ | 5 min |
+| **[docs/INDEX.md](docs/INDEX.md)** | Navigation guide (start here if lost!) | 5 min |
+| **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** | Developer codebase tour | 10 min |
+| **[docs/SDD-system-design.md](docs/SDD-system-design.md)** | Complete system design reference | 20 min |
+| **[ROADMAP.md](ROADMAP.md)** | Improvement phases and task tracking | 10 min |
+| **[docs/TESTING.md](docs/TESTING.md)** | Testing via CI, debugging strategies | 10 min |
+| **[CLAUDE.md](CLAUDE.md)** | Project structure for AI contributors | 5 min |
+| **[specs/CONSTITUTION.md](specs/CONSTITUTION.md)** | Non-negotiable principles (MUST READ before contributing) | 5 min |
+
+See **[docs/INDEX.md](docs/INDEX.md)** for complete documentation index and "how to find what you're looking for" guide.
 
 ## Contributing
 
