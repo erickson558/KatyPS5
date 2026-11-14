@@ -40,16 +40,16 @@ foreach ($toolName in $tools.Keys) {
     try {
         $output = & $tool.command $tool.version_flag 2>&1
         if ($LASTEXITCODE -eq 0) {
-            Write-Host "✓ $toolName: FOUND" -ForegroundColor Green
+            Write-Host "✓ ${toolName}: FOUND" -ForegroundColor Green
             Write-Host "  $($output[0])" -ForegroundColor Gray
         } else {
-            Write-Host "✗ $toolName: ERROR" -ForegroundColor Red
+            Write-Host "✗ ${toolName}: ERROR" -ForegroundColor Red
         }
     } catch {
         if ($tool.required) {
-            Write-Host "✗ $toolName: NOT FOUND (required)" -ForegroundColor Red
+            Write-Host "✗ ${toolName}: NOT FOUND (required)" -ForegroundColor Red
         } else {
-            Write-Host "ℹ $toolName: NOT FOUND (optional)" -ForegroundColor Yellow
+            Write-Host "ℹ ${toolName}: NOT FOUND (optional)" -ForegroundColor Yellow
         }
     }
 }
