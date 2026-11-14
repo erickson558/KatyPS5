@@ -41,10 +41,15 @@ static std::string GetBuildString() {
 static void PrintUsage() {
 	::printf("%s\n", GetBuildString().c_str());
 	::printf("katy_emulator --game <dir|elf> [options]\n\n");
+	::printf("Game Input (Required):\n");
+	::printf("  --game <path>                        Game directory or ELF file to load.\n");
+	::printf("                                       Accepted formats:\n");
+	::printf("                                         - PS5 game directory (contains eboot.bin)\n");
+	::printf("                                         - ELF binary file (eboot.bin or similar)\n");
+	::printf("                                       Path must be quoted if it contains spaces:\n");
+	::printf("                                         Example: --game \"D:/Games/MyGame\"\n\n");
 	::printf("Options:\n");
-	::printf("  --game <dir|elf>                     Game directory or ELF to load.\n");
-	::printf(
-	    "  --game-patch <json>                  Validated patch plan to apply before entry.\n");
+	::printf("  --game-patch <json>                  Validated patch plan to apply before entry.\n");
 	::printf("  --screen-width <num>                 Window width. Default: 1280.\n");
 	::printf("  --screen-height <num>                Window height. Default: 720.\n");
 	::printf("  --fullscreen                         Run in borderless desktop fullscreen.\n");
@@ -65,7 +70,11 @@ static void PrintUsage() {
 	::printf(
 	    "  --readback-linear-images <true|false> Read back writable linear images on submit.\n");
 	::printf("  --keymap <Pad=Key>                   DualSense mapping; may be repeated.\n");
-	::printf("  --rd                                 Enable RenderDoc capture.\n");
+	::printf("  --rd                                 Enable RenderDoc capture.\n\n");
+	::printf("Examples:\n");
+	::printf("  katy_emulator --game \"D:/Games/MyGame\"\n");
+	::printf("  katy_emulator --game \"D:/Games/eboot.bin\" --screen-width 1920 --screen-height 1080\n");
+	::printf("  katy_emulator --game \"D:/Games/MyGame\" --fullscreen --vulkan-validation true\n");
 }
 
 static bool NextArg(int argc, char* argv[], int& index, std::string& out) {

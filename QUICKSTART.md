@@ -56,9 +56,32 @@ cmake --install _Build/macos --prefix _Build/macos/install
 
 ## 3. **First Steps**
 
+### Launcher GUI (Easiest)
 1. **Add game folders** in the launcher settings (recursive search for `eboot.bin`)
 2. **Select a game** from the list
 3. **Click "Run"** and watch it boot!
+
+### Command Line (Advanced)
+For advanced users or automation, use the core emulator directly:
+
+```bash
+# Basic usage (quote paths with spaces)
+katy_emulator --game "D:\Games\MyGame"
+
+# With custom resolution
+katy_emulator --game "D:\Games\MyGame" --screen-width 1920 --screen-height 1080
+
+# Fullscreen mode
+katy_emulator --game "D:\Games\MyGame" --fullscreen
+```
+
+**⚠️ Important**: Always quote game paths if they contain spaces!
+
+See [docs/GAME-LOADING.md](docs/GAME-LOADING.md) for:
+- Accepted game formats (directory vs ELF file)
+- How to fix "path not recognized" errors
+- Windows batch script templates
+- Full command-line reference
 
 ## 4. **For Developers**
 

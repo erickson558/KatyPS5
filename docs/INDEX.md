@@ -38,6 +38,7 @@ Complete guide to all documentation in the KatyPS5 project.
 
 | Document | Purpose | Read Time |
 |----------|---------|-----------|
+| **[docs/GAME-LOADING.md](docs/GAME-LOADING.md)** | Game formats, command-line usage, troubleshooting | 5 min |
 | [docs/save-memory.md](docs/save-memory.md) | SaveDataMemory2 persistence user guide | 5 min |
 
 ## 🔒 Security & Policies

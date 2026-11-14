@@ -94,6 +94,7 @@ Complete documentation for users and developers:
 | Document | Purpose | Time |
 |----------|---------|------|
 | **[QUICKSTART.md](QUICKSTART.md)** | Setup, first steps, FAQ | 5 min |
+| **[docs/GAME-LOADING.md](docs/GAME-LOADING.md)** | Game formats, command-line usage, troubleshooting | 5 min |
 | **[docs/INDEX.md](docs/INDEX.md)** | Navigation guide (start here if lost!) | 5 min |
 | **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** | Developer codebase tour | 10 min |
 | **[docs/SDD-system-design.md](docs/SDD-system-design.md)** | Complete system design reference | 20 min |
