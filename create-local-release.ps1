@@ -240,13 +240,37 @@ Copy-Item -Path $launcherExe -Destination $WindowsReleaseDir
 Write-Host "  ✓ Copied executables" -ForegroundColor Green
 
 # Copy Qt6 runtime DLLs
+$qt6BinPath = Join-Path $Env:Qt6_DIR "bin"
+if (-not (Test-Path $qt6BinPath)) {
+    Write-Host "  ⚠ Qt6 bin directory not found at: $qt6BinPath" -ForegroundColor Yellow
+    Write-Host "     Attempting alternative search..." -ForegroundColor Gray
+    
+    # Try finding dlls in the Qt6 installation directory
+    $qt6BinPath = $null
+    foreach ($searchPath in @(
+        (Join-Path $Env:Qt6_DIR "bin"),
+        (Join-Path $Env:Qt6_DIR "lib"),
+        (Join-Path $Env:Qt6_DIR "libexec")
+    )) {
+        if (Test-Path $searchPath) {
+            $qt6BinPath = $searchPath
+            Write-Host "     Found in: $searchPath" -ForegroundColor Green
+            break
+        }
+    }
+    
+    if (-not $qt6BinPath) {
+        Write-Host "     Could not locate Qt6 runtime directory" -ForegroundColor Yellow
+    }
+}
+
 $missingDlls = @()
 foreach ($dll in $qt6Dlls) {
-    $dllPath = Join-Path $Env:Qt6_DIR "bin" $dll
+    $dllPath = Join-Path $qt6BinPath $dll
     if (Test-Path $dllPath) {
         Copy-Item -Path $dllPath -Destination $WindowsReleaseDir -Force
     } else {
-        Write-Host "  ⚠ Optional DLL not found: $dll" -ForegroundColor Gray
+        Write-Host "  ⚠ Optional DLL not found: $dll (searched: $dllPath)" -ForegroundColor Gray
     }
 }
 
@@ -256,17 +280,24 @@ Write-Host "  ✓ Copied Qt6 runtime libraries" -ForegroundColor Green
 $pluginDirs = @("platforms", "iconengines", "imageformats", "styles", "generic", "networkinformation", "tls")
 $qtPluginsDir = Join-Path $Env:Qt6_DIR "plugins"
 
-foreach ($plugin in $pluginDirs) {
-    $srcPlugin = Join-Path $qtPluginsDir $plugin
-    $destPlugin = Join-Path $WindowsReleaseDir $plugin
-    
-    if (Test-Path $srcPlugin) {
-        $null = New-Item -ItemType Directory -Path $destPlugin -Force
-        Copy-Item -Path "$srcPlugin\*" -Destination $destPlugin -Recurse -Force
+if (-not (Test-Path $qtPluginsDir)) {
+    Write-Host "  ⚠ Qt6 plugins directory not found at: $qtPluginsDir" -ForegroundColor Yellow
+    Write-Host "     Plugins may not be included in this release" -ForegroundColor Gray
+} else {
+    foreach ($plugin in $pluginDirs) {
+        $srcPlugin = Join-Path $qtPluginsDir $plugin
+        $destPlugin = Join-Path $WindowsReleaseDir $plugin
+        
+        if (Test-Path $srcPlugin) {
+            $null = New-Item -ItemType Directory -Path $destPlugin -Force
+            Copy-Item -Path "$srcPlugin\*" -Destination $destPlugin -Recurse -Force
+        } else {
+            Write-Host "  ℹ Optional plugin not found: $plugin" -ForegroundColor Gray
+        }
     }
+    
+    Write-Host "  ✓ Copied Qt6 plugins" -ForegroundColor Green
 }
-
-Write-Host "  ✓ Copied Qt6 plugins" -ForegroundColor Green
 
 # Copy LICENSE
 $licensePath = Join-Path $ProjectRoot "LICENSE"
@@ -277,7 +308,9 @@ if (Test-Path $licensePath) {
 
 # Copy Qt LICENSES
 $qtLicensesDir = Join-Path $Env:Qt6_DIR "licenses"
-if (Test-Path $qtLicensesDir) {
+if (-not (Test-Path $qtLicensesDir)) {
+    Write-Host "  ℹ Qt6 licenses directory not found at: $qtLicensesDir" -ForegroundColor Gray
+} else {
     $qtLicensesDest = Join-Path $WindowsReleaseDir "LICENSES"
     $null = New-Item -ItemType Directory -Path $qtLicensesDest -Force
     Copy-Item -Path "$qtLicensesDir\*" -Destination $qtLicensesDest -Recurse -Force
@@ -301,15 +334,28 @@ Write-Host ""
 Write-Host "📝 Creating manifest.json..." -ForegroundColor Yellow
 
 # Get git commit hash
-$commitHash = git -C $ProjectRoot rev-parse HEAD 2>$null
-if (-not $commitHash) {
+try {
+    $commitHash = (git -C $ProjectRoot rev-parse HEAD 2>&1)
+    if (-not $commitHash -or $LASTEXITCODE -ne 0) {
+        $commitHash = "unknown"
+    }
+} catch {
     $commitHash = "unknown"
 }
-$commitShort = $commitHash.Substring(0, 7)
+
+if ($commitHash.Length -ge 7) {
+    $commitShort = $commitHash.Substring(0, 7)
+} else {
+    $commitShort = $commitHash
+}
 
 # Get current git branch
-$gitBranch = git -C $ProjectRoot rev-parse --abbrev-ref HEAD 2>$null
-if (-not $gitBranch) {
+try {
+    $gitBranch = (git -C $ProjectRoot rev-parse --abbrev-ref HEAD 2>&1)
+    if (-not $gitBranch -or $LASTEXITCODE -ne 0) {
+        $gitBranch = "unknown"
+    }
+} catch {
     $gitBranch = "unknown"
 }
 
@@ -446,19 +492,42 @@ if (Test-Path $windowsZipPath) {
 
 # Use PowerShell's Compress-Archive (available in 5.1+)
 try {
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction Stop
     $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
+    
+    # Verify the Windows release directory exists and has content
+    if (-not (Test-Path $WindowsReleaseDir)) {
+        Write-Host "  ✗ ERROR: Windows release directory not found: $WindowsReleaseDir" -ForegroundColor Red
+        Write-Host "  This usually means the compilation or packaging steps failed." -ForegroundColor Red
+        exit 1
+    }
+    
+    $itemsInDir = Get-ChildItem -Path $WindowsReleaseDir | Measure-Object
+    if ($itemsInDir.Count -eq 0) {
+        Write-Host "  ✗ ERROR: Windows release directory is empty: $WindowsReleaseDir" -ForegroundColor Red
+        exit 1
+    }
+    
     [System.IO.Compression.ZipFile]::CreateFromDirectory(
         $WindowsReleaseDir,
         $windowsZipPath,
         $compressionLevel,
         $false
     )
-    $zipSize = (Get-Item $windowsZipPath).Length
-    Write-Host "  ✓ Created ZIP package ($(($zipSize / 1MB).ToString('F2')) MB)" -ForegroundColor Green
-    Write-Host "    File: $windowsZipName" -ForegroundColor Gray
+    
+    if (Test-Path $windowsZipPath) {
+        $zipSize = (Get-Item $windowsZipPath).Length
+        Write-Host "  ✓ Created ZIP package ($(($zipSize / 1MB).ToString('F2')) MB)" -ForegroundColor Green
+        Write-Host "    File: $windowsZipName" -ForegroundColor Gray
+    } else {
+        Write-Host "  ✗ ZIP file was not created" -ForegroundColor Red
+        exit 1
+    }
 } catch {
-    Write-Host "  ⚠ Could not create ZIP (optional): $_" -ForegroundColor Yellow
+    Write-Host "  ✗ Could not create ZIP: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "  The release folder exists at: $ReleaseDir" -ForegroundColor Yellow
+    Write-Host "  You can manually create the ZIP or try again." -ForegroundColor Yellow
+    # Don't exit - allow user to continue with manual ZIP creation
 }
 
 Write-Host ""
