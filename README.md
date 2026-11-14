@@ -105,6 +105,22 @@ Complete documentation for users and developers:
 
 See **[docs/INDEX.md](docs/INDEX.md)** for complete documentation index and "how to find what you're looking for" guide.
 
+## Quick Local Build (Windows)
+
+Want to compile KatyPS5 locally? Use the automated scripts:
+
+**First time:**
+```powershell
+.\install-build-tools.bat            # One-time setup (click "Run as Administrator")
+.\create-local-release.ps1           # Compile + package into _Build/releases/vX.Y.Z/
+```
+
+**Result:** Complete release package with binaries, Qt6 runtime, and launchers ready to use or
+distribute — same structure as GitHub Actions releases.
+
+📖 **[CREATE-LOCAL-RELEASE.md](CREATE-LOCAL-RELEASE.md)** — Full guide with options and
+troubleshooting.
+
 ## Contributing
 
 **See [`CONTRIBUTING.md`](CONTRIBUTING.md)** for the complete contribution guide.
